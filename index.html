@@ -311,7 +311,7 @@
       let isInternalUpdate = false;
 
       function parseAmount(value) {
-        const normalized = String(value || '').replace(',', '.').replace(/[^0-9.\-]/g, '');
+        const normalized = String(value || '').replace(',', '.').replace(/[^0-9.]/g, '');
         const parsed = parseFloat(normalized);
         return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
       }
@@ -359,9 +359,11 @@
         const thresholdNet = allowance;
 
         let gross;
+        // If net is within allowance coverage, IIN is 0 and only employee VSAOI applies.
         if (allowance > 0 && targetNet <= thresholdNet) {
           gross = targetNet / NET_WITHOUT_IIN_COEFF;
         } else {
+          // Above allowance threshold, net = gross*(1-VSAOI)*(1-IIN) + IIN*allowance.
           gross = (targetNet - RATES.iin * allowance) / NET_COEFF;
         }
 
@@ -369,6 +371,7 @@
 
         const boundaryGross = allowance / NET_WITHOUT_IIN_COEFF;
         if (allowance > 0 && targetNet <= thresholdNet && gross > boundaryGross) {
+          // Clamp to the regime boundary to avoid crossing into IIN-applied segment from rounding drift.
           gross = boundaryGross;
         }
 
