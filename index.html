@@ -7,10 +7,103 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.css" />
     <style>
       :root {
-        --f7-theme-color: #007aff;
+        --f7-theme-color: #0a84ff;
+        --card-glow: rgba(10, 132, 255, 0.2);
       }
+
       body {
         margin: 0;
+        background: linear-gradient(180deg, #f2f4f8 0%, #eef2f7 100%);
+      }
+
+      .page-content {
+        padding-bottom: calc(var(--f7-safe-area-bottom) + 24px);
+      }
+
+      .section-title {
+        margin: 18px 18px 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #6b7280;
+      }
+
+      .hero-card {
+        margin: 14px 16px 16px;
+        border-radius: 22px;
+        background: linear-gradient(140deg, #0a84ff 0%, #5ac8fa 100%);
+        color: #fff;
+        box-shadow: 0 18px 38px var(--card-glow);
+        overflow: hidden;
+        transition: transform 180ms ease, box-shadow 220ms ease;
+      }
+
+      .hero-card.hero-pulse {
+        transform: translateY(-1px) scale(1.004);
+        box-shadow: 0 20px 44px rgba(10, 132, 255, 0.28);
+      }
+
+      .hero-card-content {
+        padding: 18px 18px 16px;
+      }
+
+      .hero-label {
+        font-size: 13px;
+        opacity: 0.9;
+        margin-bottom: 4px;
+      }
+
+      .hero-value {
+        margin: 0;
+        font-size: 38px;
+        line-height: 1.05;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-sub {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.24);
+        font-size: 15px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .hero-sub span:last-child {
+        font-weight: 700;
+      }
+
+      .list .item-title {
+        font-weight: 600;
+      }
+
+      .metric-list .item-after,
+      .breakdown-table .row .col:last-child {
+        font-variant-numeric: tabular-nums;
+        font-weight: 700;
+      }
+
+      .breakdown-table {
+        margin: 8px 0 6px;
+        display: grid;
+        row-gap: 8px;
+      }
+
+      .breakdown-table .row {
+        margin: 0;
+        padding: 0 6px;
+        align-items: center;
+      }
+
+      .breakdown-table .row .col {
+        font-size: 15px;
+      }
+
+      .muted {
+        color: #6b7280;
       }
     </style>
   </head>
@@ -18,40 +111,58 @@
     <div id="app">
       <div class="view view-main view-init">
         <div class="page" data-name="home">
-          <div class="navbar">
-            <div class="navbar-inner">
-              <div class="title">Latvijas Algas Kalkulators</div>
+          <div class="navbar navbar-large navbar-transparent">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner sliding">
+              <div class="title">Algas kalkulators</div>
+              <div class="title-large">
+                <div class="title-large-text">Latvijas Algas Kalkulators</div>
+              </div>
             </div>
           </div>
 
           <div class="page-content">
-            <div class="list list-strong-ios list-outline-ios list-inputs">
+            <div class="hero-card" id="hero-card">
+              <div class="hero-card-content">
+                <div class="hero-label">Izmaksājamā alga (Netto)</div>
+                <p class="hero-value" id="hero-net">0,00 €</p>
+                <div class="hero-sub">
+                  <span>Uzņēmuma kopējās izmaksas</span>
+                  <span id="hero-total">0,00 €</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title">Ievades dati</div>
+            <div class="list list-strong-ios list-inset-ios list-inputs">
               <ul>
                 <li class="item-content item-input">
-                  <div class="item-media">€</div>
+                  <div class="item-media"><i class="f7-icons">creditcard</i></div>
                   <div class="item-inner">
-                    <div class="item-title item-label">Brutto (Gross)</div>
+                    <div class="item-title item-floating-label">Brutto (Gross) EUR</div>
                     <div class="item-input-wrap">
-                      <input id="gross-input" type="number" min="0" step="0.01" placeholder="0.00" />
+                      <input id="gross-input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
                     </div>
                   </div>
                 </li>
                 <li class="item-content item-input">
-                  <div class="item-media">€</div>
+                  <div class="item-media"><i class="f7-icons">money_euro</i></div>
                   <div class="item-inner">
-                    <div class="item-title item-label">Netto (Net)</div>
+                    <div class="item-title item-floating-label">Netto (Net) EUR</div>
                     <div class="item-input-wrap">
-                      <input id="net-input" type="number" min="0" step="0.01" placeholder="0.00" />
+                      <input id="net-input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" />
                     </div>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <div class="list list-strong-ios list-outline-ios">
+            <div class="section-title">Nodokļu parametri</div>
+            <div class="list list-strong-ios list-inset-ios">
               <ul>
                 <li>
                   <label class="item-content">
+                    <div class="item-media"><i class="f7-icons">doc_text</i></div>
                     <div class="item-inner">
                       <div class="item-title">Algas nodokļa grāmatiņa</div>
                       <div class="item-after">
@@ -64,16 +175,11 @@
                   </label>
                 </li>
                 <li class="item-content item-input">
+                  <div class="item-media"><i class="f7-icons">person_2</i></div>
                   <div class="item-inner">
                     <div class="item-title">Apgādājamie</div>
                     <div class="item-after">
-                      <div
-                        id="dependents-stepper"
-                        class="stepper stepper-init stepper-round stepper-small"
-                        data-min="0"
-                        data-max="5"
-                        data-value="0"
-                      >
+                      <div id="dependents-stepper" class="stepper stepper-init stepper-round-ios stepper-small" data-min="0" data-max="5" data-value="0">
                         <div class="stepper-button-minus"></div>
                         <div class="stepper-input-wrap">
                           <input id="dependents-input" type="text" value="0" readonly />
@@ -86,16 +192,69 @@
               </ul>
             </div>
 
-            <div class="block-title">Rezultātu sadalījums</div>
-            <div class="list list-strong-ios list-outline-ios">
+            <div class="section-title">Ātrie rādītāji</div>
+            <div class="list list-strong-ios list-inset-ios metric-list">
               <ul>
-                <li class="item-content"><div class="item-inner"><div class="item-title">Brutto</div><div id="r-gross" class="item-after">€0.00</div></div></li>
-                <li class="item-content"><div class="item-inner"><div class="item-title">Netto</div><div id="r-net" class="item-after">€0.00</div></div></li>
-                <li class="item-content"><div class="item-inner"><div class="item-title">Darba ņēmēja VSAOI (10.5%)</div><div id="r-emp-social" class="item-after">€0.00</div></div></li>
-                <li class="item-content"><div class="item-inner"><div class="item-title">IIN (25.5%)</div><div id="r-iin" class="item-after">€0.00</div></div></li>
-                <li class="item-content"><div class="item-inner"><div class="item-title">Darba devēja VSAOI (23.59%)</div><div id="r-employer-social" class="item-after">€0.00</div></div></li>
-                <li class="item-content"><div class="item-inner"><div class="item-title">Riska nodeva</div><div id="r-risk-duty" class="item-after">€0.36</div></div></li>
-                <li class="item-content"><div class="item-inner"><div class="item-title">Kopējās darba devēja izmaksas</div><div id="r-total-employer" class="item-after">€0.00</div></div></li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Brutto</div>
+                    <div id="r-gross" class="item-after">0,00 €</div>
+                  </div>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Netto</div>
+                    <div id="r-net" class="item-after">0,00 €</div>
+                  </div>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title">Kopējās darba devēja izmaksas</div>
+                    <div id="r-total-employer" class="item-after">0,00 €</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="list accordion-list list-strong-ios list-inset-ios">
+              <ul>
+                <li class="accordion-item">
+                  <a class="item-content item-link" href="#">
+                    <div class="item-inner">
+                      <div class="item-title">Sīkāks sadalījums (Detailed Tax Breakdown)</div>
+                    </div>
+                  </a>
+                  <div class="accordion-item-content">
+                    <div class="block block-strong-ios">
+                      <div class="breakdown-table">
+                        <div class="row">
+                          <div class="col">Darba ņēmēja VSAOI (10.50%)</div>
+                          <div class="col text-align-right" id="r-emp-social">0,00 €</div>
+                        </div>
+                        <div class="row">
+                          <div class="col">IIN (25.50%)</div>
+                          <div class="col text-align-right" id="r-iin">0,00 €</div>
+                        </div>
+                        <div class="row">
+                          <div class="col">Darba devēja VSAOI (23.59%)</div>
+                          <div class="col text-align-right" id="r-employer-social">0,00 €</div>
+                        </div>
+                        <div class="row">
+                          <div class="col">Riska nodeva</div>
+                          <div class="col text-align-right" id="r-risk-duty">0,36 €</div>
+                        </div>
+                        <div class="row">
+                          <div class="col muted">Neapliekamais minimums / apgādājamie</div>
+                          <div class="col text-align-right muted" id="r-allowance">0,00 €</div>
+                        </div>
+                        <div class="row">
+                          <div class="col muted">Apliekamā bāze</div>
+                          <div class="col text-align-right muted" id="r-taxable-base">0,00 €</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -114,8 +273,11 @@
       const netInput = document.getElementById('net-input');
       const taxBookToggle = document.getElementById('tax-book-toggle');
       const dependentsInput = document.getElementById('dependents-input');
+      const heroCard = document.getElementById('hero-card');
 
       const out = {
+        heroNet: document.getElementById('hero-net'),
+        heroTotal: document.getElementById('hero-total'),
         gross: document.getElementById('r-gross'),
         net: document.getElementById('r-net'),
         empSocial: document.getElementById('r-emp-social'),
@@ -123,47 +285,58 @@
         employerSocial: document.getElementById('r-employer-social'),
         riskDuty: document.getElementById('r-risk-duty'),
         totalEmployer: document.getElementById('r-total-employer'),
+        taxableBase: document.getElementById('r-taxable-base'),
+        allowance: document.getElementById('r-allowance'),
       };
 
       const RATES = {
-        empSocial: 0.105,
-        employerSocial: 0.2359,
+        employeeVsaoi: 0.105,
+        employerVsaoi: 0.2359,
         iin: 0.255,
         nonTaxMin: 550,
         depAllowance: 250,
         riskDuty: 0.36,
       };
-      const SEARCH_LIMITS = {
-        initialMultiplier: 3,
-        minimumUpperBound: 2000,
-        maxGrossSalary: 1000000,
-        iterations: 60,
-      };
+
+      const NET_COEFF = (1 - RATES.employeeVsaoi) * (1 - RATES.iin);
+      const NET_WITHOUT_IIN_COEFF = 1 - RATES.employeeVsaoi;
+      const currencyFmt = new Intl.NumberFormat('lv-LV', {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
 
       let lastEdited = 'gross';
       let isInternalUpdate = false;
 
-      function num(v) {
-        const n = parseFloat(v);
-        return Number.isFinite(n) && n > 0 ? n : 0;
+      function parseAmount(value) {
+        const normalized = String(value || '').replace(',', '.').replace(/[^0-9.]/g, '');
+        const parsed = parseFloat(normalized);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
       }
 
-      function money(v) {
-        return '€' + v.toFixed(2);
+      function round2(value) {
+        return Math.round(value * 100) / 100;
       }
 
-      function allowances() {
+      function formatCurrency(value) {
+        return currencyFmt.format(round2(value));
+      }
+
+      function allowanceTotal() {
         if (!taxBookToggle.checked) return 0;
-        const deps = parseInt(dependentsInput.value || '0', 10) || 0;
+        const deps = Math.min(5, Math.max(0, parseInt(dependentsInput.value || '0', 10) || 0));
         return RATES.nonTaxMin + deps * RATES.depAllowance;
       }
 
       function breakdownFromGross(gross) {
-        const employeeSocial = gross * RATES.empSocial;
-        const taxableBase = Math.max(0, gross - employeeSocial - allowances());
+        const employeeSocial = gross * RATES.employeeVsaoi;
+        const allowance = allowanceTotal();
+        const taxableBase = Math.max(0, gross - employeeSocial - allowance);
         const iin = taxableBase * RATES.iin;
         const net = gross - employeeSocial - iin;
-        const employerSocial = gross * RATES.employerSocial;
+        const employerSocial = gross * RATES.employerVsaoi;
         const totalEmployerCost = gross + employerSocial + RATES.riskDuty;
 
         return {
@@ -174,42 +347,62 @@
           employerSocial,
           riskDuty: RATES.riskDuty,
           totalEmployerCost,
+          taxableBase,
+          allowance,
         };
       }
 
       function grossFromNet(targetNet) {
         if (targetNet <= 0) return 0;
 
-        let low = 0;
-        let high = Math.max(targetNet * SEARCH_LIMITS.initialMultiplier, SEARCH_LIMITS.minimumUpperBound);
+        const allowance = allowanceTotal();
+        const thresholdNet = allowance;
 
-        while (breakdownFromGross(high).net < targetNet) {
-          high *= 2;
-          if (high > SEARCH_LIMITS.maxGrossSalary) break;
+        let gross;
+        // If net is within allowance coverage, IIN is 0 and only employee VSAOI applies.
+        if (targetNet <= thresholdNet) {
+          gross = targetNet / NET_WITHOUT_IIN_COEFF;
+        } else {
+          // Above allowance threshold, net = gross*(1-VSAOI)*(1-IIN) + IIN*allowance.
+          gross = (targetNet - RATES.iin * allowance) / NET_COEFF;
         }
 
-        for (let i = 0; i < SEARCH_LIMITS.iterations; i += 1) {
-          const mid = (low + high) / 2;
-          const midNet = breakdownFromGross(mid).net;
-          if (midNet < targetNet) low = mid;
-          else high = mid;
+        if (!Number.isFinite(gross) || gross < 0) return 0;
+
+        const boundaryGross = allowance / NET_WITHOUT_IIN_COEFF;
+        if (gross > boundaryGross) {
+          // Clamp to the regime boundary to avoid crossing into IIN-applied segment from rounding drift.
+          gross = boundaryGross;
         }
-        return high;
+
+        return gross;
+      }
+
+      function pulseHero() {
+        heroCard.classList.remove('hero-pulse');
+        requestAnimationFrame(() => heroCard.classList.add('hero-pulse'));
       }
 
       function render(result) {
-        out.gross.textContent = money(result.gross);
-        out.net.textContent = money(result.net);
-        out.empSocial.textContent = money(result.employeeSocial);
-        out.iin.textContent = money(result.iin);
-        out.employerSocial.textContent = money(result.employerSocial);
-        out.riskDuty.textContent = money(result.riskDuty);
-        out.totalEmployer.textContent = money(result.totalEmployerCost);
+        out.heroNet.textContent = formatCurrency(result.net);
+        out.heroTotal.textContent = formatCurrency(result.totalEmployerCost);
+
+        out.gross.textContent = formatCurrency(result.gross);
+        out.net.textContent = formatCurrency(result.net);
+        out.empSocial.textContent = formatCurrency(result.employeeSocial);
+        out.iin.textContent = formatCurrency(result.iin);
+        out.employerSocial.textContent = formatCurrency(result.employerSocial);
+        out.riskDuty.textContent = formatCurrency(result.riskDuty);
+        out.totalEmployer.textContent = formatCurrency(result.totalEmployerCost);
+        out.taxableBase.textContent = formatCurrency(result.taxableBase);
+        out.allowance.textContent = formatCurrency(result.allowance);
+
+        pulseHero();
       }
 
       function recalc() {
-        const currentGross = num(grossInput.value);
-        const currentNet = num(netInput.value);
+        const currentGross = parseAmount(grossInput.value);
+        const currentNet = parseAmount(netInput.value);
 
         let result;
         if (lastEdited === 'net') {
@@ -220,8 +413,8 @@
         }
 
         isInternalUpdate = true;
-        grossInput.value = result.gross.toFixed(2);
-        netInput.value = result.net.toFixed(2);
+        grossInput.value = round2(result.gross).toFixed(2);
+        netInput.value = round2(result.net).toFixed(2);
         isInternalUpdate = false;
 
         render(result);
@@ -237,6 +430,14 @@
         if (isInternalUpdate) return;
         lastEdited = 'net';
         recalc();
+      });
+
+      grossInput.addEventListener('blur', () => {
+        grossInput.value = round2(parseAmount(grossInput.value)).toFixed(2);
+      });
+
+      netInput.addEventListener('blur', () => {
+        netInput.value = round2(parseAmount(netInput.value)).toFixed(2);
       });
 
       taxBookToggle.addEventListener('change', recalc);
