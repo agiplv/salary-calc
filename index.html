@@ -412,8 +412,11 @@
         }
 
         isInternalUpdate = true;
-        grossInput.value = round2(result.gross).toFixed(2);
-        netInput.value = round2(result.net).toFixed(2);
+        if (lastEdited === 'net') {
+          grossInput.value = round2(result.gross).toFixed(2);
+        } else {
+          netInput.value = round2(result.net).toFixed(2);
+        }
         isInternalUpdate = false;
 
         render(result);
@@ -429,14 +432,6 @@
         if (isInternalUpdate) return;
         lastEdited = 'net';
         recalc();
-      });
-
-      grossInput.addEventListener('blur', () => {
-        grossInput.value = round2(parseAmount(grossInput.value)).toFixed(2);
-      });
-
-      netInput.addEventListener('blur', () => {
-        netInput.value = round2(parseAmount(netInput.value)).toFixed(2);
       });
 
       taxBookToggle.addEventListener('change', recalc);
