@@ -309,6 +309,7 @@
 
       let lastEdited = 'gross';
       let isInternalUpdate = false;
+      let hasInitializedInputs = false;
 
       function parseAmount(value) {
         const normalized = String(value || '').replace(',', '.').replace(/[^0-9.]/g, '');
@@ -412,7 +413,11 @@
         }
 
         isInternalUpdate = true;
-        if (lastEdited === 'net') {
+        if (!hasInitializedInputs) {
+          grossInput.value = round2(result.gross).toFixed(2);
+          netInput.value = round2(result.net).toFixed(2);
+          hasInitializedInputs = true;
+        } else if (lastEdited === 'net') {
           grossInput.value = round2(result.gross).toFixed(2);
         } else {
           netInput.value = round2(result.net).toFixed(2);
