@@ -365,15 +365,14 @@
         } else {
           // Above allowance threshold, net = gross*(1-VSAOI)*(1-IIN) + IIN*allowance.
           gross = (targetNet - RATES.iin * allowance) / NET_COEFF;
+          const boundaryGross = allowance / NET_WITHOUT_IIN_COEFF;
+          if (gross < boundaryGross) {
+            // Clamp to the regime boundary to avoid crossing into no-IIN segment from rounding drift.
+            gross = boundaryGross;
+          }
         }
 
         if (!Number.isFinite(gross) || gross < 0) return 0;
-
-        const boundaryGross = allowance / NET_WITHOUT_IIN_COEFF;
-        if (gross < boundaryGross) {
-          // Clamp to the regime boundary to avoid crossing into no-IIN segment from rounding drift.
-          gross = boundaryGross;
-        }
 
         return gross;
       }
