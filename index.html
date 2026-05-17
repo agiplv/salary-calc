@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>Latvijas Algas Kalkulators</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.css" />
+    <style>
+      :root {
+        --f7-theme-color: #007aff;
+      }
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="view view-main view-init">
+        <div class="page" data-name="home">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="title">Latvijas Algas Kalkulators</div>
+            </div>
+          </div>
+
+          <div class="page-content">
+            <div class="list list-strong-ios list-outline-ios list-inputs">
+              <ul>
+                <li class="item-content item-input">
+                  <div class="item-media">€</div>
+                  <div class="item-inner">
+                    <div class="item-title item-label">Brutto (Gross)</div>
+                    <div class="item-input-wrap">
+                      <input id="gross-input" type="number" min="0" step="0.01" placeholder="0.00" />
+                    </div>
+                  </div>
+                </li>
+                <li class="item-content item-input">
+                  <div class="item-media">€</div>
+                  <div class="item-inner">
+                    <div class="item-title item-label">Netto (Net)</div>
+                    <div class="item-input-wrap">
+                      <input id="net-input" type="number" min="0" step="0.01" placeholder="0.00" />
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="list list-strong-ios list-outline-ios">
+              <ul>
+                <li>
+                  <label class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title">Algas nodokļa grāmatiņa</div>
+                      <div class="item-after">
+                        <label class="toggle toggle-init color-blue">
+                          <input id="tax-book-toggle" type="checkbox" checked />
+                          <span class="toggle-icon"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </label>
+                </li>
+                <li class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title">Apgādājamie</div>
+                    <div class="item-after">
+                      <div
+                        id="dependents-stepper"
+                        class="stepper stepper-init stepper-round stepper-small"
+                        data-min="0"
+                        data-max="5"
+                        data-value="0"
+                      >
+                        <div class="stepper-button-minus"></div>
+                        <div class="stepper-input-wrap">
+                          <input id="dependents-input" type="text" value="0" readonly />
+                        </div>
+                        <div class="stepper-button-plus"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="block-title">Rezultātu sadalījums</div>
+            <div class="list list-strong-ios list-outline-ios">
+              <ul>
+                <li class="item-content"><div class="item-inner"><div class="item-title">Brutto</div><div id="r-gross" class="item-after">€0.00</div></div></li>
+                <li class="item-content"><div class="item-inner"><div class="item-title">Netto</div><div id="r-net" class="item-after">€0.00</div></div></li>
+                <li class="item-content"><div class="item-inner"><div class="item-title">Darbinieka VSAOI (10.5%)</div><div id="r-emp-social" class="item-after">€0.00</div></div></li>
+                <li class="item-content"><div class="item-inner"><div class="item-title">IIN (25.5%)</div><div id="r-pit" class="item-after">€0.00</div></div></li>
+                <li class="item-content"><div class="item-inner"><div class="item-title">Darba devēja VSAOI (23.59%)</div><div id="r-employer-social" class="item-after">€0.00</div></div></li>
+                <li class="item-content"><div class="item-inner"><div class="item-title">Riska nodeva</div><div id="r-risk-duty" class="item-after">€0.36</div></div></li>
+                <li class="item-content"><div class="item-inner"><div class="item-title">Kopējās darba devēja izmaksas</div><div id="r-total-employer" class="item-after">€0.00</div></div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.js"></script>
+    <script>
+      const app = new Framework7({
+        el: '#app',
+        theme: 'ios',
+      });
+
+      const grossInput = document.getElementById('gross-input');
+      const netInput = document.getElementById('net-input');
+      const taxBookToggle = document.getElementById('tax-book-toggle');
+      const dependentsInput = document.getElementById('dependents-input');
+
+      const out = {
+        gross: document.getElementById('r-gross'),
+        net: document.getElementById('r-net'),
+        empSocial: document.getElementById('r-emp-social'),
+        pit: document.getElementById('r-pit'),
+        employerSocial: document.getElementById('r-employer-social'),
+        riskDuty: document.getElementById('r-risk-duty'),
+        totalEmployer: document.getElementById('r-total-employer'),
+      };
+
+      const RATES = {
+        empSocial: 0.105,
+        employerSocial: 0.2359,
+        pit: 0.255,
+        nonTaxMin: 550,
+        depAllowance: 250,
+        riskDuty: 0.36,
+      };
+
+      let lastEdited = 'gross';
+      let isInternalUpdate = false;
+
+      function num(v) {
+        const n = parseFloat(v);
+        return Number.isFinite(n) && n > 0 ? n : 0;
+      }
+
+      function money(v) {
+        return '€' + v.toFixed(2);
+      }
+
+      function allowances() {
+        if (!taxBookToggle.checked) return 0;
+        const deps = parseInt(dependentsInput.value || '0', 10) || 0;
+        return RATES.nonTaxMin + deps * RATES.depAllowance;
+      }
+
+      function breakdownFromGross(gross) {
+        const employeeSocial = gross * RATES.empSocial;
+        const taxableBase = Math.max(0, gross - employeeSocial - allowances());
+        const pit = taxableBase * RATES.pit;
+        const net = gross - employeeSocial - pit;
+        const employerSocial = gross * RATES.employerSocial;
+        const totalEmployerCost = gross + employerSocial + RATES.riskDuty;
+
+        return {
+          gross,
+          net,
+          employeeSocial,
+          pit,
+          employerSocial,
+          riskDuty: RATES.riskDuty,
+          totalEmployerCost,
+        };
+      }
+
+      function grossFromNet(targetNet) {
+        if (targetNet <= 0) return 0;
+
+        let low = 0;
+        let high = Math.max(targetNet * 3, 2000);
+
+        while (breakdownFromGross(high).net < targetNet) {
+          high *= 2;
+          if (high > 1000000) break;
+        }
+
+        for (let i = 0; i < 60; i += 1) {
+          const mid = (low + high) / 2;
+          const midNet = breakdownFromGross(mid).net;
+          if (midNet < targetNet) low = mid;
+          else high = mid;
+        }
+        return high;
+      }
+
+      function render(result) {
+        out.gross.textContent = money(result.gross);
+        out.net.textContent = money(result.net);
+        out.empSocial.textContent = money(result.employeeSocial);
+        out.pit.textContent = money(result.pit);
+        out.employerSocial.textContent = money(result.employerSocial);
+        out.riskDuty.textContent = money(result.riskDuty);
+        out.totalEmployer.textContent = money(result.totalEmployerCost);
+      }
+
+      function recalc() {
+        const currentGross = num(grossInput.value);
+        const currentNet = num(netInput.value);
+
+        let result;
+        if (lastEdited === 'net') {
+          const gross = grossFromNet(currentNet);
+          result = breakdownFromGross(gross);
+        } else {
+          result = breakdownFromGross(currentGross);
+        }
+
+        isInternalUpdate = true;
+        grossInput.value = result.gross.toFixed(2);
+        netInput.value = result.net.toFixed(2);
+        isInternalUpdate = false;
+
+        render(result);
+      }
+
+      grossInput.addEventListener('input', () => {
+        if (isInternalUpdate) return;
+        lastEdited = 'gross';
+        recalc();
+      });
+
+      netInput.addEventListener('input', () => {
+        if (isInternalUpdate) return;
+        lastEdited = 'net';
+        recalc();
+      });
+
+      taxBookToggle.addEventListener('change', recalc);
+      app.on('stepperChange', (stepper, value) => {
+        dependentsInput.value = String(value);
+        recalc();
+      });
+
+      recalc();
+    </script>
+  </body>
+</html>
