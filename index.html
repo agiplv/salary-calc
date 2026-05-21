@@ -222,19 +222,19 @@
             <div class="card summary-card">
               <div class="card-content card-content-padding">
                 <div class="text-color-gray" id="lbl-summaryGross">Gross Salary</div>
-                <div id="hero-gross" class="summary-value" role="status" aria-labelledby="lbl-summaryGross">0.00 €</div>
+                <div id="hero-gross" class="summary-value" role="status" aria-atomic="true" aria-label="Gross Salary">0.00 €</div>
               </div>
             </div>
             <div class="card summary-card">
               <div class="card-content card-content-padding">
                 <div class="text-color-gray" id="lbl-inHand">In Hand (Net)</div>
-                <div id="hero-net" class="summary-value text-color-blue" role="status" aria-labelledby="lbl-inHand">0.00 €</div>
+                <div id="hero-net" class="summary-value text-color-blue" role="status" aria-atomic="true" aria-label="In Hand (Net)">0.00 €</div>
               </div>
             </div>
             <div class="card summary-card">
               <div class="card-content card-content-padding">
                 <div class="text-color-gray" id="lbl-totalEmployer">Total Employer Cost</div>
-                <div id="hero-total" class="summary-value" role="status" aria-labelledby="lbl-totalEmployer">0.00 €</div>
+                <div id="hero-total" class="summary-value" role="status" aria-atomic="true" aria-label="Total Employer Cost">0.00 €</div>
               </div>
             </div>
 
@@ -604,6 +604,12 @@
         'lbl-totalEmployer2': 'totalEmployer',
       };
 
+      const SUMMARY_VALUE_LABEL_MAP = {
+        'hero-gross': 'summaryGross',
+        'hero-net': 'inHand',
+        'hero-total': 'totalEmployer',
+      };
+
       // ── State ─────────────────────────────────────────────────────────────────
       const VALID_COUNTRIES = ['lv', 'ee'];
       const VALID_LANGS = ['en', 'lv', 'ru'];
@@ -698,6 +704,10 @@
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
+        });
+        Object.entries(SUMMARY_VALUE_LABEL_MAP).forEach(([id, key]) => {
+          const el = $(id);
+          if (el && t[key]) el.setAttribute('aria-label', t[key]);
         });
         const langAttr = { en: 'en', lv: 'lv', ru: 'ru' };
         document.documentElement.lang = langAttr[lang] || 'en';
