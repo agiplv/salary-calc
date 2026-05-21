@@ -161,19 +161,19 @@
                 <div class="tab tab-active salary-input-tab" id="tab-gross">
                   <div class="salary-input-panel">
                     <div class="salary-input-panel-label" id="lbl-gross">Salary (Gross) EUR</div>
-                    <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                    <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                   </div>
                 </div>
                 <div class="tab salary-input-tab" id="tab-net">
                   <div class="salary-input-panel">
                     <div class="salary-input-panel-label" id="lbl-net">Salary (Net) EUR</div>
-                    <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                    <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
                   </div>
                 </div>
                 <div class="tab salary-input-tab" id="tab-employer">
                   <div class="salary-input-panel">
                     <div class="salary-input-panel-label" id="lbl-employerCost">Employer Cost EUR</div>
-                    <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                    <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
                   </div>
                 </div>
               </div>
@@ -224,19 +224,19 @@
             <div class="card summary-card">
               <div class="card-content card-content-padding">
                 <div class="text-color-gray" id="lbl-summaryGross">Gross Salary</div>
-                <div id="hero-gross" class="summary-value" role="status" aria-atomic="true" aria-labelledby="lbl-summaryGross">0.00 €</div>
+                <div id="hero-gross" class="summary-value" aria-live="polite" aria-atomic="true">0.00 €</div>
               </div>
             </div>
             <div class="card summary-card">
               <div class="card-content card-content-padding">
                 <div class="text-color-gray" id="lbl-inHand">In Hand (Net)</div>
-                <div id="hero-net" class="summary-value text-color-blue" role="status" aria-atomic="true" aria-labelledby="lbl-inHand">0.00 €</div>
+                <div id="hero-net" class="summary-value text-color-blue" aria-live="polite" aria-atomic="true">0.00 €</div>
               </div>
             </div>
             <div class="card summary-card">
               <div class="card-content card-content-padding">
                 <div class="text-color-gray" id="lbl-totalEmployer">Total Employer Cost</div>
-                <div id="hero-total" class="summary-value" role="status" aria-atomic="true" aria-labelledby="lbl-totalEmployer">0.00 €</div>
+                <div id="hero-total" class="summary-value" aria-live="polite" aria-atomic="true">0.00 €</div>
               </div>
             </div>
 
