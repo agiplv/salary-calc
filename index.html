@@ -6,32 +6,8 @@
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.css" />
     <style>
-      .top-controls {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 16px 6px;
-        gap: 8px;
-      }
-      .top-controls-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      #dark-mode-btn {
-        font-size: 22px;
-        line-height: 1;
-        cursor: pointer;
-        background: none;
-        border: none;
-        padding: 4px 8px;
-      }
       .hidden {
         display: none !important;
-      }
-      .country-label {
-        font-size: 13px;
-        opacity: 0.6;
       }
     </style>
   </head>
@@ -45,7 +21,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <button id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
+                <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
               <div class="title-large">
                 <div class="title-large-text" id="nav-title-large">Salary Calculator</div>
@@ -54,24 +30,33 @@
           </div>
 
           <div class="page-content">
-            <!-- Top controls: country + language -->
-            <div class="block" style="margin-bottom:0; padding:0;">
-              <div class="top-controls">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span class="country-label" id="lbl-country">Country</span>
-                  <div class="segmented segmented-strong segmented-round" id="country-selector">
-                    <button class="button button-active" data-country="lv">🇱🇻 LV</button>
-                    <button class="button" data-country="ee">🇪🇪 EE</button>
+            <!-- Country and Language selectors -->
+            <div class="list list-strong list-inset list-strong-inset">
+              <ul>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-country">Country</div>
+                    <div class="item-after">
+                      <div class="segmented segmented-strong segmented-round" id="country-selector">
+                        <button class="button button-active" data-country="lv">🇱🇻 LV</button>
+                        <button class="button" data-country="ee">🇪🇪 EE</button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="top-controls-row">
-                  <div class="segmented segmented-strong segmented-round" id="lang-selector">
-                    <button class="button button-active" data-lang="en">EN</button>
-                    <button class="button" data-lang="lv">LV</button>
-                    <button class="button" data-lang="ru">RU</button>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-lang">Language</div>
+                    <div class="item-after">
+                      <div class="segmented segmented-strong segmented-round" id="lang-selector">
+                        <button class="button button-active" data-lang="en">EN</button>
+                        <button class="button" data-lang="lv">LV</button>
+                        <button class="button" data-lang="ru">RU</button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </li>
+              </ul>
             </div>
 
             <!-- Salary inputs -->
@@ -302,6 +287,7 @@
           darkMode: 'Dark',
           lightMode: 'Light',
           country: 'Country',
+          lang: 'Language',
         },
         lv: {
           title: 'Algas kalkulators',
@@ -329,6 +315,7 @@
           darkMode: 'Tumšais',
           lightMode: 'Gaišais',
           country: 'Valsts',
+          lang: 'Valoda',
         },
         ru: {
           title: 'Калькулятор зарплаты',
@@ -356,6 +343,7 @@
           darkMode: 'Тёмный',
           lightMode: 'Светлый',
           country: 'Страна',
+          lang: 'Язык',
         },
       };
 
@@ -474,6 +462,7 @@
         'lbl-net': 'net',
         'lbl-employerCost': 'employerCost',
         'lbl-country': 'country',
+        'lbl-lang': 'lang',
         'lbl-taxBook': 'taxBook',
         'lbl-dependents': 'dependents',
         'lbl-inHand': 'inHand',
@@ -658,7 +647,7 @@
         recalc();
       });
 
-      darkModeBtn.addEventListener('click', () => applyTheme(!currentDark));
+      darkModeBtn.addEventListener('click', e => { e.preventDefault(); applyTheme(!currentDark); });
 
       document.getElementById('country-selector').addEventListener('click', e => {
         const btn = e.target.closest('[data-country]');
