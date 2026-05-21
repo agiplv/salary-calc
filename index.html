@@ -16,7 +16,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language: EN">🌐</a>
+                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language: English">🌐</a>
                 <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
               <div class="title-large">
@@ -557,6 +557,7 @@
       // ── State ─────────────────────────────────────────────────────────────────
       const VALID_COUNTRIES = ['lv', 'ee'];
       const VALID_LANGS = ['en', 'lv', 'ru'];
+      const LANG_NAMES = { en: 'English', lv: 'Latviešu', ru: 'Русский' };
       const savedCountry = localStorage.getItem('country');
       const savedLang = localStorage.getItem('lang');
       let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
@@ -652,10 +653,11 @@
         $('nav-title').textContent = t.title;
         $('nav-title-large').textContent = t.title;
         langMenuBtn.setAttribute('title', t.lang);
-        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${lang.toUpperCase()}`);
+        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang] || lang.toUpperCase()}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
           const isActive = link.dataset.lang === lang;
           link.classList.toggle('text-color-blue', isActive);
+          link.setAttribute('aria-current', isActive ? 'true' : 'false');
           link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
         });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
@@ -768,7 +770,6 @@
       document.getElementById('lang-popover').addEventListener('click', e => {
         const btn = e.target.closest('[data-lang]');
         if (btn) {
-          e.preventDefault();
           applyLang(btn.dataset.lang);
         }
       });
