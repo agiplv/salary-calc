@@ -16,7 +16,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language">🌐</a>
+                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language: EN">🌐</a>
                 <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
               <div class="title-large">
@@ -47,7 +47,7 @@
                 <div class="tab tab-active salary-input-tab" id="tab-gross">
                   <div class="list list-strong no-margin">
                     <ul>
-                      <li class="item-content item-input item-input-outline item-input-with-value">
+                      <li class="item-content item-input item-input-outline">
                         <div class="item-inner">
                           <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
                           <div class="item-input-wrap">
@@ -61,7 +61,7 @@
                 <div class="tab salary-input-tab" id="tab-net">
                   <div class="list list-strong no-margin">
                     <ul>
-                      <li class="item-content item-input item-input-outline item-input-with-value">
+                      <li class="item-content item-input item-input-outline">
                         <div class="item-inner">
                           <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
                           <div class="item-input-wrap">
@@ -75,7 +75,7 @@
                 <div class="tab salary-input-tab" id="tab-employer">
                   <div class="list list-strong no-margin">
                     <ul>
-                      <li class="item-content item-input item-input-outline item-input-with-value">
+                      <li class="item-content item-input item-input-outline">
                         <div class="item-inner">
                           <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
                           <div class="item-input-wrap">
@@ -578,10 +578,14 @@
 
       function money(value) { return `${round2(value).toFixed(2)} €`; }
 
+      function syncInputState(input) {
+        const itemContent = input.closest('.item-content');
+        if (itemContent) itemContent.classList.toggle('item-input-with-value', input.value !== '');
+      }
+
       function setInputValue(input, value) {
         input.value = value;
-        const itemContent = input.closest('.item-content');
-        if (itemContent) itemContent.classList.toggle('item-input-with-value', value !== '');
+        syncInputState(input);
       }
 
       function getDependents() {
@@ -651,7 +655,7 @@
         langMenuBtn.setAttribute('aria-label', `${t.lang}: ${lang.toUpperCase()}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
           const isActive = link.dataset.lang === lang;
-          link.classList.toggle('color-blue', isActive);
+          link.classList.toggle('text-color-blue', isActive);
           link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
         });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
@@ -725,6 +729,7 @@
       // ── Event handlers ────────────────────────────────────────────────────────
       grossInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
+        syncInputState(grossInput);
         lastEdited = 'gross';
         recalc();
       });
@@ -732,6 +737,7 @@
 
       netInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
+        syncInputState(netInput);
         lastEdited = 'net';
         recalc();
       });
@@ -739,6 +745,7 @@
 
       employerInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
+        syncInputState(employerInput);
         lastEdited = 'employer';
         recalc();
       });
