@@ -41,7 +41,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <button id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
+                <button id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙 Dark</button>
               </div>
               <div class="title-large">
                 <div class="title-large-text" id="nav-title-large">Salary Calculator</div>
@@ -83,6 +83,14 @@
                     <div class="item-title item-floating-label" id="lbl-net">Salary (Net) EUR</div>
                     <div class="item-input-wrap">
                       <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                    </div>
+                  </div>
+                </li>
+                <li class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-floating-label" id="lbl-employerCost">Employer Cost EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
                     </div>
                   </div>
                 </li>
@@ -265,6 +273,7 @@
           title: 'Salary Calculator',
           gross: 'Salary (Gross) EUR',
           net: 'Salary (Net) EUR',
+          employerCost: 'Employer Cost EUR',
           taxBook: 'Tax Book',
           dependents: 'Dependents',
           inHand: 'In Hand (Net)',
@@ -283,11 +292,14 @@
           taxableBase: 'Taxable Base',
           grossLabel: 'Gross',
           netLabel: 'Net',
+          darkMode: 'Dark',
+          lightMode: 'Light',
         },
         lv: {
           title: 'Algas kalkulators',
           gross: 'Alga (Brutto) EUR',
           net: 'Alga (Netto) EUR',
+          employerCost: 'Darba devēja izmaksas EUR',
           taxBook: 'Algas nodokļa grāmatiņa',
           dependents: 'Apgādājamie',
           inHand: 'Uz rokas (Netto)',
@@ -306,11 +318,14 @@
           taxableBase: 'Apliekamā bāze',
           grossLabel: 'Brutto',
           netLabel: 'Netto',
+          darkMode: 'Tumšais',
+          lightMode: 'Gaišais',
         },
         ru: {
           title: 'Калькулятор зарплаты',
           gross: 'Зарплата (Брутто) EUR',
           net: 'Зарплата (Нетто) EUR',
+          employerCost: 'Расходы работодателя EUR',
           taxBook: 'Налоговая книжка',
           dependents: 'Иждивенцы',
           inHand: 'На руки (Нетто)',
@@ -329,6 +344,8 @@
           taxableBase: 'Налогооблагаемая база',
           grossLabel: 'Брутто',
           netLabel: 'Нетто',
+          darkMode: 'Тёмный',
+          lightMode: 'Светлый',
         },
       };
 
@@ -377,6 +394,12 @@
         return gross;
       }
 
+      function lvGrossFromEmployerCost(employerCost) {
+        if (employerCost <= LV_RATES.riskDuty) return 0;
+        const gross = (employerCost - LV_RATES.riskDuty) / (1 + LV_RATES.employerVsaoi);
+        return gross > 0 ? gross : 0;
+      }
+
       // ── Estonia calculator ────────────────────────────────────────────────────
       const EE_RATES = {
         empUnemployment: 0.016,
@@ -418,6 +441,11 @@
         return (lo + hi) / 2;
       }
 
+      function eeGrossFromEmployerCost(employerCost) {
+        if (employerCost <= 0) return 0;
+        return employerCost / (1 + EE_RATES.employerSocialTax + EE_RATES.employerUnemployment);
+      }
+
       // ── Framework7 app ────────────────────────────────────────────────────────
       const app = new Framework7({ el: '#app', theme: 'ios' });
 
@@ -425,6 +453,7 @@
       const $ = id => document.getElementById(id);
       const grossInput = $('gross-input');
       const netInput = $('net-input');
+      const employerInput = $('employer-input');
       const taxBookToggle = $('tax-book-toggle');
       const dependentsInput = $('dependents-input');
       const lvOptions = $('lv-options');
@@ -433,6 +462,7 @@
       const LABEL_MAP = {
         'lbl-gross': 'gross',
         'lbl-net': 'net',
+        'lbl-employerCost': 'employerCost',
         'lbl-taxBook': 'taxBook',
         'lbl-dependents': 'dependents',
         'lbl-inHand': 'inHand',
@@ -466,7 +496,6 @@
         : window.matchMedia('(prefers-color-scheme: dark)').matches;
       let lastEdited = 'gross';
       let isInternalUpdate = false;
-      let hasInitializedInputs = false;
 
       // ── Helpers ───────────────────────────────────────────────────────────────
       function parseAmount(value) {
@@ -484,11 +513,16 @@
       }
 
       // ── Theme ─────────────────────────────────────────────────────────────────
+      function updateDarkModeBtn() {
+        const t = I18N[currentLang];
+        darkModeBtn.textContent = currentDark ? `☀️ ${t.lightMode}` : `🌙 ${t.darkMode}`;
+        darkModeBtn.setAttribute('aria-pressed', String(currentDark));
+      }
+
       function applyTheme(dark) {
         currentDark = dark;
         document.documentElement.classList.toggle('dark', dark);
-        darkModeBtn.textContent = dark ? '☀️' : '🌙';
-        darkModeBtn.setAttribute('aria-pressed', String(dark));
+        updateDarkModeBtn();
         localStorage.setItem('darkMode', dark);
       }
 
@@ -522,6 +556,7 @@
         const langAttr = { en: 'en', lv: 'lv', ru: 'ru' };
         document.documentElement.lang = langAttr[lang] || 'en';
         localStorage.setItem('lang', lang);
+        updateDarkModeBtn();
       }
 
       // ── Render ────────────────────────────────────────────────────────────────
@@ -552,27 +587,29 @@
       function recalc() {
         const currentGross = parseAmount(grossInput.value);
         const currentNet = parseAmount(netInput.value);
+        const currentEmployer = parseAmount(employerInput.value);
 
-        let result;
-        if (currentCountry === 'lv') {
-          result = lastEdited === 'net'
-            ? lvBreakdownFromGross(lvGrossFromNet(currentNet))
-            : lvBreakdownFromGross(currentGross);
+        let grossToCalc;
+        if (lastEdited === 'net') {
+          grossToCalc = currentCountry === 'lv' ? lvGrossFromNet(currentNet) : eeGrossFromNet(currentNet);
+        } else if (lastEdited === 'employer') {
+          grossToCalc = currentCountry === 'lv' ? lvGrossFromEmployerCost(currentEmployer) : eeGrossFromEmployerCost(currentEmployer);
         } else {
-          result = lastEdited === 'net'
-            ? eeBreakdownFromGross(eeGrossFromNet(currentNet))
-            : eeBreakdownFromGross(currentGross);
+          grossToCalc = currentGross;
         }
 
+        const result = currentCountry === 'lv' ? lvBreakdownFromGross(grossToCalc) : eeBreakdownFromGross(grossToCalc);
+
         isInternalUpdate = true;
-        if (!hasInitializedInputs) {
-          grossInput.value = round2(result.gross).toFixed(2);
-          netInput.value = round2(result.net).toFixed(2);
-          hasInitializedInputs = true;
+        if (lastEdited === 'gross') {
+          netInput.value = result.net > 0 ? round2(result.net).toFixed(2) : '';
+          employerInput.value = result.totalEmployerCost > 0 ? round2(result.totalEmployerCost).toFixed(2) : '';
         } else if (lastEdited === 'net') {
-          grossInput.value = round2(result.gross).toFixed(2);
-        } else {
-          netInput.value = round2(result.net).toFixed(2);
+          grossInput.value = result.gross > 0 ? round2(result.gross).toFixed(2) : '';
+          employerInput.value = result.totalEmployerCost > 0 ? round2(result.totalEmployerCost).toFixed(2) : '';
+        } else if (lastEdited === 'employer') {
+          grossInput.value = result.gross > 0 ? round2(result.gross).toFixed(2) : '';
+          netInput.value = result.net > 0 ? round2(result.net).toFixed(2) : '';
         }
         isInternalUpdate = false;
 
@@ -589,6 +626,12 @@
       netInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
         lastEdited = 'net';
+        recalc();
+      });
+
+      employerInput.addEventListener('input', () => {
+        if (isInternalUpdate) return;
+        lastEdited = 'employer';
         recalc();
       });
 
