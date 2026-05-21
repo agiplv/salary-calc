@@ -38,9 +38,9 @@
             <div class="card">
               <div class="card-content card-content-padding">
                 <div class="segmented segmented-round segmented-raised" id="salary-input-selector" role="tablist" aria-labelledby="lbl-inputModeSection">
-                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" aria-selected="true">Gross</button>
-                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" aria-selected="false">Net</button>
-                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" aria-selected="false">Employer</button>
+                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" role="tab" aria-selected="true">Gross</button>
+                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" role="tab" aria-selected="false">Net</button>
+                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" role="tab" aria-selected="false">Employer</button>
                 </div>
               </div>
               <div class="tabs">
@@ -628,13 +628,14 @@
       // ── Country ───────────────────────────────────────────────────────────────
       function applyCountry(country) {
         currentCountry = country;
+        const isLatvia = country === 'lv';
         document.querySelectorAll('#country-selector .button').forEach(btn => {
           btn.classList.toggle('button-active', btn.dataset.country === country);
         });
-        optionsSectionTitle.hidden = country !== 'lv';
-        lvOptions.hidden = country !== 'lv';
-        document.querySelectorAll('.lv-row').forEach(el => { el.hidden = country !== 'lv'; });
-        document.querySelectorAll('.ee-row').forEach(el => { el.hidden = country !== 'ee'; });
+        optionsSectionTitle.hidden = !isLatvia;
+        lvOptions.hidden = !isLatvia;
+        document.querySelectorAll('.lv-row').forEach(el => { el.hidden = !isLatvia; });
+        document.querySelectorAll('.ee-row').forEach(el => { el.hidden = isLatvia; });
         localStorage.setItem('country', country);
         recalc();
       }
@@ -646,7 +647,6 @@
         document.title = t.title;
         $('nav-title').textContent = t.title;
         $('nav-title-large').textContent = t.title;
-        langMenuBtn.textContent = '🌐';
         langMenuBtn.setAttribute('title', t.lang);
         langMenuBtn.setAttribute('aria-label', `${t.lang}: ${lang.toUpperCase()}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
