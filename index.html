@@ -29,6 +29,10 @@
       .hidden {
         display: none !important;
       }
+      .country-label {
+        font-size: 13px;
+        opacity: 0.6;
+      }
     </style>
   </head>
   <body>
@@ -41,7 +45,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <button id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙 Dark</button>
+                <button id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
               </div>
               <div class="title-large">
                 <div class="title-large-text" id="nav-title-large">Salary Calculator</div>
@@ -53,9 +57,12 @@
             <!-- Top controls: country + language -->
             <div class="block" style="margin-bottom:0; padding:0;">
               <div class="top-controls">
-                <div class="segmented segmented-strong segmented-round" id="country-selector">
-                  <button class="button button-active" data-country="lv">🇱🇻 LV</button>
-                  <button class="button" data-country="ee">🇪🇪 EE</button>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span class="country-label" id="lbl-country">Country</span>
+                  <div class="segmented segmented-strong segmented-round" id="country-selector">
+                    <button class="button button-active" data-country="lv">🇱🇻 LV</button>
+                    <button class="button" data-country="ee">🇪🇪 EE</button>
+                  </div>
                 </div>
                 <div class="top-controls-row">
                   <div class="segmented segmented-strong segmented-round" id="lang-selector">
@@ -294,6 +301,7 @@
           netLabel: 'Net',
           darkMode: 'Dark',
           lightMode: 'Light',
+          country: 'Country',
         },
         lv: {
           title: 'Algas kalkulators',
@@ -320,6 +328,7 @@
           netLabel: 'Netto',
           darkMode: 'Tumšais',
           lightMode: 'Gaišais',
+          country: 'Valsts',
         },
         ru: {
           title: 'Калькулятор зарплаты',
@@ -346,6 +355,7 @@
           netLabel: 'Нетто',
           darkMode: 'Тёмный',
           lightMode: 'Светлый',
+          country: 'Страна',
         },
       };
 
@@ -463,6 +473,7 @@
         'lbl-gross': 'gross',
         'lbl-net': 'net',
         'lbl-employerCost': 'employerCost',
+        'lbl-country': 'country',
         'lbl-taxBook': 'taxBook',
         'lbl-dependents': 'dependents',
         'lbl-inHand': 'inHand',
@@ -508,14 +519,19 @@
 
       function money(value) { return `${round2(value).toFixed(2)} €`; }
 
+      function setInputValue(input, value) {
+        input.value = value;
+        const itemContent = input.closest('.item-content');
+        if (itemContent) itemContent.classList.toggle('item-input-with-value', value !== '');
+      }
+
       function getDependents() {
         return Math.min(5, Math.max(0, parseInt(dependentsInput.value || '0', 10) || 0));
       }
 
       // ── Theme ─────────────────────────────────────────────────────────────────
       function updateDarkModeBtn() {
-        const t = I18N[currentLang];
-        darkModeBtn.textContent = currentDark ? `☀️ ${t.lightMode}` : `🌙 ${t.darkMode}`;
+        darkModeBtn.textContent = currentDark ? '☀️' : '🌙';
         darkModeBtn.setAttribute('aria-pressed', String(currentDark));
       }
 
@@ -602,14 +618,14 @@
 
         isInternalUpdate = true;
         if (lastEdited === 'gross') {
-          netInput.value = result.net > 0 ? round2(result.net).toFixed(2) : '';
-          employerInput.value = result.totalEmployerCost > 0 ? round2(result.totalEmployerCost).toFixed(2) : '';
+          setInputValue(netInput, result.net > 0 ? round2(result.net).toFixed(2) : '');
+          setInputValue(employerInput, result.totalEmployerCost > 0 ? round2(result.totalEmployerCost).toFixed(2) : '');
         } else if (lastEdited === 'net') {
-          grossInput.value = result.gross > 0 ? round2(result.gross).toFixed(2) : '';
-          employerInput.value = result.totalEmployerCost > 0 ? round2(result.totalEmployerCost).toFixed(2) : '';
+          setInputValue(grossInput, result.gross > 0 ? round2(result.gross).toFixed(2) : '');
+          setInputValue(employerInput, result.totalEmployerCost > 0 ? round2(result.totalEmployerCost).toFixed(2) : '');
         } else if (lastEdited === 'employer') {
-          grossInput.value = result.gross > 0 ? round2(result.gross).toFixed(2) : '';
-          netInput.value = result.net > 0 ? round2(result.net).toFixed(2) : '';
+          setInputValue(grossInput, result.gross > 0 ? round2(result.gross).toFixed(2) : '');
+          setInputValue(netInput, result.net > 0 ? round2(result.net).toFixed(2) : '');
         }
         isInternalUpdate = false;
 
