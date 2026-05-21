@@ -395,7 +395,7 @@
       }
 
       function lvGrossFromEmployerCost(employerCost) {
-        if (employerCost <= LV_RATES.riskDuty) return 0;
+        if (employerCost < LV_RATES.riskDuty) return 0;
         const gross = (employerCost - LV_RATES.riskDuty) / (1 + LV_RATES.employerVsaoi);
         return gross > 0 ? gross : 0;
       }
