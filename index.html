@@ -269,26 +269,26 @@
         <div class="list no-margin">
           <ul>
             <li>
-              <a href="#" class="item-link item-content popover-close" data-lang="en">
+              <a href="#" class="item-link item-content popover-close" data-lang="en" role="menuitemradio" aria-checked="true">
                 <div class="item-inner">
                   <div class="item-title">English</div>
-                  <div class="item-after" id="lang-option-en">✓</div>
+                  <div class="item-after" id="lang-option-en" aria-hidden="true">✓</div>
                 </div>
               </a>
             </li>
             <li>
-              <a href="#" class="item-link item-content popover-close" data-lang="lv">
+              <a href="#" class="item-link item-content popover-close" data-lang="lv" role="menuitemradio" aria-checked="false">
                 <div class="item-inner">
                   <div class="item-title">Latviešu</div>
-                  <div class="item-after" id="lang-option-lv" hidden>✓</div>
+                  <div class="item-after" id="lang-option-lv" aria-hidden="true" hidden>✓</div>
                 </div>
               </a>
             </li>
             <li>
-              <a href="#" class="item-link item-content popover-close" data-lang="ru">
+              <a href="#" class="item-link item-content popover-close" data-lang="ru" role="menuitemradio" aria-checked="false">
                 <div class="item-inner">
                   <div class="item-title">Русский</div>
-                  <div class="item-after" id="lang-option-ru" hidden>✓</div>
+                  <div class="item-after" id="lang-option-ru" aria-hidden="true" hidden>✓</div>
                 </div>
               </a>
             </li>
@@ -653,12 +653,11 @@
         $('nav-title').textContent = t.title;
         $('nav-title-large').textContent = t.title;
         langMenuBtn.setAttribute('title', t.lang);
-        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang] || lang.toUpperCase()}`);
+        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang]}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
           const isActive = link.dataset.lang === lang;
           link.classList.toggle('text-color-blue', isActive);
-          if (isActive) link.setAttribute('aria-current', 'page');
-          else link.removeAttribute('aria-current');
+          link.setAttribute('aria-checked', String(isActive));
           link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
         });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
