@@ -16,7 +16,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language">EN</a>
+                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language">🌐</a>
                 <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
               <div class="title-large">
@@ -646,9 +646,9 @@
         document.title = t.title;
         $('nav-title').textContent = t.title;
         $('nav-title-large').textContent = t.title;
-        langMenuBtn.textContent = lang.toUpperCase();
+        langMenuBtn.textContent = '🌐';
         langMenuBtn.setAttribute('title', t.lang);
-        langMenuBtn.setAttribute('aria-label', t.lang);
+        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${lang.toUpperCase()}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
           const isActive = link.dataset.lang === lang;
           link.classList.toggle('color-blue', isActive);
