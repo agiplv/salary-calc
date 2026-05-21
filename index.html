@@ -29,8 +29,8 @@
             <div class="block-title" id="lbl-country">Country</div>
             <div class="block block-strong inset">
               <div class="segmented segmented-round segmented-raised" id="country-selector">
-                <button class="button button-active" data-country="lv" type="button">🇱🇻 LV</button>
-                <button class="button" data-country="ee" type="button">🇪🇪 EE</button>
+                <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">🇱🇻 LV</button>
+                <button class="button" data-country="ee" type="button" aria-label="Estonia">🇪🇪 EE</button>
               </div>
             </div>
 
@@ -38,9 +38,9 @@
             <div class="card">
               <div class="card-content card-content-padding">
                 <div class="segmented segmented-round segmented-raised" id="salary-input-selector" role="tablist" aria-labelledby="lbl-inputModeSection">
-                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" role="tab" aria-selected="true">Gross</button>
-                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" role="tab" aria-selected="false">Net</button>
-                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" role="tab" aria-selected="false">Employer</button>
+                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" role="tab" aria-controls="tab-gross" aria-selected="true">Gross</button>
+                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" role="tab" aria-controls="tab-net" aria-selected="false">Net</button>
+                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" role="tab" aria-controls="tab-employer" aria-selected="false">Employer</button>
                 </div>
               </div>
               <div class="tabs">
@@ -657,7 +657,8 @@
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
           const isActive = link.dataset.lang === lang;
           link.classList.toggle('text-color-blue', isActive);
-          link.setAttribute('aria-current', isActive ? 'true' : 'false');
+          if (isActive) link.setAttribute('aria-current', 'page');
+          else link.removeAttribute('aria-current');
           link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
         });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
