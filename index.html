@@ -4,10 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <title>Salary Calculator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.css" />
+    <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
     <style>
       .hidden {
         display: none !important;
+      }
+
+      html,
+      body {
+        background: var(--f7-page-bg-color);
+      }
+
+      .page-content {
+        padding-bottom: calc(var(--f7-safe-area-bottom) + 24px);
+      }
+
+      .salary-input-card .toolbar {
+        margin: 0;
+      }
+
+      .salary-input-card .block-footer {
+        margin: 12px 16px 0;
+      }
+
+      .salary-input-card .list {
+        margin: 12px 0 0;
+      }
+
+      .summary-card {
+        margin: 0 0 12px;
+      }
+
+      .summary-card:last-child {
+        margin-bottom: 0;
+      }
+
+      .summary-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-top: 8px;
       }
     </style>
   </head>
@@ -59,37 +95,64 @@
               </ul>
             </div>
 
-            <!-- Salary inputs -->
-            <div class="list list-strong list-inset list-strong-inset">
-              <ul>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-floating-label" id="lbl-gross">Salary (Gross) EUR</div>
-                    <div class="item-input-wrap">
-                      <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
-                    </div>
+            <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
+            <div class="card salary-input-card">
+              <div class="card-content card-content-padding">
+                <div class="segmented segmented-strong" id="salary-input-selector" role="tablist" aria-label="Salary input mode">
+                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button">Gross</button>
+                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button">Net</button>
+                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button">Employer</button>
+                </div>
+                <div class="block-footer text-color-gray" id="lbl-inputHint">Choose the salary amount you know and edit only that field.</div>
+              </div>
+              <div class="tabs">
+                <div class="tab tab-active salary-input-tab" id="tab-gross">
+                  <div class="list list-strong list-inset list-strong-inset">
+                    <ul>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-floating-label" id="lbl-gross">Salary (Gross) EUR</div>
+                          <div class="item-input-wrap">
+                            <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
-                </li>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-floating-label" id="lbl-net">Salary (Net) EUR</div>
-                    <div class="item-input-wrap">
-                      <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
-                    </div>
+                </div>
+                <div class="tab salary-input-tab" id="tab-net">
+                  <div class="list list-strong list-inset list-strong-inset">
+                    <ul>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-floating-label" id="lbl-net">Salary (Net) EUR</div>
+                          <div class="item-input-wrap">
+                            <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
-                </li>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-floating-label" id="lbl-employerCost">Employer Cost EUR</div>
-                    <div class="item-input-wrap">
-                      <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
-                    </div>
+                </div>
+                <div class="tab salary-input-tab" id="tab-employer">
+                  <div class="list list-strong list-inset list-strong-inset">
+                    <ul>
+                      <li class="item-content item-input">
+                        <div class="item-inner">
+                          <div class="item-title item-floating-label" id="lbl-employerCost">Employer Cost EUR</div>
+                          <div class="item-input-wrap">
+                            <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
 
             <!-- Latvia-only options -->
+            <div class="block-title" id="lbl-optionsSection">Adjustments</div>
             <div id="lv-options" class="list list-strong list-inset list-strong-inset">
               <ul>
                 <li>
@@ -129,22 +192,18 @@
               </ul>
             </div>
 
-            <!-- Summary results -->
-            <div class="list list-strong list-inset list-strong-inset">
-              <ul>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
-                    <div id="hero-net" class="item-after font-size-24 font-weight-bold text-color-blue">0.00 €</div>
-                  </div>
-                </li>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
-                    <div id="hero-total" class="item-after font-size-24 font-weight-bold">0.00 €</div>
-                  </div>
-                </li>
-              </ul>
+            <div class="block-title" id="lbl-summarySection">Summary</div>
+            <div class="card summary-card">
+              <div class="card-content card-content-padding">
+                <div class="text-color-gray" id="lbl-inHand">In Hand (Net)</div>
+                <div id="hero-net" class="summary-value text-color-blue">0.00 €</div>
+              </div>
+            </div>
+            <div class="card summary-card">
+              <div class="card-content card-content-padding">
+                <div class="text-color-gray" id="lbl-totalEmployer">Total Employer Cost</div>
+                <div id="hero-total" class="summary-value">0.00 €</div>
+              </div>
             </div>
 
             <!-- Detailed breakdown accordion -->
@@ -257,12 +316,19 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.js"></script>
+    <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
       // ── i18n ──────────────────────────────────────────────────────────────────
       const I18N = {
         en: {
           title: 'Salary Calculator',
+          inputModeSection: 'Salary Input',
+          inputHint: 'Choose the salary amount you know and edit only that field.',
+          grossTab: 'Gross',
+          netTab: 'Net',
+          employerTab: 'Employer',
+          optionsSection: 'Adjustments',
+          summarySection: 'Summary',
           gross: 'Salary (Gross) EUR',
           net: 'Salary (Net) EUR',
           employerCost: 'Employer Cost EUR',
@@ -291,6 +357,13 @@
         },
         lv: {
           title: 'Algas kalkulators',
+          inputModeSection: 'Ievades režīms',
+          inputHint: 'Izvēlieties zināmo summu un labojiet tikai šo lauku.',
+          grossTab: 'Bruto',
+          netTab: 'Neto',
+          employerTab: 'Darba devējs',
+          optionsSection: 'Pielāgojumi',
+          summarySection: 'Kopsavilkums',
           gross: 'Alga (Brutto) EUR',
           net: 'Alga (Netto) EUR',
           employerCost: 'Darba devēja izmaksas EUR',
@@ -319,6 +392,13 @@
         },
         ru: {
           title: 'Калькулятор зарплаты',
+          inputModeSection: 'Режим ввода',
+          inputHint: 'Выберите известную сумму и редактируйте только это поле.',
+          grossTab: 'Брутто',
+          netTab: 'Нетто',
+          employerTab: 'Работодатель',
+          optionsSection: 'Настройки',
+          summarySection: 'Сводка',
           gross: 'Зарплата (Брутто) EUR',
           net: 'Зарплата (Нетто) EUR',
           employerCost: 'Расходы работодателя EUR',
@@ -456,8 +536,16 @@
       const dependentsInput = $('dependents-input');
       const lvOptions = $('lv-options');
       const darkModeBtn = $('dark-mode-btn');
+      const salaryInputSelector = $('salary-input-selector');
 
       const LABEL_MAP = {
+        'lbl-inputModeSection': 'inputModeSection',
+        'lbl-inputHint': 'inputHint',
+        'tab-btn-gross': 'grossTab',
+        'tab-btn-net': 'netTab',
+        'tab-btn-employer': 'employerTab',
+        'lbl-optionsSection': 'optionsSection',
+        'lbl-summarySection': 'summarySection',
         'lbl-gross': 'gross',
         'lbl-net': 'net',
         'lbl-employerCost': 'employerCost',
@@ -516,6 +604,24 @@
 
       function getDependents() {
         return Math.min(5, Math.max(0, parseInt(dependentsInput.value || '0', 10) || 0));
+      }
+
+      function getInputByMode(mode) {
+        if (mode === 'net') return netInput;
+        if (mode === 'employer') return employerInput;
+        return grossInput;
+      }
+
+      function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
+        lastEdited = mode;
+        salaryInputSelector.querySelectorAll('[data-input-mode]').forEach(btn => {
+          btn.classList.toggle('button-active', btn.dataset.inputMode === mode);
+        });
+        document.querySelectorAll('.salary-input-tab').forEach(tab => {
+          tab.classList.toggle('tab-active', tab.id === `tab-${mode}`);
+        });
+        if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
+        if (sync) recalc();
       }
 
       // ── Theme ─────────────────────────────────────────────────────────────────
@@ -627,18 +733,21 @@
         lastEdited = 'gross';
         recalc();
       });
+      grossInput.addEventListener('focus', () => activateSalaryInput('gross'));
 
       netInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
         lastEdited = 'net';
         recalc();
       });
+      netInput.addEventListener('focus', () => activateSalaryInput('net'));
 
       employerInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
         lastEdited = 'employer';
         recalc();
       });
+      employerInput.addEventListener('focus', () => activateSalaryInput('employer'));
 
       taxBookToggle.addEventListener('change', recalc);
 
@@ -659,10 +768,17 @@
         if (btn) applyLang(btn.dataset.lang);
       });
 
+      salaryInputSelector.addEventListener('click', e => {
+        const btn = e.target.closest('[data-input-mode]');
+        if (!btn) return;
+        activateSalaryInput(btn.dataset.inputMode, { focus: true, sync: true });
+      });
+
       // ── Init ──────────────────────────────────────────────────────────────────
       applyTheme(currentDark);
       applyCountry(currentCountry);
       applyLang(currentLang);
+      activateSalaryInput(lastEdited);
       recalc();
     </script>
   </body>
