@@ -97,6 +97,89 @@
         line-height: 1.2;
         margin-top: 6px;
       }
+
+      @media (max-width: 430px) {
+        :root {
+          --f7-list-inset-side-margin: 12px;
+          --f7-block-margin-vertical: 14px;
+          --f7-block-title-margin-top: 20px;
+          --f7-block-title-font-size: 1.125rem;
+          --f7-card-margin-vertical: 8px;
+          --f7-card-content-padding-vertical: 14px;
+          --f7-card-content-padding-horizontal: 14px;
+        }
+
+        .navbar-large .title-large-text {
+          font-size: 2rem;
+          line-height: 1.05;
+        }
+
+        .page-content {
+          padding-bottom: calc(var(--f7-safe-area-bottom) + 12px);
+        }
+
+        .list.list-inset,
+        .list.list-strong-inset,
+        .card {
+          margin-left: 12px;
+          margin-right: 12px;
+        }
+
+        .list .item-content,
+        .list .item-link {
+          min-height: 50px;
+        }
+
+        .list .item-title,
+        .block-title {
+          line-height: 1.2;
+        }
+
+        .selector-segmented {
+          padding: 3px;
+          border-radius: 12px;
+        }
+
+        .selector-segmented .button {
+          min-height: 36px;
+          font-size: 0.95rem;
+        }
+
+        .salary-input-card .card-content {
+          padding: 12px 12px 8px;
+        }
+
+        .salary-input-card .tabs {
+          padding: 0 12px 10px;
+        }
+
+        .salary-input-panel-label {
+          font-size: 0.95rem;
+        }
+
+        .salary-input-panel input {
+          margin-top: 4px;
+          font-size: 1.125rem;
+        }
+
+        .summary-card {
+          margin-bottom: 6px;
+        }
+
+        .summary-card .text-color-gray {
+          font-size: 0.95rem;
+        }
+
+        .summary-value {
+          font-size: 1.2rem;
+          margin-top: 4px;
+        }
+
+        #dependents-stepper {
+          transform: scale(0.9);
+          transform-origin: right center;
+        }
+      }
     </style>
   </head>
   <body>
