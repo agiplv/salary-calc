@@ -363,7 +363,7 @@
                         </li>
                         <li class="item-content">
                           <div class="item-inner">
-                            <div class="item-title" id="lbl-netLabel2">Net</div>
+                            <div class="item-title" id="lbl-netLabel-breakdown">Net</div>
                             <div id="r-net" class="item-after">0.00 €</div>
                           </div>
                         </li>
@@ -670,7 +670,7 @@
         'lbl-taxableBase': 'taxableBase',
         'lbl-grossLabel': 'grossLabel',
         'lbl-netLabel': 'netLabel',
-        'lbl-netLabel2': 'netLabel',
+        'lbl-netLabel-breakdown': 'netLabel',
         'lbl-totalEmployer2': 'totalEmployer',
         'lbl-taxesLabel': 'taxes',
       };
@@ -766,8 +766,6 @@
         const t = I18N[lang];
         document.title = t.title;
         $('nav-title').textContent = t.title;
-        const navTitleLarge = $('nav-title-large');
-        if (navTitleLarge) navTitleLarge.textContent = t.title;
         langMenuBtn.setAttribute('title', t.lang);
         langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang]}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
