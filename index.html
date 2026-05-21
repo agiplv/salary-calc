@@ -5,12 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
+    <style>
+      /* ── Hero Card ─────────────────────────────────────────────────────── */
+      .hero-card {
+        margin: 8px 16px 0 !important;
+        border-radius: 16px !important;
+        overflow: hidden;
+        background: var(--f7-theme-color) !important;
+        color: #fff;
+        box-shadow: 0 6px 24px rgba(0, 122, 255, 0.32) !important;
+      }
+      .dark .hero-card {
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
+      }
+      .hero-card .card-content { padding: 0; }
+
+      .hero-net-label {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.8;
+        text-align: center;
+        padding-top: 20px;
+      }
+      .hero-net-amount {
+        font-size: 2.8rem;
+        font-weight: 700;
+        text-align: center;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        padding: 4px 16px 16px;
+      }
+      .hero-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.22);
+        margin: 0 16px;
+      }
+      .hero-secondaries {
+        display: flex;
+        padding: 12px 8px;
+      }
+      .hero-secondary {
+        flex: 1;
+        text-align: center;
+        min-width: 0;
+      }
+      .hero-secondary + .hero-secondary {
+        border-left: 1px solid rgba(255, 255, 255, 0.22);
+      }
+      .hero-secondary-label {
+        font-size: 11px;
+        opacity: 0.7;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 6px;
+      }
+      .hero-secondary-value {
+        font-size: 15px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 6px;
+      }
+
+      /* ── Tax Breakdown Bar ─────────────────────────────────────────────── */
+      .tax-bar-section {
+        padding: 10px 16px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.22);
+      }
+      .tax-bar-row-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        opacity: 0.75;
+        margin-bottom: 5px;
+      }
+      .tax-bar {
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
+        overflow: hidden;
+      }
+      .bar-net {
+        background: rgba(255, 255, 255, 0.88);
+        transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
+        border-radius: 3px 0 0 3px;
+        flex-shrink: 0;
+      }
+      .bar-taxes {
+        background: rgba(255, 85, 65, 0.72);
+        transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
+        border-radius: 0 3px 3px 0;
+        flex-shrink: 0;
+      }
+      .tax-bar-pct {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        opacity: 0.6;
+        margin-top: 4px;
+      }
+
+      /* ── Source-input highlighting ──────────────────────────────────────── */
+      .salary-field.is-source .item-label {
+        color: var(--f7-theme-color) !important;
+        font-weight: 600;
+      }
+      .salary-field .auto-chip {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        border: 1px solid currentColor;
+        border-radius: 8px;
+        padding: 1px 6px;
+        opacity: 0.4;
+        pointer-events: none;
+        align-self: center;
+        display: none;
+      }
+      .salary-field:not(.is-source) .auto-chip { display: inline-block; }
+      .salary-inputs-list .item-after {
+        display: flex;
+        align-items: center;
+      }
+
+      /* ── Country block ─────────────────────────────────────────────────── */
+      .country-block { margin-top: 12px; margin-bottom: 0; }
+    </style>
   </head>
   <body>
     <div id="app">
       <div class="view view-main view-init safe-areas">
         <div class="page" id="main-page" data-name="home">
-          <div class="navbar navbar-large">
+          <div class="navbar">
             <div class="navbar-bg"></div>
             <div class="navbar-inner">
               <div class="left"></div>
@@ -19,71 +153,81 @@
                 <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language selector">🌐</a>
                 <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
-              <div class="title-large">
-                <div class="title-large-text" id="nav-title-large">Salary Calculator</div>
-              </div>
             </div>
           </div>
 
           <div class="page-content">
-            <div class="block-title" id="lbl-country">Country</div>
-            <div class="block block-strong inset">
+
+            <!-- Country Selector -->
+            <div class="block block-strong inset country-block">
               <div class="segmented segmented-round segmented-raised" id="country-selector">
                 <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">🇱🇻 LV</button>
                 <button class="button" data-country="ee" type="button" aria-label="Estonia">🇪🇪 EE</button>
               </div>
             </div>
 
+            <!-- Salary Inputs – all three always visible; active field highlighted -->
             <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
-            <div class="card">
-              <div class="card-content card-content-padding">
-                <div class="segmented segmented-round segmented-raised" id="salary-input-selector" role="tablist" aria-labelledby="lbl-inputModeSection">
-                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" role="tab" aria-controls="tab-gross" aria-selected="true">Gross</button>
-                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" role="tab" aria-controls="tab-net" aria-selected="false">Net</button>
-                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" role="tab" aria-controls="tab-employer" aria-selected="false">Employer</button>
-                </div>
-              </div>
-              <div class="tabs">
-                <div class="tab tab-active salary-input-tab" id="tab-gross">
-                  <div class="list list-strong no-margin">
-                    <ul>
-                      <li class="item-content item-input item-input-outline">
-                        <div class="item-inner">
-                          <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
-                          <div class="item-input-wrap">
-                            <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
+            <div class="list list-inset list-strong-inset salary-inputs-list">
+              <ul>
+                <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
+                  <div class="item-inner">
+                    <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
+                    </div>
+                  </div>
+                  <div class="item-after"><span class="auto-chip">AUTO</span></div>
+                </li>
+                <li id="field-net" class="item-content item-input item-input-outline salary-field">
+                  <div class="item-inner">
+                    <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
+                    </div>
+                  </div>
+                  <div class="item-after"><span class="auto-chip">AUTO</span></div>
+                </li>
+                <li id="field-employer" class="item-content item-input item-input-outline salary-field">
+                  <div class="item-inner">
+                    <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
+                    </div>
+                  </div>
+                  <div class="item-after"><span class="auto-chip">AUTO</span></div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Hero Result Card -->
+            <div class="card hero-card">
+              <div class="card-content">
+                <div class="hero-net-label" id="lbl-inHand">In Hand (Net)</div>
+                <div class="hero-net-amount" id="hero-net" aria-live="polite" aria-atomic="true">0.00 €</div>
+                <div class="hero-divider"></div>
+                <div class="hero-secondaries">
+                  <div class="hero-secondary">
+                    <div class="hero-secondary-label" id="lbl-summaryGross">Gross Salary</div>
+                    <div class="hero-secondary-value" id="hero-gross" aria-live="polite" aria-atomic="true">0.00 €</div>
+                  </div>
+                  <div class="hero-secondary">
+                    <div class="hero-secondary-label" id="lbl-totalEmployer">Total Employer Cost</div>
+                    <div class="hero-secondary-value" id="hero-total" aria-live="polite" aria-atomic="true">0.00 €</div>
                   </div>
                 </div>
-                <div class="tab salary-input-tab" id="tab-net">
-                  <div class="list list-strong no-margin">
-                    <ul>
-                      <li class="item-content item-input item-input-outline">
-                        <div class="item-inner">
-                          <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
-                          <div class="item-input-wrap">
-                            <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
+                <div class="tax-bar-section">
+                  <div class="tax-bar-row-labels">
+                    <span id="lbl-netLabel">Net</span>
+                    <span id="lbl-taxesLabel">Taxes</span>
                   </div>
-                </div>
-                <div class="tab salary-input-tab" id="tab-employer">
-                  <div class="list list-strong no-margin">
-                    <ul>
-                      <li class="item-content item-input item-input-outline">
-                        <div class="item-inner">
-                          <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
-                          <div class="item-input-wrap">
-                            <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
+                  <div class="tax-bar">
+                    <div id="bar-net" class="bar-net" style="width:0%"></div>
+                    <div id="bar-taxes" class="bar-taxes" style="width:0%"></div>
+                  </div>
+                  <div class="tax-bar-pct">
+                    <span id="bar-net-pct">—</span>
+                    <span id="bar-taxes-pct">—</span>
                   </div>
                 </div>
               </div>
@@ -125,30 +269,6 @@
                         <div class="stepper-button-plus"></div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="block-title" id="lbl-summarySection">Summary</div>
-            <div class="list list-inset list-strong-inset">
-              <ul>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-summaryGross">Gross Salary</div>
-                    <div id="hero-gross" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
-                  </div>
-                </li>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
-                    <div id="hero-net" class="item-after text-color-blue" aria-live="polite" aria-atomic="true">0.00 €</div>
-                  </div>
-                </li>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
-                    <div id="hero-total" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
                   </div>
                 </li>
               </ul>
@@ -243,7 +363,7 @@
                         </li>
                         <li class="item-content">
                           <div class="item-inner">
-                            <div class="item-title" id="lbl-netLabel">Net</div>
+                            <div class="item-title" id="lbl-netLabel-breakdown">Net</div>
                             <div id="r-net" class="item-after">0.00 €</div>
                           </div>
                         </li>
@@ -259,6 +379,8 @@
                 </li>
               </ul>
             </div>
+
+            <div style="height:24px"></div>
           </div>
         </div>
       </div>
@@ -331,6 +453,7 @@
           taxableBase: 'Taxable Base',
           grossLabel: 'Gross',
           netLabel: 'Net',
+          taxes: 'Taxes',
           darkMode: 'Dark',
           lightMode: 'Light',
           country: 'Country',
@@ -366,6 +489,7 @@
           taxableBase: 'Apliekamā bāze',
           grossLabel: 'Brutto',
           netLabel: 'Netto',
+          taxes: 'Nodokļi',
           darkMode: 'Tumšais',
           lightMode: 'Gaišais',
           country: 'Valsts',
@@ -401,6 +525,7 @@
           taxableBase: 'Налогооблагаемая база',
           grossLabel: 'Брутто',
           netLabel: 'Нетто',
+          taxes: 'Налоги',
           darkMode: 'Тёмный',
           lightMode: 'Светлый',
           country: 'Страна',
@@ -519,19 +644,13 @@
       const optionsSectionTitle = $('lbl-optionsSection');
       const darkModeBtn = $('dark-mode-btn');
       const langMenuBtn = $('lang-menu-btn');
-      const salaryInputSelector = $('salary-input-selector');
 
       const LABEL_MAP = {
         'lbl-inputModeSection': 'inputModeSection',
-        'tab-btn-gross': 'grossTab',
-        'tab-btn-net': 'netTab',
-        'tab-btn-employer': 'employerTab',
         'lbl-optionsSection': 'optionsSection',
-        'lbl-summarySection': 'summarySection',
         'lbl-gross': 'gross',
         'lbl-net': 'net',
         'lbl-employerCost': 'employerCost',
-        'lbl-country': 'country',
         'lbl-taxBook': 'taxBook',
         'lbl-dependents': 'dependents',
         'lbl-summaryGross': 'summaryGross',
@@ -551,7 +670,9 @@
         'lbl-taxableBase': 'taxableBase',
         'lbl-grossLabel': 'grossLabel',
         'lbl-netLabel': 'netLabel',
+        'lbl-netLabel-breakdown': 'netLabel',
         'lbl-totalEmployer2': 'totalEmployer',
+        'lbl-taxesLabel': 'taxes',
       };
 
       // ── State ─────────────────────────────────────────────────────────────────
@@ -601,14 +722,8 @@
 
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
         lastEdited = mode;
-        salaryInputSelector.querySelectorAll('[data-input-mode]').forEach(btn => {
-          const isActive = btn.dataset.inputMode === mode;
-          btn.classList.toggle('button-active', isActive);
-          btn.setAttribute('aria-selected', String(isActive));
-          btn.setAttribute('tabindex', isActive ? '0' : '-1');
-        });
-        document.querySelectorAll('.salary-input-tab').forEach(tab => {
-          tab.classList.toggle('tab-active', tab.id === `tab-${mode}`);
+        document.querySelectorAll('.salary-field').forEach(field => {
+          field.classList.toggle('is-source', field.id === `field-${mode}`);
         });
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
         if (sync) recalc();
@@ -651,7 +766,6 @@
         const t = I18N[lang];
         document.title = t.title;
         $('nav-title').textContent = t.title;
-        $('nav-title-large').textContent = t.title;
         langMenuBtn.setAttribute('title', t.lang);
         langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang]}`);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
@@ -692,6 +806,22 @@
           $('r-employer-social-ee').textContent = money(result.employerSocialTax);
           $('r-employer-unemployment').textContent = money(result.employerUnemployment);
           $('r-non-tax-min').textContent = money(result.nonTaxMin);
+        }
+
+        // Tax breakdown bar
+        const gross = result.gross;
+        if (gross > 0) {
+          const netPct = Math.round((result.net / gross) * 100);
+          const taxPct = 100 - netPct;
+          $('bar-net').style.width = netPct + '%';
+          $('bar-taxes').style.width = taxPct + '%';
+          $('bar-net-pct').textContent = netPct + '%';
+          $('bar-taxes-pct').textContent = taxPct + '%';
+        } else {
+          $('bar-net').style.width = '0%';
+          $('bar-taxes').style.width = '0%';
+          $('bar-net-pct').textContent = '—';
+          $('bar-taxes-pct').textContent = '—';
         }
       }
 
@@ -772,12 +902,6 @@
         if (btn) {
           applyLang(btn.dataset.lang);
         }
-      });
-
-      salaryInputSelector.addEventListener('click', e => {
-        const btn = e.target.closest('[data-input-mode]');
-        if (!btn) return;
-        activateSalaryInput(btn.dataset.inputMode, { focus: true, sync: true });
       });
 
       // ── Init ──────────────────────────────────────────────────────────────────
