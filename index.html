@@ -41,7 +41,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <button id="dark-mode-btn" title="Toggle dark mode">🌙</button>
+                <button id="dark-mode-btn" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</button>
               </div>
               <div class="title-large">
                 <div class="title-large-text" id="nav-title-large">Salary Calculator</div>
@@ -455,8 +455,12 @@
       };
 
       // ── State ─────────────────────────────────────────────────────────────────
-      let currentCountry = localStorage.getItem('country') || 'lv';
-      let currentLang = localStorage.getItem('lang') || 'en';
+      const VALID_COUNTRIES = ['lv', 'ee'];
+      const VALID_LANGS = ['en', 'lv', 'ru'];
+      const savedCountry = localStorage.getItem('country');
+      const savedLang = localStorage.getItem('lang');
+      let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
+      let currentLang = VALID_LANGS.includes(savedLang) ? savedLang : 'en';
       let currentDark = localStorage.getItem('darkMode') !== null
         ? localStorage.getItem('darkMode') === 'true'
         : window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -484,6 +488,7 @@
         currentDark = dark;
         document.documentElement.classList.toggle('dark', dark);
         darkModeBtn.textContent = dark ? '☀️' : '🌙';
+        darkModeBtn.setAttribute('aria-pressed', String(dark));
         localStorage.setItem('darkMode', dark);
       }
 
@@ -514,7 +519,8 @@
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
         });
-        document.documentElement.lang = lang === 'ru' ? 'ru' : lang === 'lv' ? 'lv' : 'en';
+        const langAttr = { en: 'en', lv: 'lv', ru: 'ru' };
+        document.documentElement.lang = langAttr[lang] || 'en';
         localStorage.setItem('lang', lang);
       }
 
