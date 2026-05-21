@@ -1,31 +1,78 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <title>Algas kalkulators</title>
+    <title>Salary Calculator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.css" />
+    <style>
+      .top-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px 6px;
+        gap: 8px;
+      }
+      .top-controls-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #dark-mode-btn {
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 4px 8px;
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
   </head>
-  <body class="theme-dark">
+  <body>
     <div id="app">
       <div class="view view-main view-init safe-areas">
-        <div class="page theme-dark" data-name="home">
+        <div class="page" id="main-page" data-name="home">
           <div class="navbar navbar-large">
             <div class="navbar-bg"></div>
-            <div class="navbar-inner sliding">
-              <div class="title">Algas kalkulators</div>
+            <div class="navbar-inner">
+              <div class="left"></div>
+              <div class="title" id="nav-title">Salary Calculator</div>
+              <div class="right">
+                <button id="dark-mode-btn" title="Toggle dark mode">🌙</button>
+              </div>
               <div class="title-large">
-                <div class="title-large-text">Algas kalkulators</div>
+                <div class="title-large-text" id="nav-title-large">Salary Calculator</div>
               </div>
             </div>
           </div>
 
           <div class="page-content">
+            <!-- Top controls: country + language -->
+            <div class="block" style="margin-bottom:0; padding:0;">
+              <div class="top-controls">
+                <div class="segmented segmented-strong segmented-round" id="country-selector">
+                  <button class="button button-active" data-country="lv">🇱🇻 LV</button>
+                  <button class="button" data-country="ee">🇪🇪 EE</button>
+                </div>
+                <div class="top-controls-row">
+                  <div class="segmented segmented-strong segmented-round" id="lang-selector">
+                    <button class="button button-active" data-lang="en">EN</button>
+                    <button class="button" data-lang="lv">LV</button>
+                    <button class="button" data-lang="ru">RU</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Salary inputs -->
             <div class="list list-strong list-inset list-strong-inset">
               <ul>
                 <li class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-floating-label">Alga (Brutto) EUR</div>
+                    <div class="item-title item-floating-label" id="lbl-gross">Salary (Gross) EUR</div>
                     <div class="item-input-wrap">
                       <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
                     </div>
@@ -33,7 +80,7 @@
                 </li>
                 <li class="item-content item-input">
                   <div class="item-inner">
-                    <div class="item-title item-floating-label">Alga (Netto) EUR</div>
+                    <div class="item-title item-floating-label" id="lbl-net">Salary (Net) EUR</div>
                     <div class="item-input-wrap">
                       <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" />
                     </div>
@@ -42,12 +89,13 @@
               </ul>
             </div>
 
-            <div class="list list-strong list-inset list-strong-inset">
+            <!-- Latvia-only options -->
+            <div id="lv-options" class="list list-strong list-inset list-strong-inset">
               <ul>
                 <li>
                   <label class="item-content">
                     <div class="item-inner">
-                      <div class="item-title">Algas nodokļa grāmatiņa</div>
+                      <div class="item-title" id="lbl-taxBook">Tax Book</div>
                       <div class="item-after">
                         <label class="toggle toggle-init color-blue">
                           <input id="tax-book-toggle" type="checkbox" checked />
@@ -59,7 +107,7 @@
                 </li>
                 <li class="item-content item-input item-input-with-value">
                   <div class="item-inner">
-                    <div class="item-title">Apgādājamie</div>
+                    <div class="item-title" id="lbl-dependents">Dependents</div>
                     <div class="item-after">
                       <div
                         id="dependents-stepper"
@@ -81,85 +129,120 @@
               </ul>
             </div>
 
+            <!-- Summary results -->
             <div class="list list-strong list-inset list-strong-inset">
               <ul>
                 <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title">Uz rokas (Netto)</div>
+                    <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
                     <div id="hero-net" class="item-after font-size-24 font-weight-bold text-color-blue">0.00 €</div>
                   </div>
                 </li>
                 <li class="item-content">
                   <div class="item-inner">
-                    <div class="item-title">Kopējās izmaksas Darba devējam</div>
+                    <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
                     <div id="hero-total" class="item-after font-size-24 font-weight-bold">0.00 €</div>
                   </div>
                 </li>
               </ul>
             </div>
 
+            <!-- Detailed breakdown accordion -->
             <div class="list accordion-list list-strong list-inset list-strong-inset">
               <ul>
                 <li class="accordion-item">
                   <a href="#" class="item-content item-link">
                     <div class="item-inner">
-                      <div class="item-title">Detalizēts aprēķins</div>
+                      <div class="item-title" id="lbl-breakdown">Detailed Breakdown</div>
                     </div>
                   </a>
                   <div class="accordion-item-content">
                     <div class="list">
                       <ul>
-                        <li class="item-content">
+                        <!-- LV-specific rows -->
+                        <li class="item-content lv-row">
                           <div class="item-inner">
-                            <div class="item-title">Darbinieka VSAOI (10.5%)</div>
+                            <div class="item-title" id="lbl-empSocial">Employee VSAOI (10.5%)</div>
                             <div id="r-emp-social" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content">
+                        <li class="item-content lv-row">
                           <div class="item-inner">
-                            <div class="item-title">IIN (25.5%)</div>
+                            <div class="item-title" id="lbl-iin">PIT (25.5%)</div>
                             <div id="r-iin" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content">
+                        <li class="item-content lv-row">
                           <div class="item-inner">
-                            <div class="item-title">Darba devēja VSAOI (23.59%)</div>
+                            <div class="item-title" id="lbl-employerSocial">Employer VSAOI (23.59%)</div>
                             <div id="r-employer-social" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content">
+                        <li class="item-content lv-row">
                           <div class="item-inner">
-                            <div class="item-title">Riska nodeva (€0.36)</div>
+                            <div class="item-title" id="lbl-riskDuty">Risk Duty (€0.36)</div>
                             <div id="r-risk-duty" class="item-after">0.36 €</div>
                           </div>
                         </li>
-                        <li class="item-content">
+                        <li class="item-content lv-row">
                           <div class="item-inner">
-                            <div class="item-title">Neapliekamais minimums + apgādājamie</div>
+                            <div class="item-title" id="lbl-allowance">Non-taxable Min + Dependents</div>
                             <div id="r-allowance" class="item-after">0.00 €</div>
                           </div>
                         </li>
+                        <!-- EE-specific rows -->
+                        <li class="item-content ee-row hidden">
+                          <div class="item-inner">
+                            <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
+                            <div id="r-emp-unemployment" class="item-after">0.00 €</div>
+                          </div>
+                        </li>
+                        <li class="item-content ee-row hidden">
+                          <div class="item-inner">
+                            <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
+                            <div id="r-income-tax" class="item-after">0.00 €</div>
+                          </div>
+                        </li>
+                        <li class="item-content ee-row hidden">
+                          <div class="item-inner">
+                            <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
+                            <div id="r-employer-social-ee" class="item-after">0.00 €</div>
+                          </div>
+                        </li>
+                        <li class="item-content ee-row hidden">
+                          <div class="item-inner">
+                            <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
+                            <div id="r-employer-unemployment" class="item-after">0.00 €</div>
+                          </div>
+                        </li>
+                        <li class="item-content ee-row hidden">
+                          <div class="item-inner">
+                            <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
+                            <div id="r-non-tax-min" class="item-after">0.00 €</div>
+                          </div>
+                        </li>
+                        <!-- Common rows -->
                         <li class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Apliekamā bāze</div>
+                            <div class="item-title" id="lbl-taxableBase">Taxable Base</div>
                             <div id="r-taxable-base" class="item-after">0.00 €</div>
                           </div>
                         </li>
                         <li class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Brutto</div>
+                            <div class="item-title" id="lbl-grossLabel">Gross</div>
                             <div id="r-gross" class="item-after">0.00 €</div>
                           </div>
                         </li>
                         <li class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Netto</div>
+                            <div class="item-title" id="lbl-netLabel">Net</div>
                             <div id="r-net" class="item-after">0.00 €</div>
                           </div>
                         </li>
                         <li class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Kopējās izmaksas Darba devējam</div>
+                            <div class="item-title" id="lbl-totalEmployer2">Total Employer Cost</div>
                             <div id="r-total-employer" class="item-after">0.00 €</div>
                           </div>
                         </li>
@@ -176,12 +259,81 @@
 
     <script src="https://cdn.jsdelivr.net/npm/framework7@9/framework7-bundle.min.js"></script>
     <script>
-      const app = new Framework7({
-        el: '#app',
-        theme: 'ios',
-      });
+      // ── i18n ──────────────────────────────────────────────────────────────────
+      const I18N = {
+        en: {
+          title: 'Salary Calculator',
+          gross: 'Salary (Gross) EUR',
+          net: 'Salary (Net) EUR',
+          taxBook: 'Tax Book',
+          dependents: 'Dependents',
+          inHand: 'In Hand (Net)',
+          totalEmployer: 'Total Employer Cost',
+          breakdown: 'Detailed Breakdown',
+          empSocial: 'Employee VSAOI (10.5%)',
+          iin: 'PIT (25.5%)',
+          employerSocial: 'Employer VSAOI (23.59%)',
+          riskDuty: 'Risk Duty (€0.36)',
+          allowance: 'Non-taxable Min + Dependents',
+          empUnemployment: 'Employee Unemployment Ins. (1.6%)',
+          incomeTax: 'Income Tax (22%)',
+          employerSocialTax: 'Employer Social Tax (33%)',
+          employerUnemployment: 'Employer Unemployment Ins. (0.8%)',
+          nonTaxMin: 'Non-taxable Minimum',
+          taxableBase: 'Taxable Base',
+          grossLabel: 'Gross',
+          netLabel: 'Net',
+        },
+        lv: {
+          title: 'Algas kalkulators',
+          gross: 'Alga (Brutto) EUR',
+          net: 'Alga (Netto) EUR',
+          taxBook: 'Algas nodokļa grāmatiņa',
+          dependents: 'Apgādājamie',
+          inHand: 'Uz rokas (Netto)',
+          totalEmployer: 'Kopējās izmaksas Darba devējam',
+          breakdown: 'Detalizēts aprēķins',
+          empSocial: 'Darbinieka VSAOI (10.5%)',
+          iin: 'IIN (25.5%)',
+          employerSocial: 'Darba devēja VSAOI (23.59%)',
+          riskDuty: 'Riska nodeva (€0.36)',
+          allowance: 'Neapliekamais minimums + apgādājamie',
+          empUnemployment: 'Darbinieka bezdarba apdrošināšana (1.6%)',
+          incomeTax: 'Ienākuma nodoklis (22%)',
+          employerSocialTax: 'Darba devēja sociālais nodoklis (33%)',
+          employerUnemployment: 'Darba devēja bezdarba apdrošināšana (0.8%)',
+          nonTaxMin: 'Neapliekamais minimums',
+          taxableBase: 'Apliekamā bāze',
+          grossLabel: 'Brutto',
+          netLabel: 'Netto',
+        },
+        ru: {
+          title: 'Калькулятор зарплаты',
+          gross: 'Зарплата (Брутто) EUR',
+          net: 'Зарплата (Нетто) EUR',
+          taxBook: 'Налоговая книжка',
+          dependents: 'Иждивенцы',
+          inHand: 'На руки (Нетто)',
+          totalEmployer: 'Итого расходы Работодателя',
+          breakdown: 'Подробный расчёт',
+          empSocial: 'VSAOI Работника (10.5%)',
+          iin: 'ПНН (25.5%)',
+          employerSocial: 'VSAOI Работодателя (23.59%)',
+          riskDuty: 'Рисковый взнос (€0.36)',
+          allowance: 'Необлаг. минимум + иждивенцы',
+          empUnemployment: 'Страх. от безработицы Работника (1.6%)',
+          incomeTax: 'Подоходный налог (22%)',
+          employerSocialTax: 'Социальный налог Работодателя (33%)',
+          employerUnemployment: 'Страх. от безработицы Работодателя (0.8%)',
+          nonTaxMin: 'Необлагаемый минимум',
+          taxableBase: 'Налогооблагаемая база',
+          grossLabel: 'Брутто',
+          netLabel: 'Нетто',
+        },
+      };
 
-      const RATES = {
+      // ── Latvia calculator ─────────────────────────────────────────────────────
+      const LV_RATES = {
         employeeVsaoi: 0.105,
         employerVsaoi: 0.2359,
         iin: 0.255,
@@ -190,118 +342,221 @@
         riskDuty: 0.36,
       };
 
-      const NET_COEFF = (1 - RATES.employeeVsaoi) * (1 - RATES.iin);
-      const NET_WITHOUT_IIN_COEFF = 1 - RATES.employeeVsaoi;
+      const LV_NET_COEFF = (1 - LV_RATES.employeeVsaoi) * (1 - LV_RATES.iin);
+      const LV_NET_WITHOUT_IIN_COEFF = 1 - LV_RATES.employeeVsaoi;
 
-      const grossInput = document.getElementById('gross-input');
-      const netInput = document.getElementById('net-input');
-      const taxBookToggle = document.getElementById('tax-book-toggle');
-      const dependentsInput = document.getElementById('dependents-input');
+      function lvAllowanceTotal() {
+        if (!taxBookToggle.checked) return 0;
+        return LV_RATES.nonTaxMin + getDependents() * LV_RATES.depAllowance;
+      }
 
-      const out = {
-        heroNet: document.getElementById('hero-net'),
-        heroTotal: document.getElementById('hero-total'),
-        gross: document.getElementById('r-gross'),
-        net: document.getElementById('r-net'),
-        empSocial: document.getElementById('r-emp-social'),
-        iin: document.getElementById('r-iin'),
-        employerSocial: document.getElementById('r-employer-social'),
-        riskDuty: document.getElementById('r-risk-duty'),
-        allowance: document.getElementById('r-allowance'),
-        taxableBase: document.getElementById('r-taxable-base'),
-        totalEmployer: document.getElementById('r-total-employer'),
+      function lvBreakdownFromGross(gross) {
+        const employeeSocial = gross * LV_RATES.employeeVsaoi;
+        const allowance = lvAllowanceTotal();
+        const taxableBase = Math.max(0, gross - employeeSocial - allowance);
+        const iin = taxableBase * LV_RATES.iin;
+        const net = gross - employeeSocial - iin;
+        const employerSocial = gross * LV_RATES.employerVsaoi;
+        const totalEmployerCost = gross + employerSocial + LV_RATES.riskDuty;
+
+        return { gross, net, employeeSocial, iin, employerSocial, riskDuty: LV_RATES.riskDuty, allowance, taxableBase, totalEmployerCost };
+      }
+
+      function lvGrossFromNet(targetNet) {
+        if (targetNet <= 0) return 0;
+        const allowance = lvAllowanceTotal();
+        let gross;
+        if (targetNet <= allowance) {
+          gross = targetNet / LV_NET_WITHOUT_IIN_COEFF;
+        } else {
+          gross = (targetNet - LV_RATES.iin * allowance) / LV_NET_COEFF;
+          const boundaryGross = allowance / LV_NET_WITHOUT_IIN_COEFF;
+          if (gross < boundaryGross) gross = boundaryGross;
+        }
+        if (!Number.isFinite(gross) || gross < 0) return 0;
+        return gross;
+      }
+
+      // ── Estonia calculator ────────────────────────────────────────────────────
+      const EE_RATES = {
+        empUnemployment: 0.016,
+        employerUnemployment: 0.008,
+        incomeTax: 0.22,
+        employerSocialTax: 0.33,
+        nonTaxMinMax: 700,
+        nonTaxMinLow: 1200,
+        nonTaxMinHigh: 2100,
       };
 
+      function eeNonTaxMin(gross) {
+        if (gross <= EE_RATES.nonTaxMinLow) return EE_RATES.nonTaxMinMax;
+        if (gross >= EE_RATES.nonTaxMinHigh) return 0;
+        return EE_RATES.nonTaxMinMax * (EE_RATES.nonTaxMinHigh - gross) / (EE_RATES.nonTaxMinHigh - EE_RATES.nonTaxMinLow);
+      }
+
+      function eeBreakdownFromGross(gross) {
+        const empUnemployment = gross * EE_RATES.empUnemployment;
+        const nonTaxMin = eeNonTaxMin(gross);
+        const taxableBase = Math.max(0, gross - empUnemployment - nonTaxMin);
+        const incomeTax = taxableBase * EE_RATES.incomeTax;
+        const net = gross - empUnemployment - incomeTax;
+        const employerSocialTax = gross * EE_RATES.employerSocialTax;
+        const employerUnemployment = gross * EE_RATES.employerUnemployment;
+        const totalEmployerCost = gross + employerSocialTax + employerUnemployment;
+
+        return { gross, net, empUnemployment, incomeTax, employerSocialTax, employerUnemployment, nonTaxMin, taxableBase, totalEmployerCost };
+      }
+
+      function eeGrossFromNet(targetNet) {
+        if (targetNet <= 0) return 0;
+        let lo = 0, hi = targetNet * 4 + 10000;
+        for (let i = 0; i < 64; i++) {
+          const mid = (lo + hi) / 2;
+          if (eeBreakdownFromGross(mid).net < targetNet) lo = mid;
+          else hi = mid;
+        }
+        return (lo + hi) / 2;
+      }
+
+      // ── Framework7 app ────────────────────────────────────────────────────────
+      const app = new Framework7({ el: '#app', theme: 'ios' });
+
+      // ── DOM refs ──────────────────────────────────────────────────────────────
+      const $ = id => document.getElementById(id);
+      const grossInput = $('gross-input');
+      const netInput = $('net-input');
+      const taxBookToggle = $('tax-book-toggle');
+      const dependentsInput = $('dependents-input');
+      const lvOptions = $('lv-options');
+      const darkModeBtn = $('dark-mode-btn');
+
+      const LABEL_MAP = {
+        'lbl-gross': 'gross',
+        'lbl-net': 'net',
+        'lbl-taxBook': 'taxBook',
+        'lbl-dependents': 'dependents',
+        'lbl-inHand': 'inHand',
+        'lbl-totalEmployer': 'totalEmployer',
+        'lbl-breakdown': 'breakdown',
+        'lbl-empSocial': 'empSocial',
+        'lbl-iin': 'iin',
+        'lbl-employerSocial': 'employerSocial',
+        'lbl-riskDuty': 'riskDuty',
+        'lbl-allowance': 'allowance',
+        'lbl-empUnemployment': 'empUnemployment',
+        'lbl-incomeTax': 'incomeTax',
+        'lbl-employerSocialTax': 'employerSocialTax',
+        'lbl-employerUnemployment': 'employerUnemployment',
+        'lbl-nonTaxMin': 'nonTaxMin',
+        'lbl-taxableBase': 'taxableBase',
+        'lbl-grossLabel': 'grossLabel',
+        'lbl-netLabel': 'netLabel',
+        'lbl-totalEmployer2': 'totalEmployer',
+      };
+
+      // ── State ─────────────────────────────────────────────────────────────────
+      let currentCountry = localStorage.getItem('country') || 'lv';
+      let currentLang = localStorage.getItem('lang') || 'en';
+      let currentDark = localStorage.getItem('darkMode') !== null
+        ? localStorage.getItem('darkMode') === 'true'
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
       let lastEdited = 'gross';
       let isInternalUpdate = false;
       let hasInitializedInputs = false;
 
+      // ── Helpers ───────────────────────────────────────────────────────────────
       function parseAmount(value) {
         const normalized = String(value || '').replace(',', '.').replace(/[^0-9.]/g, '');
         const parsed = parseFloat(normalized);
         return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
       }
 
-      function round2(value) {
-        return Math.round(value * 100) / 100;
-      }
+      function round2(value) { return Math.round(value * 100) / 100; }
 
-      function money(value) {
-        return `${round2(value).toFixed(2)} €`;
-      }
+      function money(value) { return `${round2(value).toFixed(2)} €`; }
 
       function getDependents() {
         return Math.min(5, Math.max(0, parseInt(dependentsInput.value || '0', 10) || 0));
       }
 
-      function allowanceTotal() {
-        if (!taxBookToggle.checked) return 0;
-        return RATES.nonTaxMin + getDependents() * RATES.depAllowance;
+      // ── Theme ─────────────────────────────────────────────────────────────────
+      function applyTheme(dark) {
+        currentDark = dark;
+        document.documentElement.classList.toggle('dark', dark);
+        darkModeBtn.textContent = dark ? '☀️' : '🌙';
+        localStorage.setItem('darkMode', dark);
       }
 
-      function breakdownFromGross(gross) {
-        const employeeSocial = gross * RATES.employeeVsaoi;
-        const allowance = allowanceTotal();
-        const taxableBase = Math.max(0, gross - employeeSocial - allowance);
-        const iin = taxableBase * RATES.iin;
-        const net = gross - employeeSocial - iin;
-        const employerSocial = gross * RATES.employerVsaoi;
-        const totalEmployerCost = gross + employerSocial + RATES.riskDuty;
-
-        return {
-          gross,
-          net,
-          employeeSocial,
-          iin,
-          employerSocial,
-          riskDuty: RATES.riskDuty,
-          allowance,
-          taxableBase,
-          totalEmployerCost,
-        };
+      // ── Country ───────────────────────────────────────────────────────────────
+      function applyCountry(country) {
+        currentCountry = country;
+        document.querySelectorAll('#country-selector .button').forEach(btn => {
+          btn.classList.toggle('button-active', btn.dataset.country === country);
+        });
+        lvOptions.classList.toggle('hidden', country !== 'lv');
+        document.querySelectorAll('.lv-row').forEach(el => el.classList.toggle('hidden', country !== 'lv'));
+        document.querySelectorAll('.ee-row').forEach(el => el.classList.toggle('hidden', country !== 'ee'));
+        localStorage.setItem('country', country);
+        recalc();
       }
 
-      function grossFromNet(targetNet) {
-        if (targetNet <= 0) return 0;
-
-        const allowance = allowanceTotal();
-        const thresholdNet = allowance;
-
-        let gross;
-        if (targetNet <= thresholdNet) {
-          gross = targetNet / NET_WITHOUT_IIN_COEFF;
-        } else {
-          gross = (targetNet - RATES.iin * allowance) / NET_COEFF;
-          const boundaryGross = allowance / NET_WITHOUT_IIN_COEFF;
-          if (gross < boundaryGross) gross = boundaryGross;
-        }
-
-        if (!Number.isFinite(gross) || gross < 0) return 0;
-        return gross;
+      // ── Language ──────────────────────────────────────────────────────────────
+      function applyLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('#lang-selector .button').forEach(btn => {
+          btn.classList.toggle('button-active', btn.dataset.lang === lang);
+        });
+        const t = I18N[lang];
+        document.title = t.title;
+        $('nav-title').textContent = t.title;
+        $('nav-title-large').textContent = t.title;
+        Object.entries(LABEL_MAP).forEach(([id, key]) => {
+          const el = $(id);
+          if (el && t[key]) el.textContent = t[key];
+        });
+        document.documentElement.lang = lang === 'ru' ? 'ru' : lang === 'lv' ? 'lv' : 'en';
+        localStorage.setItem('lang', lang);
       }
 
+      // ── Render ────────────────────────────────────────────────────────────────
       function render(result) {
-        out.heroNet.textContent = money(result.net);
-        out.heroTotal.textContent = money(result.totalEmployerCost);
-        out.gross.textContent = money(result.gross);
-        out.net.textContent = money(result.net);
-        out.empSocial.textContent = money(result.employeeSocial);
-        out.iin.textContent = money(result.iin);
-        out.employerSocial.textContent = money(result.employerSocial);
-        out.riskDuty.textContent = money(result.riskDuty);
-        out.allowance.textContent = money(result.allowance);
-        out.taxableBase.textContent = money(result.taxableBase);
-        out.totalEmployer.textContent = money(result.totalEmployerCost);
+        $('hero-net').textContent = money(result.net);
+        $('hero-total').textContent = money(result.totalEmployerCost);
+        $('r-gross').textContent = money(result.gross);
+        $('r-net').textContent = money(result.net);
+        $('r-taxable-base').textContent = money(result.taxableBase);
+        $('r-total-employer').textContent = money(result.totalEmployerCost);
+
+        if (currentCountry === 'lv') {
+          $('r-emp-social').textContent = money(result.employeeSocial);
+          $('r-iin').textContent = money(result.iin);
+          $('r-employer-social').textContent = money(result.employerSocial);
+          $('r-risk-duty').textContent = money(result.riskDuty);
+          $('r-allowance').textContent = money(result.allowance);
+        } else {
+          $('r-emp-unemployment').textContent = money(result.empUnemployment);
+          $('r-income-tax').textContent = money(result.incomeTax);
+          $('r-employer-social-ee').textContent = money(result.employerSocialTax);
+          $('r-employer-unemployment').textContent = money(result.employerUnemployment);
+          $('r-non-tax-min').textContent = money(result.nonTaxMin);
+        }
       }
 
+      // ── Recalc ────────────────────────────────────────────────────────────────
       function recalc() {
         const currentGross = parseAmount(grossInput.value);
         const currentNet = parseAmount(netInput.value);
 
-        const result =
-          lastEdited === 'net'
-            ? breakdownFromGross(grossFromNet(currentNet))
-            : breakdownFromGross(currentGross);
+        let result;
+        if (currentCountry === 'lv') {
+          result = lastEdited === 'net'
+            ? lvBreakdownFromGross(lvGrossFromNet(currentNet))
+            : lvBreakdownFromGross(currentGross);
+        } else {
+          result = lastEdited === 'net'
+            ? eeBreakdownFromGross(eeGrossFromNet(currentNet))
+            : eeBreakdownFromGross(currentGross);
+        }
 
         isInternalUpdate = true;
         if (!hasInitializedInputs) {
@@ -318,6 +573,7 @@
         render(result);
       }
 
+      // ── Event handlers ────────────────────────────────────────────────────────
       grossInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
         lastEdited = 'gross';
@@ -331,11 +587,28 @@
       });
 
       taxBookToggle.addEventListener('change', recalc);
+
       app.on('stepperChange', (stepper, value) => {
         dependentsInput.value = String(value);
         recalc();
       });
 
+      darkModeBtn.addEventListener('click', () => applyTheme(!currentDark));
+
+      document.getElementById('country-selector').addEventListener('click', e => {
+        const btn = e.target.closest('[data-country]');
+        if (btn) applyCountry(btn.dataset.country);
+      });
+
+      document.getElementById('lang-selector').addEventListener('click', e => {
+        const btn = e.target.closest('[data-lang]');
+        if (btn) applyLang(btn.dataset.lang);
+      });
+
+      // ── Init ──────────────────────────────────────────────────────────────────
+      applyTheme(currentDark);
+      applyCountry(currentCountry);
+      applyLang(currentLang);
       recalc();
     </script>
   </body>
