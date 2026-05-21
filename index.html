@@ -37,7 +37,7 @@
             <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
             <div class="card">
               <div class="card-content card-content-padding">
-                <div class="segmented segmented-round segmented-raised" id="salary-input-selector" role="tablist" aria-label="Salary input mode">
+                <div class="segmented segmented-round segmented-raised" id="salary-input-selector" role="tablist" aria-labelledby="lbl-inputModeSection">
                   <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" aria-selected="true">Gross</button>
                   <button class="button" data-input-mode="net" id="tab-btn-net" type="button" aria-selected="false">Net</button>
                   <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" aria-selected="false">Employer</button>
@@ -646,15 +646,13 @@
         document.title = t.title;
         $('nav-title').textContent = t.title;
         $('nav-title-large').textContent = t.title;
-        salaryInputSelector.setAttribute('aria-label', t.inputModeSection);
         langMenuBtn.textContent = lang.toUpperCase();
         langMenuBtn.setAttribute('title', t.lang);
         langMenuBtn.setAttribute('aria-label', t.lang);
         document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
           const isActive = link.dataset.lang === lang;
           link.classList.toggle('color-blue', isActive);
-          const marker = link.querySelector('.item-after');
-          if (marker) marker.hidden = !isActive;
+          link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
         });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
           const el = $(id);
