@@ -5,177 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
-    <style>
-      .hidden {
-        display: none !important;
-      }
-
-      html,
-      body {
-        background: var(--f7-page-bg-color);
-      }
-
-      .page-content {
-        padding-bottom: calc(var(--f7-safe-area-bottom) + 16px);
-      }
-
-      .selector-segmented {
-        gap: 0;
-        padding: 4px;
-        border-radius: 14px;
-        background: var(--f7-segmented-bg-color, rgba(120, 120, 128, 0.12));
-      }
-
-      .selector-segmented .button {
-        border-radius: 10px;
-        color: var(--f7-text-color);
-        font-weight: 600;
-        transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .selector-segmented .button.button-active {
-        background: var(--f7-theme-color, #007aff);
-        color: #fff;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-      }
-
-      .salary-input-card {
-        overflow: hidden;
-      }
-
-      .salary-input-card .card-content {
-        padding-bottom: 8px;
-      }
-
-      .salary-input-card .tabs {
-        padding: 0 16px 12px;
-      }
-
-      .salary-input-panel {
-        padding: 0;
-      }
-
-      .salary-input-panel-label {
-        color: var(--f7-block-footer-text-color, #6d6d72);
-      }
-
-      .salary-input-panel input {
-        width: 100%;
-        margin: 6px 0 0;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        color: var(--f7-text-color);
-        font-size: 1.375rem;
-        font-weight: 700;
-        line-height: 1.2;
-        -webkit-appearance: textfield;
-        -moz-appearance: textfield;
-        appearance: textfield;
-      }
-
-      .salary-input-panel input:focus {
-        outline: none;
-      }
-
-      .salary-input-panel input::placeholder {
-        color: var(--f7-placeholder-color, var(--f7-block-footer-text-color, #6d6d72));
-        opacity: 1;
-      }
-
-      .summary-card {
-        margin: 0 0 8px;
-      }
-
-      .summary-card:last-child {
-        margin-bottom: 0;
-      }
-
-      .summary-value {
-        font-size: 1.375rem;
-        font-weight: 700;
-        line-height: 1.2;
-        margin-top: 6px;
-      }
-
-      @media (max-width: 430px) {
-        :root {
-          --f7-list-inset-side-margin: 12px;
-          --f7-block-margin-vertical: 14px;
-          --f7-block-title-margin-top: 20px;
-          --f7-card-margin-vertical: 8px;
-          --f7-card-content-padding-vertical: 14px;
-          --f7-card-content-padding-horizontal: 14px;
-        }
-
-        .navbar-large .title-large-text {
-          font-size: 2rem;
-          line-height: 1.15;
-        }
-
-        .page-content {
-          padding-bottom: calc(var(--f7-safe-area-bottom) + 12px);
-        }
-
-        .list.list-inset,
-        .list.list-strong-inset,
-        .card {
-          margin-left: 12px;
-          margin-right: 12px;
-        }
-
-        .list .item-content,
-        .list .item-link {
-          min-height: 54px;
-        }
-
-        .list .item-title,
-        .block-title {
-          font-size: 1.125rem;
-          line-height: 1.2;
-        }
-
-        .selector-segmented {
-          padding: 3px;
-          border-radius: 12px;
-        }
-
-        .selector-segmented .button {
-          min-height: 44px;
-          font-size: 0.95rem;
-        }
-
-        .salary-input-card .card-content {
-          padding: 12px 12px 8px;
-        }
-
-        .salary-input-card .tabs {
-          padding: 0 12px 10px;
-        }
-
-        .salary-input-panel-label {
-          font-size: 0.95rem;
-        }
-
-        .salary-input-panel input {
-          margin-top: 4px;
-          font-size: 1.125rem;
-        }
-
-        .summary-card {
-          margin-bottom: 6px;
-        }
-
-        .summary-card .text-color-gray {
-          font-size: 0.95rem;
-        }
-
-        .summary-value {
-          font-size: 1.2rem;
-          margin-top: 4px;
-        }
-      }
-    </style>
   </head>
   <body>
     <div id="app">
@@ -187,6 +16,7 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
+                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language selector">🌐</a>
                 <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
               <div class="title-large">
@@ -196,61 +26,64 @@
           </div>
 
           <div class="page-content">
-            <!-- Country and Language selectors -->
-            <div class="list list-strong list-inset list-strong-inset">
-              <ul>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-country">Country</div>
-                    <div class="item-after">
-                      <div class="segmented segmented-strong segmented-round selector-segmented" id="country-selector">
-                        <button class="button button-active" data-country="lv">🇱🇻 LV</button>
-                        <button class="button" data-country="ee">🇪🇪 EE</button>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-lang">Language</div>
-                    <div class="item-after">
-                      <div class="segmented segmented-strong segmented-round selector-segmented" id="lang-selector">
-                        <button class="button button-active" data-lang="en">EN</button>
-                        <button class="button" data-lang="lv">LV</button>
-                        <button class="button" data-lang="ru">RU</button>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+            <div class="block-title" id="lbl-country">Country</div>
+            <div class="block block-strong inset">
+              <div class="segmented segmented-round segmented-raised" id="country-selector">
+                <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">🇱🇻 LV</button>
+                <button class="button" data-country="ee" type="button" aria-label="Estonia">🇪🇪 EE</button>
+              </div>
             </div>
 
             <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
-            <div class="card salary-input-card">
+            <div class="card">
               <div class="card-content card-content-padding">
-                <div class="segmented segmented-strong selector-segmented" id="salary-input-selector" role="tablist" aria-label="Salary input mode">
-                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" aria-selected="true">Gross</button>
-                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" aria-selected="false">Net</button>
-                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" aria-selected="false">Employer</button>
+                <div class="segmented segmented-round segmented-raised" id="salary-input-selector" role="tablist" aria-labelledby="lbl-inputModeSection">
+                  <button class="button button-active" data-input-mode="gross" id="tab-btn-gross" type="button" role="tab" aria-controls="tab-gross" aria-selected="true">Gross</button>
+                  <button class="button" data-input-mode="net" id="tab-btn-net" type="button" role="tab" aria-controls="tab-net" aria-selected="false">Net</button>
+                  <button class="button" data-input-mode="employer" id="tab-btn-employer" type="button" role="tab" aria-controls="tab-employer" aria-selected="false">Employer</button>
                 </div>
               </div>
               <div class="tabs">
                 <div class="tab tab-active salary-input-tab" id="tab-gross">
-                  <div class="salary-input-panel">
-                    <div class="salary-input-panel-label" id="lbl-gross">Salary (Gross) EUR</div>
-                    <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
+                  <div class="list list-strong no-margin">
+                    <ul>
+                      <li class="item-content item-input item-input-outline">
+                        <div class="item-inner">
+                          <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
+                          <div class="item-input-wrap">
+                            <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <div class="tab salary-input-tab" id="tab-net">
-                  <div class="salary-input-panel">
-                    <div class="salary-input-panel-label" id="lbl-net">Salary (Net) EUR</div>
-                    <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
+                  <div class="list list-strong no-margin">
+                    <ul>
+                      <li class="item-content item-input item-input-outline">
+                        <div class="item-inner">
+                          <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
+                          <div class="item-input-wrap">
+                            <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <div class="tab salary-input-tab" id="tab-employer">
-                  <div class="salary-input-panel">
-                    <div class="salary-input-panel-label" id="lbl-employerCost">Employer Cost EUR</div>
-                    <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
+                  <div class="list list-strong no-margin">
+                    <ul>
+                      <li class="item-content item-input item-input-outline">
+                        <div class="item-inner">
+                          <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
+                          <div class="item-input-wrap">
+                            <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -258,7 +91,7 @@
 
             <!-- Latvia-only options -->
             <div class="block-title" id="lbl-optionsSection">Adjustments</div>
-            <div id="lv-options" class="list list-strong list-inset list-strong-inset">
+            <div id="lv-options" class="list list-inset list-strong-inset">
               <ul>
                 <li>
                   <label class="item-content">
@@ -298,27 +131,31 @@
             </div>
 
             <div class="block-title" id="lbl-summarySection">Summary</div>
-            <div class="card summary-card">
-              <div class="card-content card-content-padding">
-                <div class="text-color-gray" id="lbl-summaryGross">Gross Salary</div>
-                <div id="hero-gross" class="summary-value" aria-live="polite" aria-atomic="true">0.00 €</div>
-              </div>
-            </div>
-            <div class="card summary-card">
-              <div class="card-content card-content-padding">
-                <div class="text-color-gray" id="lbl-inHand">In Hand (Net)</div>
-                <div id="hero-net" class="summary-value text-color-blue" aria-live="polite" aria-atomic="true">0.00 €</div>
-              </div>
-            </div>
-            <div class="card summary-card">
-              <div class="card-content card-content-padding">
-                <div class="text-color-gray" id="lbl-totalEmployer">Total Employer Cost</div>
-                <div id="hero-total" class="summary-value" aria-live="polite" aria-atomic="true">0.00 €</div>
-              </div>
+            <div class="list list-inset list-strong-inset">
+              <ul>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-summaryGross">Gross Salary</div>
+                    <div id="hero-gross" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                  </div>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
+                    <div id="hero-net" class="item-after text-color-blue" aria-live="polite" aria-atomic="true">0.00 €</div>
+                  </div>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
+                    <div id="hero-total" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                  </div>
+                </li>
+              </ul>
             </div>
 
             <!-- Detailed breakdown accordion -->
-            <div class="list accordion-list list-strong list-inset list-strong-inset">
+            <div class="list accordion-list list-inset list-strong-inset">
               <ul>
                 <li class="accordion-item">
                   <a href="#" class="item-content item-link">
@@ -361,31 +198,31 @@
                           </div>
                         </li>
                         <!-- EE-specific rows -->
-                        <li class="item-content ee-row hidden">
+                        <li class="item-content ee-row" hidden>
                           <div class="item-inner">
                             <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
                             <div id="r-emp-unemployment" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content ee-row hidden">
+                        <li class="item-content ee-row" hidden>
                           <div class="item-inner">
                             <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
                             <div id="r-income-tax" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content ee-row hidden">
+                        <li class="item-content ee-row" hidden>
                           <div class="item-inner">
                             <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
                             <div id="r-employer-social-ee" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content ee-row hidden">
+                        <li class="item-content ee-row" hidden>
                           <div class="item-inner">
                             <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
                             <div id="r-employer-unemployment" class="item-after">0.00 €</div>
                           </div>
                         </li>
-                        <li class="item-content ee-row hidden">
+                        <li class="item-content ee-row" hidden>
                           <div class="item-inner">
                             <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
                             <div id="r-non-tax-min" class="item-after">0.00 €</div>
@@ -423,6 +260,39 @@
               </ul>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="popover" id="lang-popover">
+      <div class="popover-angle"></div>
+      <div class="popover-inner">
+        <div class="list no-margin">
+          <ul>
+            <li>
+              <a href="#" class="item-link item-content popover-close" data-lang="en" role="menuitemradio" aria-checked="true">
+                <div class="item-inner">
+                  <div class="item-title">English</div>
+                  <div class="item-after" id="lang-option-en">✓</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="item-link item-content popover-close" data-lang="lv" role="menuitemradio" aria-checked="false">
+                <div class="item-inner">
+                  <div class="item-title">Latviešu</div>
+                  <div class="item-after" id="lang-option-lv" hidden>✓</div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="item-link item-content popover-close" data-lang="ru" role="menuitemradio" aria-checked="false">
+                <div class="item-inner">
+                  <div class="item-title">Русский</div>
+                  <div class="item-after" id="lang-option-ru" hidden>✓</div>
+                </div>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -646,7 +516,9 @@
       const taxBookToggle = $('tax-book-toggle');
       const dependentsInput = $('dependents-input');
       const lvOptions = $('lv-options');
+      const optionsSectionTitle = $('lbl-optionsSection');
       const darkModeBtn = $('dark-mode-btn');
+      const langMenuBtn = $('lang-menu-btn');
       const salaryInputSelector = $('salary-input-selector');
 
       const LABEL_MAP = {
@@ -660,7 +532,6 @@
         'lbl-net': 'net',
         'lbl-employerCost': 'employerCost',
         'lbl-country': 'country',
-        'lbl-lang': 'lang',
         'lbl-taxBook': 'taxBook',
         'lbl-dependents': 'dependents',
         'lbl-summaryGross': 'summaryGross',
@@ -686,6 +557,7 @@
       // ── State ─────────────────────────────────────────────────────────────────
       const VALID_COUNTRIES = ['lv', 'ee'];
       const VALID_LANGS = ['en', 'lv', 'ru'];
+      const LANG_NAMES = { en: 'English', lv: 'Latviešu', ru: 'Русский' };
       const savedCountry = localStorage.getItem('country');
       const savedLang = localStorage.getItem('lang');
       let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
@@ -707,10 +579,14 @@
 
       function money(value) { return `${round2(value).toFixed(2)} €`; }
 
+      function syncInputState(input) {
+        const itemContent = input.closest('.item-content');
+        if (itemContent) itemContent.classList.toggle('item-input-with-value', input.value !== '');
+      }
+
       function setInputValue(input, value) {
         input.value = value;
-        const itemContent = input.closest('.item-content');
-        if (itemContent) itemContent.classList.toggle('item-input-with-value', value !== '');
+        syncInputState(input);
       }
 
       function getDependents() {
@@ -742,6 +618,9 @@
       function updateDarkModeBtn() {
         darkModeBtn.textContent = currentDark ? '☀️' : '🌙';
         darkModeBtn.setAttribute('aria-pressed', String(currentDark));
+        const t = I18N[currentLang];
+        darkModeBtn.setAttribute('title', currentDark ? t.lightMode : t.darkMode);
+        darkModeBtn.setAttribute('aria-label', currentDark ? t.lightMode : t.darkMode);
       }
 
       function applyTheme(dark) {
@@ -754,12 +633,14 @@
       // ── Country ───────────────────────────────────────────────────────────────
       function applyCountry(country) {
         currentCountry = country;
+        const isLatvia = country === 'lv';
         document.querySelectorAll('#country-selector .button').forEach(btn => {
           btn.classList.toggle('button-active', btn.dataset.country === country);
         });
-        lvOptions.classList.toggle('hidden', country !== 'lv');
-        document.querySelectorAll('.lv-row').forEach(el => el.classList.toggle('hidden', country !== 'lv'));
-        document.querySelectorAll('.ee-row').forEach(el => el.classList.toggle('hidden', country !== 'ee'));
+        optionsSectionTitle.hidden = !isLatvia;
+        lvOptions.hidden = !isLatvia;
+        document.querySelectorAll('.lv-row').forEach(el => { el.hidden = !isLatvia; });
+        document.querySelectorAll('.ee-row').forEach(el => { el.hidden = isLatvia; });
         localStorage.setItem('country', country);
         recalc();
       }
@@ -767,13 +648,18 @@
       // ── Language ──────────────────────────────────────────────────────────────
       function applyLang(lang) {
         currentLang = lang;
-        document.querySelectorAll('#lang-selector .button').forEach(btn => {
-          btn.classList.toggle('button-active', btn.dataset.lang === lang);
-        });
         const t = I18N[lang];
         document.title = t.title;
         $('nav-title').textContent = t.title;
         $('nav-title-large').textContent = t.title;
+        langMenuBtn.setAttribute('title', t.lang);
+        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang]}`);
+        document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
+          const isActive = link.dataset.lang === lang;
+          link.classList.toggle('text-color-blue', isActive);
+          link.setAttribute('aria-checked', String(isActive));
+          link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
+        });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
@@ -845,6 +731,7 @@
       // ── Event handlers ────────────────────────────────────────────────────────
       grossInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
+        syncInputState(grossInput);
         lastEdited = 'gross';
         recalc();
       });
@@ -852,6 +739,7 @@
 
       netInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
+        syncInputState(netInput);
         lastEdited = 'net';
         recalc();
       });
@@ -859,6 +747,7 @@
 
       employerInput.addEventListener('input', () => {
         if (isInternalUpdate) return;
+        syncInputState(employerInput);
         lastEdited = 'employer';
         recalc();
       });
@@ -878,9 +767,11 @@
         if (btn) applyCountry(btn.dataset.country);
       });
 
-      document.getElementById('lang-selector').addEventListener('click', e => {
+      document.getElementById('lang-popover').addEventListener('click', e => {
         const btn = e.target.closest('[data-lang]');
-        if (btn) applyLang(btn.dataset.lang);
+        if (btn) {
+          applyLang(btn.dataset.lang);
+        }
       });
 
       salaryInputSelector.addEventListener('click', e => {
