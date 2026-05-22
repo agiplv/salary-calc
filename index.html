@@ -6,6 +6,10 @@
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
     <style>
+      :root {
+        --radius-pill: 999px;
+      }
+
       /* ── Hero Card ─────────────────────────────────────────────────────── */
       .hero-card {
         margin: 8px 16px 0 !important;
@@ -88,7 +92,7 @@
       }
       .tax-bar {
         height: 8px;
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         background: rgba(255, 255, 255, 0.18);
         display: flex;
         overflow: hidden;
@@ -96,13 +100,13 @@
       .bar-net {
         background: rgba(255, 255, 255, 0.88);
         transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
-        border-radius: 999px 0 0 999px;
+        border-radius: var(--radius-pill) 0 0 var(--radius-pill);
         flex-shrink: 0;
       }
       .bar-taxes {
         background: rgba(255, 85, 65, 0.72);
         transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
-        border-radius: 0 999px 999px 0;
+        border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
         flex-shrink: 0;
       }
       .tax-bar-pct {
@@ -213,7 +217,7 @@
         font-variant-numeric: tabular-nums;
       }
       .native-stepper {
-        border-radius: 999px;
+        border-radius: var(--radius-pill);
         overflow: hidden;
       }
       .native-stepper .stepper-input-wrap {
@@ -242,6 +246,9 @@
         font-weight: 500;
         color: var(--f7-text-color-secondary);
       }
+      .navbar-right-spacer {
+        width: 28px;
+      }
     </style>
   </head>
   <body>
@@ -253,7 +260,7 @@
             <div class="navbar-inner">
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
-              <div class="right"></div>
+              <div class="right navbar-right-spacer" aria-hidden="true"></div>
             </div>
           </div>
 
@@ -957,6 +964,7 @@
       if (typeof colorSchemeMedia.addEventListener === 'function') {
         colorSchemeMedia.addEventListener('change', applySystemTheme);
       } else if (typeof colorSchemeMedia.addListener === 'function') {
+        // Legacy Safari fallback for MediaQueryList change events.
         colorSchemeMedia.addListener(applySystemTheme);
       }
       applyCountry(currentCountry);
