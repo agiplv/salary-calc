@@ -27,15 +27,15 @@
         letter-spacing: 0.1em;
         opacity: 0.8;
         text-align: center;
-        padding-top: 20px;
+        padding-top: 12px;
       }
       .hero-net-amount {
-        font-size: 2.8rem;
+        font-size: 2.4rem;
         font-weight: 700;
         text-align: center;
         letter-spacing: -0.02em;
         line-height: 1.1;
-        padding: 4px 16px 16px;
+        padding: 2px 16px 10px;
       }
       .hero-divider {
         height: 1px;
@@ -44,7 +44,7 @@
       }
       .hero-secondaries {
         display: flex;
-        padding: 12px 8px;
+        padding: 8px 8px;
       }
       .hero-secondary {
         flex: 1;
@@ -76,7 +76,7 @@
 
       /* ── Tax Breakdown Bar ─────────────────────────────────────────────── */
       .tax-bar-section {
-        padding: 10px 16px 16px;
+        padding: 8px 16px 12px;
         border-top: 1px solid rgba(255, 255, 255, 0.22);
       }
       .tax-bar-row-labels {
@@ -137,29 +137,22 @@
         justify-content: flex-end;
         min-width: 52px;
       }
+      .salary-inputs-list {
+        margin-top: 8px !important;
+      }
 
-      /* ── Country block ─────────────────────────────────────────────────── */
-      .country-block { margin-top: 12px; margin-bottom: 0; }
-      .context-block {
-        margin-top: 8px;
-        margin-bottom: 0;
+      /* ── Controls block (country + mode in one) ────────────────────────── */
+      .controls-block {
+        margin: 8px 16px 0 !important;
+        padding: 10px 12px 12px !important;
       }
-      .context-chips {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .context-chip {
-        border-radius: 999px;
-      }
-      .source-mode-block {
-        margin-top: 10px;
-        margin-bottom: 2px;
-      }
-      .source-mode-block .segmented {
+      .controls-block .segmented {
         width: 100%;
       }
-      .source-mode-block .button {
+      .controls-block .segmented + .segmented {
+        margin-top: 8px;
+      }
+      .controls-block .button {
         font-weight: 600;
       }
 
@@ -194,11 +187,6 @@
       .item-after {
         font-variant-numeric: tabular-nums;
       }
-      .section-caption {
-        margin: 6px 16px 0;
-        color: var(--f7-text-color-secondary);
-        font-size: 12px;
-      }
     </style>
   </head>
   <body>
@@ -218,37 +206,21 @@
 
           <div class="page-content">
 
-            <!-- Country Selector -->
-            <div class="block block-strong inset country-block">
+            <!-- Controls: Country + Mode in one compact block -->
+            <div class="block block-strong inset controls-block">
               <div class="segmented segmented-round segmented-raised" id="country-selector">
                 <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">🇱🇻 LV</button>
                 <button class="button" data-country="ee" type="button" aria-label="Estonia">🇪🇪 EE</button>
               </div>
-            </div>
-
-            <div class="block block-strong inset context-block">
-              <div class="context-chips">
-                <div id="country-pill" class="chip context-chip color-blue">
-                  <div class="chip-label">Country: LV</div>
-                </div>
-                <div id="mode-pill" class="chip context-chip color-indigo">
-                  <div class="chip-label">Mode: Gross</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="block block-strong inset source-mode-block">
-              <div class="block-header">Primary input mode</div>
               <div class="segmented segmented-round segmented-raised" id="source-mode-selector">
                 <button class="button button-active" data-mode="gross" type="button" id="mode-btn-gross">Gross</button>
                 <button class="button" data-mode="net" type="button" id="mode-btn-net">Net</button>
                 <button class="button" data-mode="employer" type="button" id="mode-btn-employer">Employer</button>
               </div>
             </div>
-
-            <!-- Salary Inputs – all three always visible; active field highlighted -->
-            <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
-            <div class="section-caption">Tip: edit any field and the other values will be recalculated automatically.</div>
+            <!-- hidden pills kept for JS compatibility -->
+            <span id="country-pill" hidden><span class="chip-label"></span></span>
+            <span id="mode-pill" hidden><span class="chip-label"></span></span>
             <div class="list list-inset list-strong-inset salary-inputs-list">
               <ul>
                 <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
@@ -695,7 +667,6 @@
       const modePill = $('mode-pill');
 
       const LABEL_MAP = {
-        'lbl-inputModeSection': 'inputModeSection',
         'lbl-optionsSection': 'optionsSection',
         'lbl-gross': 'gross',
         'lbl-net': 'net',
