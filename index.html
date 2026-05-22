@@ -757,7 +757,7 @@
 
       // ── Language ──────────────────────────────────────────────────────────────
       function applyLang() {
-        const t = I18N[currentLang];
+        const t = I18N[DEFAULT_LANG];
         document.title = t.title;
         $('nav-title').textContent = t.title;
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
