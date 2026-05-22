@@ -218,9 +218,6 @@
                 <button class="button" data-mode="employer" type="button" id="mode-btn-employer">Employer</button>
               </div>
             </div>
-            <!-- hidden pills kept for JS compatibility -->
-            <span id="country-pill" hidden><span class="chip-label"></span></span>
-            <span id="mode-pill" hidden><span class="chip-label"></span></span>
             <div class="list list-inset list-strong-inset salary-inputs-list">
               <ul>
                 <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
@@ -663,8 +660,6 @@
       const optionsSectionTitle = $('lbl-optionsSection');
       const darkModeBtn = $('dark-mode-btn');
       const sourceModeSelector = $('source-mode-selector');
-      const countryPill = $('country-pill');
-      const modePill = $('mode-pill');
 
       const LABEL_MAP = {
         'lbl-optionsSection': 'optionsSection',
@@ -693,15 +688,6 @@
         'lbl-netLabel-breakdown': 'netLabel',
         'lbl-totalEmployer2': 'totalEmployer',
         'lbl-taxesLabel': 'taxes',
-      };
-      const MODE_LABEL_MAP = {
-        gross: 'grossTab',
-        net: 'netTab',
-        employer: 'employerTab',
-      };
-      const COUNTRY_TEXT = {
-        lv: 'LV',
-        ee: 'EE',
       };
       const CALCULATOR_MAP = {
         lv: {
@@ -758,14 +744,6 @@
         return grossInput;
       }
 
-      function updateContextPills() {
-        const t = I18N[APP_LANG];
-        const countryCode = COUNTRY_TEXT[currentCountry] || COUNTRY_TEXT.lv;
-        const modeLabelKey = MODE_LABEL_MAP[lastEdited] || MODE_LABEL_MAP.gross;
-        countryPill.querySelector('.chip-label').textContent = `${t.country}: ${countryCode}`;
-        modePill.querySelector('.chip-label').textContent = `${t.inputModeSection}: ${t[modeLabelKey]}`;
-      }
-
       function updateSourceModeSelector() {
         sourceModeSelector.querySelectorAll('.button').forEach(btn => {
           btn.classList.toggle('button-active', btn.dataset.mode === lastEdited);
@@ -778,7 +756,6 @@
           field.classList.toggle('is-source', field.id === `field-${mode}`);
         });
         updateSourceModeSelector();
-        updateContextPills();
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
         if (sync) recalc();
       }
@@ -811,7 +788,6 @@
         document.querySelectorAll('.lv-row').forEach(el => { el.hidden = !isLatvia; });
         document.querySelectorAll('.ee-row').forEach(el => { el.hidden = isLatvia; });
         localStorage.setItem('country', country);
-        updateContextPills();
         recalc();
       }
 
@@ -828,7 +804,6 @@
         $('mode-btn-net').textContent = t.netTab;
         $('mode-btn-employer').textContent = t.employerTab;
         updateDarkModeBtn();
-        updateContextPills();
       }
 
       // ── Render ────────────────────────────────────────────────────────────────
