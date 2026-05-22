@@ -732,6 +732,18 @@
         lv: 'LV',
         ee: 'EE',
       };
+      const CALCULATOR_MAP = {
+        lv: {
+          breakdownFromGross: lvBreakdownFromGross,
+          grossFromNet: lvGrossFromNet,
+          grossFromEmployerCost: lvGrossFromEmployerCost,
+        },
+        ee: {
+          breakdownFromGross: eeBreakdownFromGross,
+          grossFromNet: eeGrossFromNet,
+          grossFromEmployerCost: eeGrossFromEmployerCost,
+        },
+      };
 
       // ── State ─────────────────────────────────────────────────────────────────
       const VALID_COUNTRIES = ['lv', 'ee'];
@@ -894,17 +906,7 @@
         const currentGross = parseAmount(grossInput.value);
         const currentNet = parseAmount(netInput.value);
         const currentEmployer = parseAmount(employerInput.value);
-        const calculator = currentCountry === 'lv'
-          ? {
-            breakdownFromGross: lvBreakdownFromGross,
-            grossFromNet: lvGrossFromNet,
-            grossFromEmployerCost: lvGrossFromEmployerCost,
-          }
-          : {
-            breakdownFromGross: eeBreakdownFromGross,
-            grossFromNet: eeGrossFromNet,
-            grossFromEmployerCost: eeGrossFromEmployerCost,
-          };
+        const calculator = CALCULATOR_MAP[currentCountry] || CALCULATOR_MAP.lv;
 
         let grossToCalc;
         if (lastEdited === 'net') {
@@ -944,7 +946,7 @@
           activateIfNeeded();
           recalc();
         });
-        input.addEventListener('focus', activateIfNeeded);
+        input.addEventListener('focus', () => activateSalaryInput(mode));
       }
       wireSalaryInput(grossInput, 'gross');
       wireSalaryInput(netInput, 'net');
