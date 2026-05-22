@@ -677,7 +677,7 @@
       const VALID_COUNTRIES = ['lv', 'ee'];
       const savedCountry = localStorage.getItem('country');
       let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
-      const DEFAULT_LANG = 'en';
+      const APP_LANG = 'en';
       let currentDark = localStorage.getItem('darkMode') !== null
         ? localStorage.getItem('darkMode') === 'true'
         : window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -728,7 +728,7 @@
       function updateDarkModeBtn() {
         darkModeBtn.textContent = currentDark ? '☀️' : '🌙';
         darkModeBtn.setAttribute('aria-pressed', String(currentDark));
-        const t = I18N[DEFAULT_LANG];
+        const t = I18N[APP_LANG];
         darkModeBtn.setAttribute('title', currentDark ? t.lightMode : t.darkMode);
         darkModeBtn.setAttribute('aria-label', currentDark ? t.lightMode : t.darkMode);
       }
@@ -756,15 +756,15 @@
       }
 
       // ── Language ──────────────────────────────────────────────────────────────
-      function applyLang() {
-        const t = I18N[DEFAULT_LANG];
+      function initializeLabels() {
+        const t = I18N[APP_LANG];
         document.title = t.title;
         $('nav-title').textContent = t.title;
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
         });
-        document.documentElement.lang = DEFAULT_LANG;
+        document.documentElement.lang = APP_LANG;
         updateDarkModeBtn();
       }
 
@@ -884,7 +884,7 @@
       // ── Init ──────────────────────────────────────────────────────────────────
       applyTheme(currentDark);
       applyCountry(currentCountry);
-      applyLang();
+      initializeLabels();
       activateSalaryInput(lastEdited);
       recalc();
     </script>
