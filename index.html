@@ -140,6 +140,28 @@
 
       /* ── Country block ─────────────────────────────────────────────────── */
       .country-block { margin-top: 12px; margin-bottom: 0; }
+      .context-block {
+        margin-top: 8px;
+        margin-bottom: 0;
+      }
+      .context-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .context-chip {
+        border-radius: 999px;
+      }
+      .source-mode-block {
+        margin-top: 10px;
+        margin-bottom: 2px;
+      }
+      .source-mode-block .segmented {
+        width: 100%;
+      }
+      .source-mode-block .button {
+        font-weight: 600;
+      }
 
       /* ── Light mode list surfaces and rhythm ───────────────────────────── */
       html:not(.dark) .page-content {
@@ -172,6 +194,11 @@
       .item-after {
         font-variant-numeric: tabular-nums;
       }
+      .section-caption {
+        margin: 6px 16px 0;
+        color: var(--f7-text-color-secondary);
+        font-size: 12px;
+      }
     </style>
   </head>
   <body>
@@ -199,8 +226,29 @@
               </div>
             </div>
 
+            <div class="block block-strong inset context-block">
+              <div class="context-chips">
+                <div id="country-pill" class="chip context-chip color-blue">
+                  <div class="chip-label">Country: LV</div>
+                </div>
+                <div id="mode-pill" class="chip context-chip color-indigo">
+                  <div class="chip-label">Mode: Gross</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="block block-strong inset source-mode-block">
+              <div class="block-header">Primary input mode</div>
+              <div class="segmented segmented-round segmented-raised" id="source-mode-selector">
+                <button class="button button-active" data-mode="gross" type="button" id="mode-btn-gross">Gross</button>
+                <button class="button" data-mode="net" type="button" id="mode-btn-net">Net</button>
+                <button class="button" data-mode="employer" type="button" id="mode-btn-employer">Employer</button>
+              </div>
+            </div>
+
             <!-- Salary Inputs – all three always visible; active field highlighted -->
             <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
+            <div class="section-caption">Tip: edit any field, and the other values will be calculated automatically.</div>
             <div class="list list-inset list-strong-inset salary-inputs-list">
               <ul>
                 <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
@@ -642,6 +690,9 @@
       const lvOptions = $('lv-options');
       const optionsSectionTitle = $('lbl-optionsSection');
       const darkModeBtn = $('dark-mode-btn');
+      const sourceModeSelector = $('source-mode-selector');
+      const countryPill = $('country-pill');
+      const modePill = $('mode-pill');
 
       const LABEL_MAP = {
         'lbl-inputModeSection': 'inputModeSection',
@@ -671,6 +722,15 @@
         'lbl-netLabel-breakdown': 'netLabel',
         'lbl-totalEmployer2': 'totalEmployer',
         'lbl-taxesLabel': 'taxes',
+      };
+      const MODE_LABEL_MAP = {
+        gross: 'grossTab',
+        net: 'netTab',
+        employer: 'employerTab',
+      };
+      const COUNTRY_TEXT = {
+        lv: 'LV',
+        ee: 'EE',
       };
 
       // ── State ─────────────────────────────────────────────────────────────────
@@ -715,11 +775,25 @@
         return grossInput;
       }
 
+      function updateContextPills() {
+        const t = I18N[APP_LANG];
+        countryPill.querySelector('.chip-label').textContent = `${t.country}: ${COUNTRY_TEXT[currentCountry]}`;
+        modePill.querySelector('.chip-label').textContent = `${t.inputModeSection}: ${t[MODE_LABEL_MAP[lastEdited]]}`;
+      }
+
+      function updateSourceModeSelector() {
+        sourceModeSelector.querySelectorAll('.button').forEach(btn => {
+          btn.classList.toggle('button-active', btn.dataset.mode === lastEdited);
+        });
+      }
+
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
         lastEdited = mode;
         document.querySelectorAll('.salary-field').forEach(field => {
           field.classList.toggle('is-source', field.id === `field-${mode}`);
         });
+        updateSourceModeSelector();
+        updateContextPills();
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
         if (sync) recalc();
       }
@@ -752,6 +826,7 @@
         document.querySelectorAll('.lv-row').forEach(el => { el.hidden = !isLatvia; });
         document.querySelectorAll('.ee-row').forEach(el => { el.hidden = isLatvia; });
         localStorage.setItem('country', country);
+        updateContextPills();
         recalc();
       }
 
@@ -764,7 +839,11 @@
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
         });
+        $('mode-btn-gross').textContent = t.grossTab;
+        $('mode-btn-net').textContent = t.netTab;
+        $('mode-btn-employer').textContent = t.employerTab;
         updateDarkModeBtn();
+        updateContextPills();
       }
 
       // ── Render ────────────────────────────────────────────────────────────────
@@ -813,17 +892,28 @@
         const currentGross = parseAmount(grossInput.value);
         const currentNet = parseAmount(netInput.value);
         const currentEmployer = parseAmount(employerInput.value);
+        const calculator = currentCountry === 'lv'
+          ? {
+            breakdownFromGross: lvBreakdownFromGross,
+            grossFromNet: lvGrossFromNet,
+            grossFromEmployerCost: lvGrossFromEmployerCost,
+          }
+          : {
+            breakdownFromGross: eeBreakdownFromGross,
+            grossFromNet: eeGrossFromNet,
+            grossFromEmployerCost: eeGrossFromEmployerCost,
+          };
 
         let grossToCalc;
         if (lastEdited === 'net') {
-          grossToCalc = currentCountry === 'lv' ? lvGrossFromNet(currentNet) : eeGrossFromNet(currentNet);
+          grossToCalc = calculator.grossFromNet(currentNet);
         } else if (lastEdited === 'employer') {
-          grossToCalc = currentCountry === 'lv' ? lvGrossFromEmployerCost(currentEmployer) : eeGrossFromEmployerCost(currentEmployer);
+          grossToCalc = calculator.grossFromEmployerCost(currentEmployer);
         } else {
           grossToCalc = currentGross;
         }
 
-        const result = currentCountry === 'lv' ? lvBreakdownFromGross(grossToCalc) : eeBreakdownFromGross(grossToCalc);
+        const result = calculator.breakdownFromGross(grossToCalc);
 
         isInternalUpdate = true;
         if (lastEdited === 'gross') {
@@ -842,29 +932,18 @@
       }
 
       // ── Event handlers ────────────────────────────────────────────────────────
-      grossInput.addEventListener('input', () => {
-        if (isInternalUpdate) return;
-        syncInputState(grossInput);
-        lastEdited = 'gross';
-        recalc();
-      });
-      grossInput.addEventListener('focus', () => activateSalaryInput('gross'));
-
-      netInput.addEventListener('input', () => {
-        if (isInternalUpdate) return;
-        syncInputState(netInput);
-        lastEdited = 'net';
-        recalc();
-      });
-      netInput.addEventListener('focus', () => activateSalaryInput('net'));
-
-      employerInput.addEventListener('input', () => {
-        if (isInternalUpdate) return;
-        syncInputState(employerInput);
-        lastEdited = 'employer';
-        recalc();
-      });
-      employerInput.addEventListener('focus', () => activateSalaryInput('employer'));
+      function wireSalaryInput(input, mode) {
+        input.addEventListener('input', () => {
+          if (isInternalUpdate) return;
+          syncInputState(input);
+          activateSalaryInput(mode);
+          recalc();
+        });
+        input.addEventListener('focus', () => activateSalaryInput(mode));
+      }
+      wireSalaryInput(grossInput, 'gross');
+      wireSalaryInput(netInput, 'net');
+      wireSalaryInput(employerInput, 'employer');
 
       taxBookToggle.addEventListener('change', recalc);
 
@@ -878,6 +957,10 @@
       document.getElementById('country-selector').addEventListener('click', e => {
         const btn = e.target.closest('[data-country]');
         if (btn) applyCountry(btn.dataset.country);
+      });
+      sourceModeSelector.addEventListener('click', e => {
+        const btn = e.target.closest('[data-mode]');
+        if (btn) activateSalaryInput(btn.dataset.mode, { focus: true, sync: true });
       });
 
       // ── Init ──────────────────────────────────────────────────────────────────
