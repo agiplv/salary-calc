@@ -11,12 +11,12 @@
         margin: 8px 16px 0 !important;
         border-radius: 16px !important;
         overflow: hidden;
-        background: var(--f7-theme-color) !important;
+        background: linear-gradient(180deg, #2f8cff 0%, #1a73e8 100%) !important;
         color: #fff;
-        box-shadow: 0 6px 24px rgba(0, 122, 255, 0.32) !important;
+        box-shadow: 0 4px 14px rgba(0, 122, 255, 0.2) !important;
       }
       .dark .hero-card {
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
       }
       .hero-card .card-content { padding: 0; }
 
@@ -134,10 +134,44 @@
       .salary-inputs-list .item-after {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+        min-width: 52px;
       }
 
       /* ── Country block ─────────────────────────────────────────────────── */
       .country-block { margin-top: 12px; margin-bottom: 0; }
+
+      /* ── Light mode list surfaces and rhythm ───────────────────────────── */
+      html:not(.dark) .page-content {
+        background: #edf1f7;
+      }
+      html:not(.dark) .list-inset ul {
+        background: #fff;
+        border: 1px solid #e8edf4;
+        border-radius: 14px;
+      }
+      html:not(.dark) .list-inset .item-inner {
+        min-height: 52px;
+      }
+      html:not(.dark) .salary-field .item-inner {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+      html:not(.dark) .salary-field .item-title.item-label {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      html:not(.dark) .accordion-list .item-title {
+        font-size: 15px;
+      }
+      html:not(.dark) .accordion-list .item-after {
+        color: #1a2433;
+        font-weight: 600;
+      }
+      .item-after {
+        font-variant-numeric: tabular-nums;
+      }
     </style>
   </head>
   <body>
@@ -150,7 +184,6 @@
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
               <div class="right">
-                <a href="#" id="lang-menu-btn" class="link popover-open" data-popover="#lang-popover" title="Language" aria-label="Language selector">🌐</a>
                 <a href="#" id="dark-mode-btn" class="link icon-only" title="Toggle dark mode" aria-label="Toggle dark mode" aria-pressed="false">🌙</a>
               </div>
             </div>
@@ -385,40 +418,6 @@
         </div>
       </div>
     </div>
-    <div class="popover" id="lang-popover">
-      <div class="popover-angle"></div>
-      <div class="popover-inner">
-        <div class="list no-margin">
-          <ul>
-            <li>
-              <a href="#" class="item-link item-content popover-close" data-lang="en" role="menuitemradio" aria-checked="true">
-                <div class="item-inner">
-                  <div class="item-title">English</div>
-                  <div class="item-after" id="lang-option-en">✓</div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="item-link item-content popover-close" data-lang="lv" role="menuitemradio" aria-checked="false">
-                <div class="item-inner">
-                  <div class="item-title">Latviešu</div>
-                  <div class="item-after" id="lang-option-lv" hidden>✓</div>
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="item-link item-content popover-close" data-lang="ru" role="menuitemradio" aria-checked="false">
-                <div class="item-inner">
-                  <div class="item-title">Русский</div>
-                  <div class="item-after" id="lang-option-ru" hidden>✓</div>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
     <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
       // ── i18n ──────────────────────────────────────────────────────────────────
@@ -643,7 +642,6 @@
       const lvOptions = $('lv-options');
       const optionsSectionTitle = $('lbl-optionsSection');
       const darkModeBtn = $('dark-mode-btn');
-      const langMenuBtn = $('lang-menu-btn');
 
       const LABEL_MAP = {
         'lbl-inputModeSection': 'inputModeSection',
@@ -677,12 +675,9 @@
 
       // ── State ─────────────────────────────────────────────────────────────────
       const VALID_COUNTRIES = ['lv', 'ee'];
-      const VALID_LANGS = ['en', 'lv', 'ru'];
-      const LANG_NAMES = { en: 'English', lv: 'Latviešu', ru: 'Русский' };
       const savedCountry = localStorage.getItem('country');
-      const savedLang = localStorage.getItem('lang');
       let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
-      let currentLang = VALID_LANGS.includes(savedLang) ? savedLang : 'en';
+      const APP_LANG = 'en';
       let currentDark = localStorage.getItem('darkMode') !== null
         ? localStorage.getItem('darkMode') === 'true'
         : window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -733,7 +728,7 @@
       function updateDarkModeBtn() {
         darkModeBtn.textContent = currentDark ? '☀️' : '🌙';
         darkModeBtn.setAttribute('aria-pressed', String(currentDark));
-        const t = I18N[currentLang];
+        const t = I18N[APP_LANG];
         darkModeBtn.setAttribute('title', currentDark ? t.lightMode : t.darkMode);
         darkModeBtn.setAttribute('aria-label', currentDark ? t.lightMode : t.darkMode);
       }
@@ -761,26 +756,14 @@
       }
 
       // ── Language ──────────────────────────────────────────────────────────────
-      function applyLang(lang) {
-        currentLang = lang;
-        const t = I18N[lang];
+      function initializeLabels() {
+        const t = I18N[APP_LANG];
         document.title = t.title;
         $('nav-title').textContent = t.title;
-        langMenuBtn.setAttribute('title', t.lang);
-        langMenuBtn.setAttribute('aria-label', `${t.lang}: ${LANG_NAMES[lang]}`);
-        document.querySelectorAll('#lang-popover [data-lang]').forEach(link => {
-          const isActive = link.dataset.lang === lang;
-          link.classList.toggle('text-color-blue', isActive);
-          link.setAttribute('aria-checked', String(isActive));
-          link.querySelector('.item-after')?.toggleAttribute('hidden', !isActive);
-        });
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
         });
-        const langAttr = { en: 'en', lv: 'lv', ru: 'ru' };
-        document.documentElement.lang = langAttr[lang] || 'en';
-        localStorage.setItem('lang', lang);
         updateDarkModeBtn();
       }
 
@@ -897,17 +880,11 @@
         if (btn) applyCountry(btn.dataset.country);
       });
 
-      document.getElementById('lang-popover').addEventListener('click', e => {
-        const btn = e.target.closest('[data-lang]');
-        if (btn) {
-          applyLang(btn.dataset.lang);
-        }
-      });
-
       // ── Init ──────────────────────────────────────────────────────────────────
+      document.documentElement.lang = APP_LANG;
       applyTheme(currentDark);
       applyCountry(currentCountry);
-      applyLang(currentLang);
+      initializeLabels();
       activateSalaryInput(lastEdited);
       recalc();
     </script>
