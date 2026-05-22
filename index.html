@@ -935,13 +935,16 @@
 
       // ── Event handlers ────────────────────────────────────────────────────────
       function wireSalaryInput(input, mode) {
+        const activateIfNeeded = () => {
+          if (lastEdited !== mode) activateSalaryInput(mode);
+        };
         input.addEventListener('input', () => {
           if (isInternalUpdate) return;
           syncInputState(input);
-          if (lastEdited !== mode) activateSalaryInput(mode);
+          activateIfNeeded();
           recalc();
         });
-        input.addEventListener('focus', () => activateSalaryInput(mode));
+        input.addEventListener('focus', activateIfNeeded);
       }
       wireSalaryInput(grossInput, 'gross');
       wireSalaryInput(netInput, 'net');
