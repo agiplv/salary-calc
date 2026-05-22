@@ -937,13 +937,10 @@
 
       // ── Event handlers ────────────────────────────────────────────────────────
       function wireSalaryInput(input, mode) {
-        const activateIfNeeded = () => {
-          if (lastEdited !== mode) activateSalaryInput(mode);
-        };
         input.addEventListener('input', () => {
           if (isInternalUpdate) return;
           syncInputState(input);
-          activateIfNeeded();
+          activateSalaryInput(mode);
           recalc();
         });
         input.addEventListener('focus', () => activateSalaryInput(mode));
