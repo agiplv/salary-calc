@@ -248,7 +248,7 @@
 
             <!-- Salary Inputs – all three always visible; active field highlighted -->
             <div class="block-title" id="lbl-inputModeSection">Salary Input</div>
-            <div class="section-caption">Tip: edit any field and the other values will be calculated automatically.</div>
+            <div class="section-caption">Tip: edit any field and the other values will be recalculated automatically.</div>
             <div class="list list-inset list-strong-inset salary-inputs-list">
               <ul>
                 <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
@@ -940,7 +940,7 @@
         input.addEventListener('input', () => {
           if (isInternalUpdate) return;
           syncInputState(input);
-          activateSalaryInput(mode);
+          if (lastEdited !== mode) activateSalaryInput(mode);
           recalc();
         });
         input.addEventListener('focus', () => activateSalaryInput(mode));
