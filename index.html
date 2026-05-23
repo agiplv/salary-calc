@@ -277,6 +277,10 @@
     </div>
     <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
+      if (typeof window.Framework7 !== 'function') {
+        throw new Error('Framework7 library is required but was not loaded. Ensure framework7-bundle.min.js is included before this script.');
+      }
+
       // ── i18n ──────────────────────────────────────────────────────────────────
       const I18N = {
         en: {
@@ -486,10 +490,6 @@
         return employerCost / (1 + EE_RATES.employerSocialTax + EE_RATES.employerUnemployment);
       }
 
-      if (typeof window.Framework7 !== 'function') {
-        throw new Error('Framework7 library is required but was not loaded. Ensure framework7-bundle.min.js is included before this script.');
-      }
-
       // ── Framework7 app ────────────────────────────────────────────────────────
       const app = new Framework7({ el: '#app', theme: 'ios' });
 
@@ -597,6 +597,7 @@
         lastEdited = mode;
         document.querySelectorAll('.salary-field').forEach(field => {
           const isSource = field.id === `field-${mode}`;
+          field.classList.toggle('is-source', isSource);
           const autoChip = field.querySelector('[data-auto-chip]');
           if (autoChip) autoChip.hidden = isSource;
         });
