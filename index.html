@@ -20,6 +20,94 @@
           </div>
 
           <div class="page-content">
+            <div class="list list-inset list-strong salary-inputs-list">
+              <ul>
+                <li>
+                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select country">
+                    <select id="country-select" aria-labelledby="lbl-country">
+                      <option value="lv">Latvia</option>
+                      <option value="ee">Estonia</option>
+                    </select>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-country">Country</div>
+                        <div id="country-current" class="item-after">Latvia</div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select salary input mode">
+                    <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
+                      <option value="gross">Gross</option>
+                      <option value="net">Net</option>
+                      <option value="employer">Employer</option>
+                    </select>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
+                        <div id="source-mode-current" class="item-after">Gross</div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="item-link popup-open" data-popup=".salary-input-popup" aria-label="Open salary values input dialog">
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="list list-inset list-strong">
+              <ul>
+                <li id="lbl-optionsSection-row" class="item-content">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-optionsSection">Adjustments</div>
+                  </div>
+                </li>
+                <li class="lv-option-row">
+                  <label class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-taxBook">Tax Book</div>
+                      <div class="item-after">
+                        <label class="toggle toggle-init color-blue">
+                          <input id="tax-book-toggle" type="checkbox" checked />
+                          <span class="toggle-icon"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </label>
+                </li>
+                <li class="item-content item-input item-input-with-value lv-option-row">
+                  <div class="item-inner">
+                    <div class="item-title" id="lbl-dependents">Dependents</div>
+                    <div class="item-after">
+                      <span id="dependents-value" class="dependents-value">0</span>
+                      <div
+                        id="dependents-stepper"
+                        class="stepper stepper-init stepper-round"
+                        data-min="0"
+                        data-max="5"
+                        data-value="0"
+                        data-autorepeat="true"
+                      >
+                        <div class="stepper-button-minus"></div>
+                        <div class="stepper-input-wrap">
+                          <input id="dependents-input" type="text" value="0" readonly />
+                        </div>
+                        <div class="stepper-button-plus"></div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
             <div class="list list-strong list-inset">
               <ul>
                 <li>
@@ -63,107 +151,6 @@
                   </div>
                 </li>
               </ul>
-            </div>
-
-            <div class="list list-inset list-strong salary-inputs-list">
-                <ul>
-                  <li class="item-input item-input-outline">
-                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
-                      <select id="country-select" aria-labelledby="lbl-country">
-                        <option value="lv">Latvia</option>
-                        <option value="ee">Estonia</option>
-                      </select>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title" id="lbl-country">Country</div>
-                          <div id="country-current" class="item-after">Latvia</div>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li class="item-input item-input-outline">
-                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
-                      <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
-                        <option value="gross">Gross</option>
-                        <option value="net">Net</option>
-                        <option value="employer">Employer</option>
-                      </select>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
-                          <div id="source-mode-current" class="item-after">Gross</div>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
-                    <div class="item-inner">
-                      <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
-                      <div class="item-input-wrap">
-                        <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
-                      </div>
-                    </div>
-                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
-                  </li>
-                  <li id="field-net" class="item-content item-input item-input-outline salary-field">
-                    <div class="item-inner">
-                      <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
-                      <div class="item-input-wrap">
-                        <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
-                      </div>
-                    </div>
-                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
-                  </li>
-                  <li id="field-employer" class="item-content item-input item-input-outline salary-field">
-                    <div class="item-inner">
-                      <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
-                      <div class="item-input-wrap">
-                        <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
-                      </div>
-                    </div>
-                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
-                  </li>
-                  <li id="lbl-optionsSection-row" class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-optionsSection">Adjustments</div>
-                    </div>
-                  </li>
-                  <li class="lv-option-row">
-                    <label class="item-content">
-                      <div class="item-inner">
-                        <div class="item-title" id="lbl-taxBook">Tax Book</div>
-                        <div class="item-after">
-                          <label class="toggle toggle-init color-blue">
-                            <input id="tax-book-toggle" type="checkbox" checked />
-                            <span class="toggle-icon"></span>
-                          </label>
-                        </div>
-                      </div>
-                    </label>
-                  </li>
-                  <li class="item-content item-input item-input-with-value lv-option-row">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-dependents">Dependents</div>
-                      <div class="item-after">
-                        <span id="dependents-value" class="dependents-value">0</span>
-                        <div
-                          id="dependents-stepper"
-                          class="stepper stepper-init stepper-round"
-                          data-min="0"
-                          data-max="5"
-                          data-value="0"
-                          data-autorepeat="true"
-                        >
-                          <div class="stepper-button-minus"></div>
-                          <div class="stepper-input-wrap">
-                            <input id="dependents-input" type="text" value="0" readonly />
-                          </div>
-                          <div class="stepper-button-plus"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
             </div>
 
             <div class="list accordion-list list-inset list-strong">
@@ -272,6 +259,55 @@
         </div>
       </div>
     </div>
+    <div class="popup salary-input-popup">
+      <div class="view">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-bg"></div>
+            <div class="navbar-inner">
+              <div class="left">
+                <a href="#" class="link popup-close" aria-label="Close salary values dialog">Close</a>
+              </div>
+              <div class="title" id="lbl-inputValuesPage">Salary Values</div>
+              <div class="right"></div>
+            </div>
+          </div>
+          <div class="page-content">
+            <div class="list list-inset list-strong">
+              <ul>
+                <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
+                  <div class="item-inner">
+                    <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
+                    </div>
+                  </div>
+                  <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
+                </li>
+                <li id="field-net" class="item-content item-input item-input-outline salary-field">
+                  <div class="item-inner">
+                    <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
+                    </div>
+                  </div>
+                  <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
+                </li>
+                <li id="field-employer" class="item-content item-input item-input-outline salary-field">
+                  <div class="item-inner">
+                    <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
+                    <div class="item-input-wrap">
+                      <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
+                    </div>
+                  </div>
+                  <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
       if (typeof window.Framework7 !== 'function') {
@@ -283,6 +319,8 @@
         en: {
           title: 'Salary Calculator',
           inputModeSection: 'Salary Input',
+          openInputValues: 'Enter Salary Values',
+          inputValuesPage: 'Salary Values',
           grossTab: 'Gross',
           netTab: 'Net',
           employerTab: 'Employer',
@@ -321,6 +359,8 @@
         lv: {
           title: 'Algas kalkulators',
           inputModeSection: 'Ievades režīms',
+          openInputValues: 'Ievadīt algas vērtības',
+          inputValuesPage: 'Algas vērtības',
           grossTab: 'Bruto',
           netTab: 'Neto',
           employerTab: 'Darba devējs',
@@ -359,6 +399,8 @@
         ru: {
           title: 'Калькулятор зарплаты',
           inputModeSection: 'Режим ввода',
+          openInputValues: 'Ввести значения зарплаты',
+          inputValuesPage: 'Значения зарплаты',
           grossTab: 'Брутто',
           netTab: 'Нетто',
           employerTab: 'Работодатель',
@@ -510,10 +552,13 @@
       const dependentsValue = $('dependents-value');
       const sourceModeSelect = $('source-mode-select');
       const sourceModeCurrent = $('source-mode-current');
+      const inputValuesPopup = document.querySelector('.salary-input-popup');
 
       const LABEL_MAP = {
         'lbl-country': 'country',
         'lbl-inputModeSection': 'inputModeSection',
+        'lbl-openInputValues': 'openInputValues',
+        'lbl-inputValuesPage': 'inputValuesPage',
         'lbl-optionsSection': 'optionsSection',
         'lbl-gross': 'gross',
         'lbl-net': 'net',
@@ -562,6 +607,7 @@
       const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
       let lastEdited = 'gross';
       let isInternalUpdate = false;
+      let isInputValuesPopupOpen = false;
 
       // ── Helpers ───────────────────────────────────────────────────────────────
       function parseAmount(value) {
@@ -759,7 +805,19 @@
       });
 
       countrySelect.addEventListener('change', () => applyCountry(countrySelect.value));
-      sourceModeSelect.addEventListener('change', () => activateSalaryInput(sourceModeSelect.value, { focus: true, sync: true }));
+      sourceModeSelect.addEventListener('change', () => {
+        const popupVisible = isInputValuesPopupOpen || Boolean(inputValuesPopup && inputValuesPopup.classList.contains('modal-in'));
+        activateSalaryInput(sourceModeSelect.value, { focus: popupVisible, sync: true });
+      });
+      if (inputValuesPopup) {
+        inputValuesPopup.addEventListener('popup:opened', () => {
+          isInputValuesPopupOpen = true;
+          activateSalaryInput(lastEdited, { focus: true });
+        });
+        inputValuesPopup.addEventListener('popup:closed', () => {
+          isInputValuesPopupOpen = false;
+        });
+      }
 
       // ── Init ──────────────────────────────────────────────────────────────────
       document.documentElement.lang = APP_LANG;
