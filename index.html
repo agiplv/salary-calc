@@ -20,43 +20,49 @@
           </div>
 
           <div class="page-content">
-            <div class="card card-outline">
-              <div class="card-content card-content-padding">
-                <div class="block-title-medium" id="lbl-inHand">In Hand (Net)</div>
-                <div id="hero-net" aria-live="polite" aria-atomic="true">0.00 €</div>
-                <div class="list simple-list">
-                  <ul>
-                    <li>
-                      <span id="lbl-summaryGross">Gross Salary</span>
-                      <span id="hero-gross" aria-live="polite" aria-atomic="true">0.00 €</span>
-                    </li>
-                    <li>
-                      <span id="lbl-totalEmployer">Total Employer Cost</span>
-                      <span id="hero-total" aria-live="polite" aria-atomic="true">0.00 €</span>
-                    </li>
-                  </ul>
-                </div>
-                <div class="list simple-list">
-                  <ul>
-                    <li>
-                      <span id="lbl-netLabel">Net</span>
-                      <span id="bar-net-pct">—</span>
-                    </li>
-                    <li>
-                      <span id="lbl-taxesLabel">Taxes</span>
-                      <span id="bar-taxes-pct">—</span>
-                    </li>
-                  </ul>
-                </div>
-                <div class="block block-strong inset">
-                  <div class="block-header">Net</div>
-                  <div id="bar-net" class="progressbar color-green" data-progress="0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
-                </div>
-                <div class="block block-strong inset">
-                  <div class="block-header">Taxes</div>
-                  <div id="bar-taxes" class="progressbar color-red" data-progress="0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
-                </div>
-              </div>
+            <div class="list list-strong list-inset">
+              <ul>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
+                      <div id="hero-net" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-summaryGross">Gross Salary</div>
+                      <div id="hero-gross" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
+                      <div id="hero-total" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-netLabel">Net</div>
+                      <div id="bar-net-pct" class="item-after">—</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-taxesLabel">Taxes</div>
+                      <div id="bar-taxes-pct" class="item-after">—</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
 
             <div class="list list-strong list-inset">
@@ -669,22 +675,14 @@
           $('r-non-tax-min').textContent = money(result.nonTaxMin);
         }
 
-        // Tax breakdown bar
+        // Tax breakdown percentages
         const gross = result.gross;
         if (gross > 0) {
           const netPct = Math.round((result.net / gross) * 100);
           const taxPct = 100 - netPct;
-          app.progressbar.set($('bar-net'), netPct);
-          app.progressbar.set($('bar-taxes'), taxPct);
-          $('bar-net').setAttribute('aria-valuenow', String(netPct));
-          $('bar-taxes').setAttribute('aria-valuenow', String(taxPct));
           $('bar-net-pct').textContent = netPct + '%';
           $('bar-taxes-pct').textContent = taxPct + '%';
         } else {
-          app.progressbar.set($('bar-net'), 0);
-          app.progressbar.set($('bar-taxes'), 0);
-          $('bar-net').setAttribute('aria-valuenow', '0');
-          $('bar-taxes').setAttribute('aria-valuenow', '0');
           $('bar-net-pct').textContent = '—';
           $('bar-taxes-pct').textContent = '—';
         }
