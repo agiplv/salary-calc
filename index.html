@@ -23,7 +23,7 @@
             <div class="card card-outline">
               <div class="card-content card-content-padding">
                 <div class="block-title-medium" id="lbl-inHand">In Hand (Net)</div>
-                <div class="block-header" id="hero-net" aria-live="polite" aria-atomic="true">0.00 €</div>
+                <div id="hero-net" aria-live="polite" aria-atomic="true">0.00 €</div>
                 <div class="list simple-list">
                   <ul>
                     <li>
@@ -50,11 +50,11 @@
                 </div>
                 <div class="block block-strong inset">
                   <div class="block-header">Net</div>
-                  <div id="bar-net" class="progressbar color-green"></div>
+                  <div id="bar-net" class="progressbar color-green" data-progress="0"></div>
                 </div>
                 <div class="block block-strong inset">
                   <div class="block-header">Taxes</div>
-                  <div id="bar-taxes" class="progressbar color-red"></div>
+                  <div id="bar-taxes" class="progressbar color-red" data-progress="0"></div>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@
                         <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray auto-chip" hidden>AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden>AUTO</span></div>
                   </li>
                   <li id="field-net" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -106,7 +106,7 @@
                         <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray auto-chip" hidden>AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden>AUTO</span></div>
                   </li>
                   <li id="field-employer" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -115,7 +115,7 @@
                         <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray auto-chip" hidden>AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden>AUTO</span></div>
                   </li>
                 </ul>
             </div>
@@ -124,7 +124,7 @@
                 <ul>
                   <li id="lbl-optionsSection-row" class="item-content">
                     <div class="item-inner">
-                      <div class="item-title item-header" id="lbl-optionsSection">Adjustments</div>
+                      <div class="item-title" id="lbl-optionsSection">Adjustments</div>
                     </div>
                   </li>
                 </ul>
@@ -597,7 +597,7 @@
         lastEdited = mode;
         document.querySelectorAll('.salary-field').forEach(field => {
           const isSource = field.id === `field-${mode}`;
-          const autoChip = field.querySelector('.auto-chip');
+          const autoChip = field.querySelector('[data-auto-chip]');
           if (autoChip) autoChip.hidden = isSource;
         });
         updateSourceModeSelector();
