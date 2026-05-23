@@ -675,6 +675,7 @@
           $('r-non-tax-min').textContent = money(result.nonTaxMin);
         }
 
+        // Tax breakdown percentages
         const gross = result.gross;
         if (gross > 0) {
           const netPct = Math.round((result.net / gross) * 100);
