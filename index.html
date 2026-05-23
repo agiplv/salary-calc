@@ -65,7 +65,7 @@
 
             <div class="list list-inset list-strong">
               <ul>
-                <li id="lbl-optionsSection-row" class="item-content">
+                <li id="lbl-optionsSection-row" class="item-content lv-option-row">
                   <div class="item-inner">
                     <div class="item-title" id="lbl-optionsSection">Adjustments</div>
                   </div>
@@ -83,27 +83,23 @@
                     </div>
                   </label>
                 </li>
-                <li class="item-content item-input item-input-with-value lv-option-row">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-dependents">Dependents</div>
-                    <div class="item-after">
-                      <span id="dependents-value" class="dependents-value">0</span>
-                      <div
-                        id="dependents-stepper"
-                        class="stepper stepper-init stepper-round"
-                        data-min="0"
-                        data-max="5"
-                        data-value="0"
-                        data-autorepeat="true"
-                      >
-                        <div class="stepper-button-minus"></div>
-                        <div class="stepper-input-wrap">
-                          <input id="dependents-input" type="text" value="0" readonly />
-                        </div>
-                        <div class="stepper-button-plus"></div>
+                <li class="lv-option-row">
+                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
+                    <select id="dependents-select" aria-label="Dependents">
+                      <option value="0" selected>0 dependents</option>
+                      <option value="1">1 dependent</option>
+                      <option value="2">2 dependents</option>
+                      <option value="3">3 dependents</option>
+                      <option value="4">4 dependents</option>
+                      <option value="5">5 dependents</option>
+                    </select>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-dependents">Dependents</div>
+                        <div id="dependents-value" class="item-after"></div>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -546,9 +542,7 @@
       const countrySelect = $('country-select');
       const countryCurrent = $('country-current');
       const taxBookToggle = $('tax-book-toggle');
-      const dependentsInput = $('dependents-input');
-      const optionsSectionTitle = $('lbl-optionsSection');
-      const optionsSectionRow = $('lbl-optionsSection-row');
+      const dependentsSelect = $('dependents-select');
       const dependentsValue = $('dependents-value');
       const sourceModeSelect = $('source-mode-select');
       const sourceModeCurrent = $('source-mode-current');
@@ -631,7 +625,7 @@
       }
 
       function getDependents() {
-        return Math.min(5, Math.max(0, parseInt(dependentsInput.value || '0', 10) || 0));
+        return Math.min(5, Math.max(0, parseInt(dependentsSelect.value || '0', 10) || 0));
       }
 
       function getInputByMode(mode) {
@@ -681,8 +675,6 @@
         currentCountry = country;
         const isLatvia = country === 'lv';
         countrySelect.value = country;
-        optionsSectionTitle.hidden = !isLatvia;
-        optionsSectionRow.classList.toggle('display-none', !isLatvia);
         document.querySelectorAll('.lv-option-row, .lv-row').forEach(el => {
           el.classList.toggle('display-none', !isLatvia);
         });
@@ -798,9 +790,8 @@
 
       taxBookToggle.addEventListener('change', recalc);
 
-      app.on('stepperChange', (stepper, value) => {
-        dependentsInput.value = String(value);
-        dependentsValue.textContent = String(value);
+      dependentsSelect.addEventListener('change', () => {
+        dependentsValue.textContent = dependentsSelect.value || '0';
         recalc();
       });
 
@@ -831,7 +822,7 @@
       applyCountry(currentCountry);
       initializeLabels();
       activateSalaryInput(lastEdited);
-      dependentsValue.textContent = dependentsInput.value || '0';
+      dependentsValue.textContent = dependentsSelect.value || '0';
       recalc();
     </script>
   </body>
