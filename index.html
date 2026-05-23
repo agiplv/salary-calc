@@ -738,8 +738,12 @@
       }
 
       // ── Section visibility ────────────────────────────────────────────────────
+      function hasAnySalaryValue() {
+        return parseAmount(grossInput.value) > 0 || parseAmount(netInput.value) > 0 || parseAmount(employerInput.value) > 0;
+      }
+
       function updateSectionVisibility() {
-        const hasValue = parseAmount(grossInput.value) > 0 || parseAmount(netInput.value) > 0 || parseAmount(employerInput.value) > 0;
+        const hasValue = hasAnySalaryValue();
         const adjustmentsSection = document.getElementById('adjustments-section');
         const breakdownSection = document.getElementById('breakdown-section');
         if (adjustmentsSection) adjustmentsSection.classList.toggle('display-none', !hasValue);
