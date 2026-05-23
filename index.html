@@ -13,9 +13,7 @@
           <div class="navbar">
             <div class="navbar-bg"></div>
             <div class="navbar-inner">
-              <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
-              <div class="right"></div>
             </div>
           </div>
 
@@ -60,46 +58,67 @@
                     </div>
                   </a>
                 </li>
-              </ul>
-            </div>
-
-            <div class="list list-inset list-strong">
-              <ul>
-                <li id="lbl-optionsSection-row" class="item-content lv-option-row">
-                  <div class="item-inner">
-                    <div class="item-title" id="lbl-optionsSection">Adjustments</div>
-                  </div>
-                </li>
-                <li class="lv-option-row">
+                <li>
                   <label class="item-content">
                     <div class="item-inner">
-                      <div class="item-title" id="lbl-taxBook">Tax Book</div>
+                      <div class="item-title" id="lbl-darkMode">Dark Mode</div>
                       <div class="item-after">
                         <label class="toggle toggle-init color-blue">
-                          <input id="tax-book-toggle" type="checkbox" checked />
+                          <input id="dark-mode-toggle" type="checkbox" />
                           <span class="toggle-icon"></span>
                         </label>
                       </div>
                     </div>
                   </label>
                 </li>
-                <li class="lv-option-row">
-                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
-                    <select id="dependents-select" aria-label="Dependents">
-                      <option value="0" selected>0 dependents</option>
-                      <option value="1">1 dependent</option>
-                      <option value="2">2 dependents</option>
-                      <option value="3">3 dependents</option>
-                      <option value="4">4 dependents</option>
-                      <option value="5">5 dependents</option>
-                    </select>
-                    <div class="item-content">
-                      <div class="item-inner">
-                        <div class="item-title" id="lbl-dependents">Dependents</div>
-                        <div id="dependents-value" class="item-after"></div>
-                      </div>
+              </ul>
+            </div>
+
+            <div class="list accordion-list list-inset list-strong" id="adjustments-section">
+              <ul>
+                <li class="accordion-item lv-option-row">
+                  <a href="#" class="item-content item-link">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-optionsSection">Adjustments</div>
                     </div>
                   </a>
+                  <div class="accordion-item-content">
+                    <div class="list">
+                      <ul>
+                        <li>
+                          <label class="item-content">
+                            <div class="item-inner">
+                              <div class="item-title" id="lbl-taxBook">Tax Book</div>
+                              <div class="item-after">
+                                <label class="toggle toggle-init color-blue">
+                                  <input id="tax-book-toggle" type="checkbox" checked />
+                                  <span class="toggle-icon"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                        <li>
+                          <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
+                            <select id="dependents-select" aria-label="Dependents">
+                              <option value="0" selected>0 dependents</option>
+                              <option value="1">1 dependent</option>
+                              <option value="2">2 dependents</option>
+                              <option value="3">3 dependents</option>
+                              <option value="4">4 dependents</option>
+                              <option value="5">5 dependents</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title" id="lbl-dependents">Dependents</div>
+                                <div id="dependents-value" class="item-after"></div>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -149,7 +168,7 @@
               </ul>
             </div>
 
-            <div class="list accordion-list list-inset list-strong">
+            <div class="list accordion-list list-inset list-strong" id="breakdown-section">
                 <ul>
                   <li class="accordion-item">
                     <a href="#" class="item-content item-link">
@@ -547,6 +566,7 @@
       const sourceModeSelect = $('source-mode-select');
       const sourceModeCurrent = $('source-mode-current');
       const inputValuesPopup = document.querySelector('.salary-input-popup');
+      const darkModeToggle = $('dark-mode-toggle');
 
       const LABEL_MAP = {
         'lbl-country': 'country',
@@ -579,6 +599,7 @@
         'lbl-netLabel-breakdown': 'netLabel',
         'lbl-totalEmployer2': 'totalEmployer',
         'lbl-taxesLabel': 'taxes',
+        'lbl-darkMode': 'darkMode',
       };
       const CALCULATOR_MAP = {
         lv: {
@@ -666,9 +687,22 @@
       }
 
       // ── Theme ─────────────────────────────────────────────────────────────────
-      function applySystemTheme() {
-        document.documentElement.classList.toggle('dark', colorSchemeMedia.matches);
+      function applyDarkMode(isDark) {
+        document.documentElement.classList.toggle('dark', isDark);
+        darkModeToggle.checked = isDark;
       }
+
+      function applySystemTheme() {
+        if (!localStorage.getItem('darkMode')) {
+          applyDarkMode(colorSchemeMedia.matches);
+        }
+      }
+
+      darkModeToggle.addEventListener('change', () => {
+        const isDark = darkModeToggle.checked;
+        localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+        applyDarkMode(isDark);
+      });
 
       // ── Country ───────────────────────────────────────────────────────────────
       function applyCountry(country) {
@@ -701,6 +735,15 @@
         sourceModeSelect.querySelector('option[value="net"]').textContent = t.netTab;
         sourceModeSelect.querySelector('option[value="employer"]').textContent = t.employerTab;
         syncSelectionLabels();
+      }
+
+      // ── Section visibility ────────────────────────────────────────────────────
+      function updateSectionVisibility() {
+        const hasValue = parseAmount(grossInput.value) > 0 || parseAmount(netInput.value) > 0 || parseAmount(employerInput.value) > 0;
+        const adjustmentsSection = document.getElementById('adjustments-section');
+        const breakdownSection = document.getElementById('breakdown-section');
+        if (adjustmentsSection) adjustmentsSection.classList.toggle('display-none', !hasValue);
+        if (breakdownSection) breakdownSection.classList.toggle('display-none', !hasValue);
       }
 
       // ── Render ────────────────────────────────────────────────────────────────
@@ -772,6 +815,7 @@
         isInternalUpdate = false;
 
         render(result);
+        updateSectionVisibility();
       }
 
       // ── Event handlers ────────────────────────────────────────────────────────
@@ -812,7 +856,12 @@
 
       // ── Init ──────────────────────────────────────────────────────────────────
       document.documentElement.lang = APP_LANG;
-      applySystemTheme();
+      const savedDarkPref = localStorage.getItem('darkMode');
+      if (savedDarkPref) {
+        applyDarkMode(savedDarkPref === 'dark');
+      } else {
+        applyDarkMode(colorSchemeMedia.matches);
+      }
       if (typeof colorSchemeMedia.addEventListener === 'function') {
         colorSchemeMedia.addEventListener('change', applySystemTheme);
       } else if (typeof colorSchemeMedia.addListener === 'function') {
