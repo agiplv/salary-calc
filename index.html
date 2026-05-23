@@ -15,15 +15,29 @@
             <div class="page-content tab tab-active" id="tab-calculator">
               <div class="list list-inset list-strong salary-inputs-list">
                 <ul>
-                  <li>
-                    <a href="#" class="item-link popup-open" data-popup=".salary-input-popup" aria-label="Open salary values input dialog">
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
-                          <div class="item-footer" id="salary-values-footer" role="status"></div>
-                        </div>
+                  <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
+                      <div class="item-input-wrap">
+                        <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                       </div>
-                    </a>
+                    </div>
+                  </li>
+                  <li id="field-net" class="item-content item-input item-input-outline salary-field display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
+                      <div class="item-input-wrap">
+                        <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
+                      </div>
+                    </div>
+                  </li>
+                  <li id="field-employer" class="item-content item-input item-input-outline salary-field display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
+                      <div class="item-input-wrap">
+                        <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -419,52 +433,6 @@
         </div>
       </div>
     </div>
-    <div class="popup salary-input-popup">
-      <div class="view">
-        <div class="page">
-          <div class="navbar">
-            <div class="navbar-bg"></div>
-            <div class="navbar-inner">
-              <div class="left">
-                <a href="#" class="link popup-close" aria-label="Close salary values dialog">Close</a>
-              </div>
-              <div class="title" id="lbl-inputValuesPage">Salary Values</div>
-              <div class="right"></div>
-            </div>
-          </div>
-          <div class="page-content">
-            <div class="list list-inset list-strong">
-              <ul>
-                <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
-                  <div class="item-inner">
-                    <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
-                    <div class="item-input-wrap">
-                      <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
-                    </div>
-                  </div>
-                </li>
-                <li id="field-net" class="item-content item-input item-input-outline salary-field display-none">
-                  <div class="item-inner">
-                    <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
-                    <div class="item-input-wrap">
-                      <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
-                    </div>
-                  </div>
-                </li>
-                <li id="field-employer" class="item-content item-input item-input-outline salary-field display-none">
-                  <div class="item-inner">
-                    <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
-                    <div class="item-input-wrap">
-                      <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
       if (typeof window.Framework7 !== 'function') {
@@ -476,8 +444,6 @@
         en: {
           title: 'Salary Calculator',
           inputModeSection: 'Salary Input',
-          openInputValues: 'Enter Salary Values',
-          inputValuesPage: 'Salary Values',
           grossTab: 'Gross',
           netTab: 'Net',
           employerTab: 'Employer',
@@ -535,8 +501,6 @@
         lv: {
           title: 'Algas kalkulators',
           inputModeSection: 'Ievades režīms',
-          openInputValues: 'Ievadīt algas vērtības',
-          inputValuesPage: 'Algas vērtības',
           grossTab: 'Bruto',
           netTab: 'Neto',
           employerTab: 'Darba devējs',
@@ -594,8 +558,6 @@
         ru: {
           title: 'Калькулятор зарплаты',
           inputModeSection: 'Режим ввода',
-          openInputValues: 'Ввести значения зарплаты',
-          inputValuesPage: 'Значения зарплаты',
           grossTab: 'Брутто',
           netTab: 'Нетто',
           employerTab: 'Работодатель',
@@ -775,10 +737,8 @@
       const dependentsValue = $('dependents-value');
       const sourceModeSelect = $('source-mode-select');
       const sourceModeCurrent = $('source-mode-current');
-      const salaryValuesFooter = $('salary-values-footer');
       const langSelect = $('lang-select');
       const langCurrent = $('lang-current');
-      const inputValuesPopup = document.querySelector('.salary-input-popup');
       const darkModeToggle = $('dark-mode-toggle');
       const lvEmployeeVsaoiInput = $('lv-employee-vsaoi-input');
       const lvEmployerVsaoiInput = $('lv-employer-vsaoi-input');
@@ -798,8 +758,6 @@
         'lbl-country': 'country',
         'lbl-lang': 'lang',
         'lbl-inputModeSection': 'inputModeSection',
-        'lbl-openInputValues': 'openInputValues',
-        'lbl-inputValuesPage': 'inputValuesPage',
         'lbl-optionsSection': 'optionsSection',
         'lbl-gross': 'gross',
         'lbl-net': 'net',
@@ -867,7 +825,6 @@
       const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
       let lastEdited = 'gross';
       let isInternalUpdate = false;
-      let isInputValuesPopupOpen = false;
 
       // ── Helpers ───────────────────────────────────────────────────────────────
       function parseAmount(value) {
@@ -932,17 +889,6 @@
         langCurrent.textContent = getLanguageLabel(currentLang);
       }
 
-      function updateSalaryValuesFooter() {
-        if (!salaryValuesFooter) return;
-        const sourceInput = getInputByMode(lastEdited);
-        if (!sourceInput) {
-          salaryValuesFooter.textContent = '';
-          return;
-        }
-        const amount = parseAmount(sourceInput.value);
-        salaryValuesFooter.textContent = amount > 0 ? `${getModeLabel(lastEdited)}: ${money(amount)}` : '';
-      }
-
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
         lastEdited = mode;
         sourceModeSelect.value = mode;
@@ -952,7 +898,6 @@
           field.classList.toggle('display-none', !isSource);
         });
         syncSelectionLabels();
-        updateSalaryValuesFooter();
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
         if (sync) recalc();
       }
@@ -1015,7 +960,6 @@
         langSelect.querySelector('option[value="ru"]').textContent = t.langOptionRu;
         langSelect.value = currentLang;
         syncSelectionLabels();
-        updateSalaryValuesFooter();
       }
 
       function applyLanguage(lang) {
@@ -1133,7 +1077,6 @@
         isInternalUpdate = false;
 
         render(result);
-        updateSalaryValuesFooter();
         updateSectionVisibility();
       }
 
@@ -1161,8 +1104,7 @@
       countrySelect.addEventListener('change', () => applyCountry(countrySelect.value));
       langSelect.addEventListener('change', () => applyLanguage(langSelect.value));
       sourceModeSelect.addEventListener('change', () => {
-        const popupVisible = isInputValuesPopupOpen || Boolean(inputValuesPopup && inputValuesPopup.classList.contains('modal-in'));
-        activateSalaryInput(sourceModeSelect.value, { focus: popupVisible, sync: true });
+        activateSalaryInput(sourceModeSelect.value, { focus: true, sync: true });
       });
 
       bindTaxInput(lvEmployeeVsaoiInput, value => { LV_RATES.employeeVsaoi = Math.max(0, value / 100); });
@@ -1178,16 +1120,6 @@
       bindTaxInput(eeNonTaxMinMaxInput, value => { EE_RATES.nonTaxMinMax = Math.max(0, value); });
       bindTaxInput(eeNonTaxMinLowInput, value => { EE_RATES.nonTaxMinLow = Math.max(0, value); });
       bindTaxInput(eeNonTaxMinHighInput, value => { EE_RATES.nonTaxMinHigh = Math.max(0, value); });
-
-      if (inputValuesPopup) {
-        inputValuesPopup.addEventListener('popup:opened', () => {
-          isInputValuesPopupOpen = true;
-          activateSalaryInput(lastEdited, { focus: true });
-        });
-        inputValuesPopup.addEventListener('popup:closed', () => {
-          isInputValuesPopupOpen = false;
-        });
-      }
 
       // ── Init ──────────────────────────────────────────────────────────────────
       document.documentElement.lang = currentLang;
