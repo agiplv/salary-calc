@@ -6,10 +6,17 @@
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
     <style>
+      :root {
+        --salary-tabbar-background: rgba(255, 255, 255, 0.92);
+        --salary-tabbar-border-color: rgba(60, 60, 67, 0.18);
+        --salary-tabbar-active-color: #007aff;
+        --salary-tabbar-active-background: rgba(0, 122, 255, 0.12);
+      }
+
       .ios .salary-tabbar {
         height: calc(64px + var(--f7-safe-area-bottom));
-        background: rgba(255, 255, 255, 0.92);
-        border-top: 1px solid rgba(60, 60, 67, 0.18);
+        background: var(--salary-tabbar-background);
+        border-top: 1px solid var(--salary-tabbar-border-color);
         -webkit-backdrop-filter: saturate(180%) blur(20px);
         backdrop-filter: saturate(180%) blur(20px);
       }
@@ -29,8 +36,8 @@
       }
 
       .ios .salary-tabbar .tab-link-active {
-        background: rgba(0, 122, 255, 0.12);
-        color: #007aff;
+        background: var(--salary-tabbar-active-background);
+        color: var(--salary-tabbar-active-color);
       }
 
       .ios .salary-tabbar .tab-link-active .tabbar-icon {
