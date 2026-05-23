@@ -5,384 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
-    <style>
-      :root {
-        --radius-pill: 999px;
-        --mono-stack: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-      }
-
-      html:not(.dark) .page-content {
-        background: linear-gradient(180deg, #f5f7fb 0%, #eef2f8 100%);
-      }
-
-      .ios-statusbar {
-        height: 22px;
-        padding: 0 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 13px;
-        font-weight: 600;
-        color: #101318;
-        letter-spacing: 0.01em;
-      }
-      .ios-statusbar-icons {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        font-size: 12px;
-      }
-      .ios-battery {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-      }
-      .ios-battery::before {
-        content: "";
-        width: 19px;
-        height: 10px;
-        border-radius: 3px;
-        border: 1.5px solid currentColor;
-        display: inline-block;
-        background: linear-gradient(90deg, #111 56%, transparent 56%);
-      }
-
-      .navbar {
-        top: 22px !important;
-      }
-      .navbar .title {
-        font-weight: 700;
-      }
-      .settings-btn {
-        width: 28px;
-        height: 28px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #5c6470;
-        border: 0;
-        background: transparent;
-        padding: 0;
-      }
-      .settings-btn .f7-icons {
-        font-size: 18px;
-      }
-
-      .hero-card {
-        margin: 10px 16px 0 !important;
-        border-radius: 22px !important;
-        overflow: hidden;
-        background: linear-gradient(160deg, #0f89ff 0%, #1f68e5 60%, #2556cc 100%) !important;
-        color: #fff;
-        box-shadow: 0 16px 30px rgba(21, 98, 226, 0.28) !important;
-      }
-      .hero-card .card-content {
-        padding: 0;
-      }
-      .hero-net-label {
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.11em;
-        opacity: 0.9;
-        text-align: center;
-        padding-top: 14px;
-      }
-      .hero-net-amount {
-        font-size: clamp(2.35rem, 9vw, 3.2rem);
-        font-weight: 800;
-        text-align: center;
-        letter-spacing: -0.03em;
-        line-height: 1.08;
-        padding: 2px 16px 12px;
-      }
-      .hero-divider {
-        height: 1px;
-        background: rgba(255, 255, 255, 0.22);
-        margin: 0 16px;
-      }
-      .hero-secondaries {
-        display: flex;
-        padding: 10px 8px 8px;
-      }
-      .hero-secondary {
-        flex: 1;
-        text-align: center;
-        min-width: 0;
-      }
-      .hero-secondary + .hero-secondary {
-        border-left: 1px solid rgba(255, 255, 255, 0.24);
-      }
-      .hero-secondary-label {
-        font-size: 11px;
-        font-weight: 700;
-        opacity: 0.87;
-        margin-bottom: 4px;
-      }
-      .hero-secondary-value {
-        font-size: 16px;
-        font-weight: 700;
-        font-family: var(--mono-stack);
-        font-variant-numeric: tabular-nums;
-      }
-
-      .tax-bar-section {
-        padding: 10px 16px 13px;
-        border-top: 1px solid rgba(255, 255, 255, 0.22);
-      }
-      .tax-bar-row-labels {
-        display: flex;
-        justify-content: space-between;
-        font-size: 12px;
-        font-weight: 700;
-        opacity: 0.92;
-        margin-bottom: 6px;
-      }
-      .tax-bar {
-        height: 14px;
-        border-radius: var(--radius-pill);
-        background: rgba(255, 255, 255, 0.22);
-        display: flex;
-        overflow: hidden;
-      }
-      .bar-net {
-        background: linear-gradient(90deg, #8ec8ff 0%, #d5e9ff 100%);
-        transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
-        border-radius: var(--radius-pill) 0 0 var(--radius-pill);
-        flex-shrink: 0;
-      }
-      .bar-taxes {
-        background: linear-gradient(90deg, #ff9f93 0%, #ff7a6e 100%);
-        transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
-        border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
-        flex-shrink: 0;
-      }
-      .tax-bar-pct {
-        display: flex;
-        justify-content: space-between;
-        font-size: 12px;
-        font-weight: 600;
-        opacity: 0.92;
-        margin-top: 5px;
-      }
-
-      .grouped-shell {
-        margin: 12px 16px 0;
-        border-radius: 18px;
-        overflow: hidden;
-        background: linear-gradient(145deg, #fff 0%, #f8fafe 100%);
-        border: 1px solid #e8edf5;
-        box-shadow: 0 10px 20px rgba(56, 81, 121, 0.08);
-      }
-      .grouped-shell .list {
-        margin: 0 !important;
-      }
-      .grouped-shell .list ul {
-        background: transparent;
-        border: 0;
-        border-radius: 0;
-      }
-      .grouped-shell .item-inner {
-        min-height: 44px;
-      }
-      .grouped-shell .item-content,
-      .grouped-shell .item-link {
-        min-height: 44px;
-      }
-      .grouped-shell .item-after {
-        font-family: var(--mono-stack);
-        font-variant-numeric: tabular-nums;
-        text-align: right;
-        white-space: nowrap;
-      }
-
-      .controls-block {
-        margin: 0 !important;
-        padding: 12px !important;
-        background: transparent !important;
-        box-shadow: none !important;
-      }
-      .controls-block .segmented {
-        width: 100%;
-        background: rgba(120, 120, 128, 0.12);
-        border-radius: 12px;
-        padding: 2px;
-      }
-      .controls-block .segmented + .segmented {
-        margin-top: 9px;
-      }
-      .controls-block .button {
-        border-radius: 10px;
-        font-weight: 600;
-        min-height: 34px;
-      }
-      .controls-block .button.button-active {
-        box-shadow: 0 2px 6px rgba(36, 49, 71, 0.22);
-      }
-
-      .salary-inputs-list .item-after {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        min-width: 52px;
-      }
-      .salary-field.is-source .item-label {
-        color: var(--f7-theme-color) !important;
-        font-weight: 700;
-      }
-      .salary-field .item-input-wrap input {
-        font-variant-numeric: tabular-nums;
-        font-family: var(--mono-stack);
-      }
-      .salary-field .auto-chip {
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        border: 1px solid currentColor;
-        border-radius: 8px;
-        padding: 1px 6px;
-        opacity: 0.4;
-        pointer-events: none;
-        align-self: center;
-        display: none;
-      }
-      .salary-field:not(.is-source) .auto-chip {
-        display: inline-block;
-      }
-
-      .section-label-row {
-        min-height: 44px;
-      }
-      .section-label-row .item-title {
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #7b8592;
-        letter-spacing: 0.05em;
-      }
-
-      .native-row .item-after {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
-      }
-      .dependents-value {
-        min-width: 18px;
-        text-align: right;
-        font-weight: 700;
-        font-variant-numeric: tabular-nums;
-        font-family: var(--mono-stack);
-      }
-      .native-stepper {
-        border-radius: var(--radius-pill);
-        overflow: hidden;
-      }
-      .native-stepper .stepper-input-wrap {
-        display: none;
-      }
-      .native-stepper .stepper-button-minus,
-      .native-stepper .stepper-button-plus {
-        width: 30px;
-        min-width: 30px;
-      }
-      .native-stepper .stepper-button-minus {
-        border-right: 1px solid var(--f7-list-item-border-color);
-      }
-
-      .breakdown-list .item-title {
-        font-size: 16px;
-      }
-      .breakdown-list .accordion-item-content .item-title {
-        font-size: 15px;
-        font-weight: 400;
-        line-height: 1.25;
-        padding-right: 8px;
-      }
-      .breakdown-list .breakdown-secondary .item-title {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--f7-text-color-secondary);
-      }
-      .breakdown-list .accordion-item-content .item-after {
-        /* Reserve enough tabular width for aligned values like 12359.36 €. */
-        min-width: 11ch;
-      }
-    </style>
   </head>
   <body>
     <div id="app">
       <div class="view view-main view-init safe-areas">
         <div class="page" id="main-page" data-name="home">
-          <div class="ios-statusbar" aria-hidden="true">
-            <span>23:20</span>
-            <span class="ios-statusbar-icons">
-              <i class="f7-icons">cellularbars</i>
-              <i class="f7-icons">wifi</i>
-              <span class="ios-battery">56%</span>
-            </span>
-          </div>
           <div class="navbar">
             <div class="navbar-bg"></div>
             <div class="navbar-inner">
               <div class="left"></div>
               <div class="title" id="nav-title">Salary Calculator</div>
-              <div class="right">
-                <button class="link icon-only settings-btn" type="button" aria-label="Settings">
-                  <i class="f7-icons">gearshape_fill</i>
-                </button>
-              </div>
+              <div class="right"></div>
             </div>
           </div>
 
           <div class="page-content">
-            <!-- Hero Result Card -->
-            <div class="card hero-card">
-              <div class="card-content">
-                <div class="hero-net-label" id="lbl-inHand">In Hand (Net)</div>
-                <div class="hero-net-amount" id="hero-net" aria-live="polite" aria-atomic="true">0.00 €</div>
-                <div class="hero-divider"></div>
-                <div class="hero-secondaries">
-                  <div class="hero-secondary">
-                    <div class="hero-secondary-label" id="lbl-summaryGross">Gross Salary</div>
-                    <div class="hero-secondary-value" id="hero-gross" aria-live="polite" aria-atomic="true">0.00 €</div>
-                  </div>
-                  <div class="hero-secondary">
-                    <div class="hero-secondary-label" id="lbl-totalEmployer">Total Employer Cost</div>
-                    <div class="hero-secondary-value" id="hero-total" aria-live="polite" aria-atomic="true">0.00 €</div>
-                  </div>
+            <div class="card card-outline">
+              <div class="card-content card-content-padding">
+                <div class="block-title-medium" id="lbl-inHand">In Hand (Net)</div>
+                <div id="hero-net" aria-live="polite" aria-atomic="true">0.00 €</div>
+                <div class="list simple-list">
+                  <ul>
+                    <li>
+                      <span id="lbl-summaryGross">Gross Salary</span>
+                      <span id="hero-gross" aria-live="polite" aria-atomic="true">0.00 €</span>
+                    </li>
+                    <li>
+                      <span id="lbl-totalEmployer">Total Employer Cost</span>
+                      <span id="hero-total" aria-live="polite" aria-atomic="true">0.00 €</span>
+                    </li>
+                  </ul>
                 </div>
-                <div class="tax-bar-section">
-                  <div class="tax-bar-row-labels">
-                    <span id="lbl-netLabel">Net</span>
-                    <span id="lbl-taxesLabel">Taxes</span>
-                  </div>
-                  <div class="tax-bar">
-                    <div id="bar-net" class="bar-net" style="width:0%"></div>
-                    <div id="bar-taxes" class="bar-taxes" style="width:0%"></div>
-                  </div>
-                  <div class="tax-bar-pct">
-                    <span id="bar-net-pct">—</span>
-                    <span id="bar-taxes-pct">—</span>
-                  </div>
+                <div class="list simple-list">
+                  <ul>
+                    <li>
+                      <span id="lbl-netLabel">Net</span>
+                      <span id="bar-net-pct">—</span>
+                    </li>
+                    <li>
+                      <span id="lbl-taxesLabel">Taxes</span>
+                      <span id="bar-taxes-pct">—</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="block block-strong inset">
+                  <div class="block-header">Net</div>
+                  <div id="bar-net" class="progressbar color-green" data-progress="0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+                </div>
+                <div class="block block-strong inset">
+                  <div class="block-header">Taxes</div>
+                  <div id="bar-taxes" class="progressbar color-red" data-progress="0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
                 </div>
               </div>
             </div>
 
-            <div class="grouped-shell">
-              <!-- Controls: Country + Mode in one compact block -->
-              <div class="block block-strong inset controls-block">
-                <div class="segmented segmented-round segmented-raised" id="country-selector">
-                  <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">LV</button>
-                  <button class="button" data-country="ee" type="button" aria-label="Estonia">EE</button>
-                </div>
-                <div class="segmented segmented-round segmented-raised" id="source-mode-selector">
-                  <button class="button button-active" data-mode="gross" type="button" id="mode-btn-gross">Gross</button>
-                  <button class="button" data-mode="net" type="button" id="mode-btn-net">Net</button>
-                  <button class="button" data-mode="employer" type="button" id="mode-btn-employer">Employer</button>
-                </div>
-              </div>
-              <div class="list list-inset list-strong-inset salary-inputs-list">
+            <div class="list list-strong list-inset">
+              <ul>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-input-wrap">
+                        <div class="segmented segmented-round segmented-raised" id="country-selector">
+                          <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">LV</button>
+                          <button class="button" data-country="ee" type="button" aria-label="Estonia">EE</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner">
+                      <div class="item-input-wrap">
+                        <div class="segmented segmented-round segmented-raised" id="source-mode-selector">
+                          <button class="button button-active" data-mode="gross" type="button" id="mode-btn-gross">Gross</button>
+                          <button class="button" data-mode="net" type="button" id="mode-btn-net">Net</button>
+                          <button class="button" data-mode="employer" type="button" id="mode-btn-employer">Employer</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="list list-inset list-strong-inset salary-inputs-list">
                 <ul>
                   <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
                     <div class="item-inner">
@@ -391,7 +97,7 @@
                         <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="auto-chip">AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
                   <li id="field-net" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -400,7 +106,7 @@
                         <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="auto-chip">AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
                   <li id="field-employer" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -409,24 +115,23 @@
                         <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="auto-chip">AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
                 </ul>
-              </div>
+            </div>
 
-              <!-- Latvia-only options -->
-              <div class="list list-inset list-strong-inset">
+            <div class="list list-inset list-strong-inset">
                 <ul>
-                  <li id="lbl-optionsSection-row" class="item-content section-label-row">
+                  <li id="lbl-optionsSection-row" class="item-content">
                     <div class="item-inner">
                       <div class="item-title" id="lbl-optionsSection">Adjustments</div>
                     </div>
                   </li>
                 </ul>
-              </div>
-              <div id="lv-options" class="list list-inset list-strong-inset">
+            </div>
+            <div id="lv-options" class="list list-inset list-strong-inset">
                 <ul>
-                  <li class="native-row">
+                  <li>
                     <label class="item-content">
                       <div class="item-inner">
                         <div class="item-title" id="lbl-taxBook">Tax Book</div>
@@ -439,14 +144,14 @@
                       </div>
                     </label>
                   </li>
-                  <li class="item-content item-input item-input-with-value native-row">
+                  <li class="item-content item-input item-input-with-value">
                     <div class="item-inner">
                       <div class="item-title" id="lbl-dependents">Dependents</div>
                       <div class="item-after">
                         <span id="dependents-value" class="dependents-value">0</span>
                         <div
                           id="dependents-stepper"
-                          class="stepper stepper-init stepper-round native-stepper"
+                          class="stepper stepper-init stepper-round"
                           data-min="0"
                           data-max="5"
                           data-value="0"
@@ -462,10 +167,9 @@
                     </div>
                   </li>
                 </ul>
-              </div>
+            </div>
 
-              <!-- Detailed breakdown accordion -->
-              <div class="list accordion-list list-inset list-strong-inset breakdown-list">
+            <div class="list accordion-list list-inset list-strong-inset">
                 <ul>
                   <li class="accordion-item">
                     <a href="#" class="item-content item-link">
@@ -476,72 +180,69 @@
                     <div class="accordion-item-content">
                       <div class="list">
                         <ul>
-                          <!-- LV-specific rows -->
-                        <li class="item-content lv-row breakdown-secondary">
+                          <li class="item-content lv-row">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-empSocial">Employee VSAOI (10.5%)</div>
                              <div id="r-emp-social" class="item-after">0.00 €</div>
                            </div>
-                        </li>
-                        <li class="item-content lv-row breakdown-secondary">
+                          </li>
+                          <li class="item-content lv-row">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-iin">PIT (25.5%)</div>
                              <div id="r-iin" class="item-after">0.00 €</div>
                            </div>
-                        </li>
-                        <li class="item-content lv-row breakdown-secondary">
+                          </li>
+                          <li class="item-content lv-row">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-employerSocial">Employer VSAOI (23.59%)</div>
                              <div id="r-employer-social" class="item-after">0.00 €</div>
                            </div>
-                        </li>
-                        <li class="item-content lv-row breakdown-secondary">
+                          </li>
+                          <li class="item-content lv-row">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-riskDuty">Risk Duty (€0.36)</div>
                              <div id="r-risk-duty" class="item-after">0.36 €</div>
                            </div>
-                        </li>
-                        <li class="item-content lv-row breakdown-secondary">
+                          </li>
+                          <li class="item-content lv-row">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-allowance">Non-taxable Min + Dependents</div>
                              <div id="r-allowance" class="item-after">0.00 €</div>
                            </div>
-                        </li>
-                          <!-- EE-specific rows -->
-                          <li class="item-content ee-row breakdown-secondary" hidden>
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
-                              <div id="r-emp-unemployment" class="item-after">0.00 €</div>
-                            </div>
                           </li>
-                          <li class="item-content ee-row breakdown-secondary" hidden>
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
-                              <div id="r-income-tax" class="item-after">0.00 €</div>
-                            </div>
+                          <li class="item-content ee-row" hidden>
+                           <div class="item-inner">
+                             <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
+                             <div id="r-emp-unemployment" class="item-after">0.00 €</div>
+                           </div>
                           </li>
-                          <li class="item-content ee-row breakdown-secondary" hidden>
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
-                              <div id="r-employer-social-ee" class="item-after">0.00 €</div>
-                            </div>
+                          <li class="item-content ee-row" hidden>
+                           <div class="item-inner">
+                             <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
+                             <div id="r-income-tax" class="item-after">0.00 €</div>
+                           </div>
                           </li>
-                          <li class="item-content ee-row breakdown-secondary" hidden>
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
-                              <div id="r-employer-unemployment" class="item-after">0.00 €</div>
-                            </div>
+                          <li class="item-content ee-row" hidden>
+                           <div class="item-inner">
+                             <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
+                             <div id="r-employer-social-ee" class="item-after">0.00 €</div>
+                           </div>
                           </li>
-                          <li class="item-content ee-row breakdown-secondary" hidden>
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
-                              <div id="r-non-tax-min" class="item-after">0.00 €</div>
-                            </div>
+                          <li class="item-content ee-row" hidden>
+                           <div class="item-inner">
+                             <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
+                             <div id="r-employer-unemployment" class="item-after">0.00 €</div>
+                           </div>
                           </li>
-                          <!-- Common rows -->
+                          <li class="item-content ee-row" hidden>
+                           <div class="item-inner">
+                             <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
+                             <div id="r-non-tax-min" class="item-after">0.00 €</div>
+                           </div>
+                          </li>
                           <li class="item-content">
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-taxableBase">Taxable Base</div>
+                           <div class="item-inner">
+                             <div class="item-title" id="lbl-taxableBase">Taxable Base</div>
                               <div id="r-taxable-base" class="item-after">0.00 €</div>
                             </div>
                           </li>
@@ -568,16 +269,18 @@
                     </div>
                   </li>
                 </ul>
-              </div>
             </div>
-
-            <div style="height:24px"></div>
+            <div class="block"></div>
           </div>
         </div>
       </div>
     </div>
     <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
+      if (typeof window.Framework7 !== 'function') {
+        throw new Error('Framework7 library is required but was not loaded. Verify vendor/framework7/framework7-bundle.min.js exists and is included before this script.');
+      }
+
       // ── i18n ──────────────────────────────────────────────────────────────────
       const I18N = {
         en: {
@@ -893,7 +596,10 @@
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
         lastEdited = mode;
         document.querySelectorAll('.salary-field').forEach(field => {
-          field.classList.toggle('is-source', field.id === `field-${mode}`);
+          const isSource = field.id === `field-${mode}`;
+          field.classList.toggle('is-source', isSource);
+          const autoChip = field.querySelector('[data-auto-chip]');
+          if (autoChip) autoChip.hidden = isSource;
         });
         updateSourceModeSelector();
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
@@ -964,13 +670,17 @@
         if (gross > 0) {
           const netPct = Math.round((result.net / gross) * 100);
           const taxPct = 100 - netPct;
-          $('bar-net').style.width = netPct + '%';
-          $('bar-taxes').style.width = taxPct + '%';
+          app.progressbar.set($('bar-net'), netPct);
+          app.progressbar.set($('bar-taxes'), taxPct);
+          $('bar-net').setAttribute('aria-valuenow', String(netPct));
+          $('bar-taxes').setAttribute('aria-valuenow', String(taxPct));
           $('bar-net-pct').textContent = netPct + '%';
           $('bar-taxes-pct').textContent = taxPct + '%';
         } else {
-          $('bar-net').style.width = '0%';
-          $('bar-taxes').style.width = '0%';
+          app.progressbar.set($('bar-net'), 0);
+          app.progressbar.set($('bar-taxes'), 0);
+          $('bar-net').setAttribute('aria-valuenow', '0');
+          $('bar-taxes').setAttribute('aria-valuenow', '0');
           $('bar-net-pct').textContent = '—';
           $('bar-taxes-pct').textContent = '—';
         }
