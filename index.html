@@ -23,7 +23,7 @@
             <div class="list list-inset list-strong salary-inputs-list">
               <ul>
                 <li>
-                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-labelledby="lbl-country">
+                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select country">
                     <select id="country-select" aria-labelledby="lbl-country">
                       <option value="lv">Latvia</option>
                       <option value="ee">Estonia</option>
@@ -37,7 +37,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-labelledby="lbl-inputModeSection">
+                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select salary input mode">
                     <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
                       <option value="gross">Gross</option>
                       <option value="net">Net</option>
@@ -52,7 +52,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" class="item-link popup-open" data-popup=".salary-input-popup" aria-labelledby="lbl-openInputValues">
+                  <a href="#" class="item-link popup-open" data-popup=".salary-input-popup" aria-label="Open salary values input dialog">
                     <div class="item-content">
                       <div class="item-inner">
                         <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
@@ -806,7 +806,8 @@
 
       countrySelect.addEventListener('change', () => applyCountry(countrySelect.value));
       sourceModeSelect.addEventListener('change', () => {
-        activateSalaryInput(sourceModeSelect.value, { focus: isInputValuesPopupOpen, sync: true });
+        const popupVisible = isInputValuesPopupOpen || Boolean(inputValuesPopup && inputValuesPopup.classList.contains('modal-in'));
+        activateSalaryInput(sourceModeSelect.value, { focus: popupVisible, sync: true });
       });
       if (inputValuesPopup) {
         inputValuesPopup.addEventListener('popup:opened', () => {
