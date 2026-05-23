@@ -607,6 +607,7 @@
       const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
       let lastEdited = 'gross';
       let isInternalUpdate = false;
+      let isInputValuesPopupOpen = false;
 
       // ── Helpers ───────────────────────────────────────────────────────────────
       function parseAmount(value) {
@@ -805,11 +806,16 @@
 
       countrySelect.addEventListener('change', () => applyCountry(countrySelect.value));
       sourceModeSelect.addEventListener('change', () => {
-        const popupOpen = Boolean(inputValuesPopup && inputValuesPopup.classList.contains('modal-in'));
-        activateSalaryInput(sourceModeSelect.value, { focus: popupOpen, sync: true });
+        activateSalaryInput(sourceModeSelect.value, { focus: isInputValuesPopupOpen, sync: true });
       });
       if (inputValuesPopup) {
-        inputValuesPopup.addEventListener('popup:opened', () => activateSalaryInput(lastEdited, { focus: true }));
+        inputValuesPopup.addEventListener('popup:opened', () => {
+          isInputValuesPopupOpen = true;
+          activateSalaryInput(lastEdited, { focus: true });
+        });
+        inputValuesPopup.addEventListener('popup:closed', () => {
+          isInputValuesPopupOpen = false;
+        });
       }
 
       // ── Init ──────────────────────────────────────────────────────────────────
