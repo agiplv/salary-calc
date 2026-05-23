@@ -15,6 +15,21 @@
             <div class="page-content tab tab-active" id="tab-calculator">
               <div class="list list-inset list-strong salary-inputs-list">
                 <ul>
+                  <li>
+                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select salary input mode">
+                      <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
+                        <option value="gross">Gross</option>
+                        <option value="net">Net</option>
+                        <option value="employer">Employer</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
+                          <div id="source-mode-current" class="item-after">Gross</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
                   <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
                     <div class="item-inner">
                       <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
@@ -252,21 +267,6 @@
                         <div class="item-inner">
                           <div class="item-title" id="lbl-country">Country</div>
                           <div id="country-current" class="item-after">Latvia</div>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select salary input mode">
-                      <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
-                        <option value="gross">Gross</option>
-                        <option value="net">Net</option>
-                        <option value="employer">Employer</option>
-                      </select>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
-                          <div id="source-mode-current" class="item-after">Gross</div>
                         </div>
                       </div>
                     </a>
