@@ -11,10 +11,11 @@
         --salary-tabbar-border-color: rgba(60, 60, 67, 0.18);
         --salary-tabbar-active-color: #007aff;
         --salary-tabbar-active-background: rgba(0, 122, 255, 0.12);
+        --salary-tabbar-inactive-color: #8e8e93;
       }
 
       .ios .salary-tabbar {
-        height: calc(64px + var(--f7-safe-area-bottom));
+        height: calc(var(--f7-toolbar-height) + 16px + var(--f7-safe-area-bottom));
         background: var(--salary-tabbar-background);
         border-top: 1px solid var(--salary-tabbar-border-color);
         -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -28,7 +29,7 @@
 
       .ios .salary-tabbar .tab-link {
         border-radius: 18px;
-        color: #8e8e93;
+        color: var(--salary-tabbar-inactive-color);
         gap: 4px;
         min-height: 48px;
         padding: 6px 0 4px;
