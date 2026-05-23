@@ -5,71 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
     <title>Salary Calculator</title>
     <link rel="stylesheet" href="vendor/framework7/framework7-bundle.min.css" />
-    <style>
-      :root {
-        --salary-tabbar-background: rgba(255, 255, 255, 0.92);
-        --salary-tabbar-border-color: rgba(60, 60, 67, 0.18);
-        --salary-tabbar-active-color: #007aff;
-        --salary-tabbar-active-background: rgba(0, 122, 255, 0.12);
-        --salary-tabbar-inactive-color: #8e8e93;
-      }
-
-      .ios .salary-tabbar {
-        height: calc(var(--f7-toolbar-height) + 16px + var(--f7-safe-area-bottom));
-        background: var(--salary-tabbar-background);
-        border-top: 1px solid var(--salary-tabbar-border-color);
-        -webkit-backdrop-filter: saturate(180%) blur(20px);
-        backdrop-filter: saturate(180%) blur(20px);
-      }
-
-      .ios .salary-tabbar .toolbar-inner {
-        gap: 8px;
-        padding: 8px 12px calc(8px + var(--f7-safe-area-bottom));
-      }
-
-      .ios .salary-tabbar .tab-link {
-        border-radius: 18px;
-        color: var(--salary-tabbar-inactive-color);
-        gap: 4px;
-        min-height: 48px;
-        padding: 6px 0 4px;
-        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-      }
-
-      .ios .salary-tabbar .tab-link-active {
-        background: var(--salary-tabbar-active-background);
-        color: var(--salary-tabbar-active-color);
-      }
-
-      .ios .salary-tabbar .tab-link-active .tabbar-icon {
-        transform: translateY(-1px);
-      }
-
-      .salary-tabbar .tabbar-icon {
-        align-items: center;
-        display: inline-flex;
-        height: 28px;
-        justify-content: center;
-        transition: transform 0.2s ease;
-        width: 28px;
-      }
-
-      .salary-tabbar .tabbar-icon svg {
-        fill: none;
-        height: 24px;
-        stroke: currentColor;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 1.8;
-        width: 24px;
-      }
-
-      .salary-tabbar .tabbar-label {
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 1.2;
-      }
-    </style>
   </head>
   <body>
     <div id="app">
@@ -482,11 +417,11 @@
               <div class="block"></div>
             </div>
           </div>
-          <div class="toolbar tabbar tabbar-icons toolbar-bottom salary-tabbar">
+          <div class="toolbar tabbar tabbar-icons toolbar-bottom">
             <div class="toolbar-inner">
               <a href="#tab-calculator" class="tab-link tab-link-active">
-                <span class="tabbar-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
+                <i class="icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
                     <rect x="5" y="3" width="14" height="18" rx="3"></rect>
                     <line x1="8" y1="7" x2="16" y2="7"></line>
                     <line x1="8" y1="12" x2="10" y2="12"></line>
@@ -494,12 +429,12 @@
                     <line x1="8" y1="16" x2="10" y2="16"></line>
                     <line x1="12" y1="16" x2="16" y2="16"></line>
                   </svg>
-                </span>
+                </i>
                 <span class="tabbar-label" id="lbl-tabCalculator">Calculator</span>
               </a>
               <a href="#tab-settings" class="tab-link">
-                <span class="tabbar-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
+                <i class="icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M12 2.75v2.5"></path>
                     <path d="M12 18.75v2.5"></path>
@@ -510,7 +445,7 @@
                     <path d="m4.93 19.07 1.77-1.77"></path>
                     <path d="m17.3 6.7 1.77-1.77"></path>
                   </svg>
-                </span>
+                </i>
                 <span class="tabbar-label" id="lbl-tabSettings">Settings</span>
               </a>
             </div>
