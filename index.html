@@ -210,31 +210,31 @@
                              <div id="r-allowance" class="item-after">0.00 €</div>
                            </div>
                           </li>
-                          <li class="item-content ee-row" hidden>
+                          <li class="item-content ee-row display-none">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
                              <div id="r-emp-unemployment" class="item-after">0.00 €</div>
                            </div>
                           </li>
-                          <li class="item-content ee-row" hidden>
+                          <li class="item-content ee-row display-none">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
                              <div id="r-income-tax" class="item-after">0.00 €</div>
                            </div>
                           </li>
-                          <li class="item-content ee-row" hidden>
+                          <li class="item-content ee-row display-none">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
                              <div id="r-employer-social-ee" class="item-after">0.00 €</div>
                            </div>
                           </li>
-                          <li class="item-content ee-row" hidden>
+                          <li class="item-content ee-row display-none">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
                              <div id="r-employer-unemployment" class="item-after">0.00 €</div>
                            </div>
                           </li>
-                          <li class="item-content ee-row" hidden>
+                          <li class="item-content ee-row display-none">
                            <div class="item-inner">
                              <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
                              <div id="r-non-tax-min" class="item-after">0.00 €</div>
@@ -619,10 +619,14 @@
           btn.classList.toggle('button-active', btn.dataset.country === country);
         });
         optionsSectionTitle.hidden = !isLatvia;
-        optionsSectionRow.hidden = !isLatvia;
-        lvOptions.hidden = !isLatvia;
-        document.querySelectorAll('.lv-row').forEach(el => { el.hidden = !isLatvia; });
-        document.querySelectorAll('.ee-row').forEach(el => { el.hidden = isLatvia; });
+        optionsSectionRow.classList.toggle('display-none', !isLatvia);
+        lvOptions.classList.toggle('display-none', !isLatvia);
+        document.querySelectorAll('.lv-row').forEach(el => {
+          el.classList.toggle('display-none', !isLatvia);
+        });
+        document.querySelectorAll('.ee-row').forEach(el => {
+          el.classList.toggle('display-none', isLatvia);
+        });
         localStorage.setItem('country', country);
         recalc();
       }
