@@ -90,14 +90,14 @@
             </div>
             <div class="list list-inset list-strong-inset salary-inputs-list">
                 <ul>
-                  <li id="field-gross" class="item-content item-input item-input-outline salary-field">
+                  <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
                     <div class="item-inner">
                       <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
                       <div class="item-input-wrap">
                         <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray auto-chip" hidden aria-label="Automatically calculated value">AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray auto-chip" hidden>AUTO</span></div>
                   </li>
                   <li id="field-net" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -106,7 +106,7 @@
                         <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray auto-chip" hidden aria-label="Automatically calculated value">AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray auto-chip" hidden>AUTO</span></div>
                   </li>
                   <li id="field-employer" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -115,7 +115,7 @@
                         <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray auto-chip" hidden aria-label="Automatically calculated value">AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray auto-chip" hidden>AUTO</span></div>
                   </li>
                 </ul>
             </div>
@@ -487,7 +487,7 @@
       }
 
       if (typeof window.Framework7 !== 'function') {
-        throw new Error('Framework7 library is required but was not loaded. Ensure vendor/framework7/framework7-bundle.min.js is included before this script.');
+        throw new Error('Framework7 library is required but was not loaded. Ensure framework7-bundle.min.js is included before this script.');
       }
 
       // ── Framework7 app ────────────────────────────────────────────────────────
