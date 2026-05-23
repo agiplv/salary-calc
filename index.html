@@ -10,266 +10,409 @@
     <div id="app">
       <div class="view view-main view-init safe-areas">
         <div class="page" id="main-page" data-name="home">
-          <div class="navbar">
-            <div class="navbar-bg"></div>
-            <div class="navbar-inner">
-              <div class="title" id="nav-title">Salary Calculator</div>
-            </div>
-          </div>
-
-          <div class="page-content">
-            <div class="list list-inset list-strong salary-inputs-list">
-              <ul>
-                <li>
-                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select country">
-                    <select id="country-select" aria-labelledby="lbl-country">
-                      <option value="lv">Latvia</option>
-                      <option value="ee">Estonia</option>
-                    </select>
-                    <div class="item-content">
-                      <div class="item-inner">
-                        <div class="item-title" id="lbl-country">Country</div>
-                        <div id="country-current" class="item-after">Latvia</div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select salary input mode">
-                    <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
-                      <option value="gross">Gross</option>
-                      <option value="net">Net</option>
-                      <option value="employer">Employer</option>
-                    </select>
-                    <div class="item-content">
-                      <div class="item-inner">
-                        <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
-                        <div id="source-mode-current" class="item-after">Gross</div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="item-link popup-open" data-popup=".salary-input-popup" aria-label="Open salary values input dialog">
-                    <div class="item-content">
-                      <div class="item-inner">
-                        <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <label class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-darkMode">Dark Mode</div>
-                      <div class="item-after">
-                        <label class="toggle toggle-init color-blue">
-                          <input id="dark-mode-toggle" type="checkbox" />
-                          <span class="toggle-icon"></span>
-                        </label>
-                      </div>
-                    </div>
-                  </label>
-                </li>
-              </ul>
-            </div>
-
-            <div class="list accordion-list list-inset list-strong" id="adjustments-section">
-              <ul>
-                <li class="accordion-item lv-option-row">
-                  <a href="#" class="item-content item-link">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-optionsSection">Adjustments</div>
-                    </div>
-                  </a>
-                  <div class="accordion-item-content">
-                    <div class="list">
-                      <ul>
-                        <li>
-                          <label class="item-content">
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-taxBook">Tax Book</div>
-                              <div class="item-after">
-                                <label class="toggle toggle-init color-blue">
-                                  <input id="tax-book-toggle" type="checkbox" checked />
-                                  <span class="toggle-icon"></span>
-                                </label>
-                              </div>
-                            </div>
-                          </label>
-                        </li>
-                        <li>
-                          <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
-                            <select id="dependents-select" aria-label="Dependents">
-                              <option value="0" selected>0 dependents</option>
-                              <option value="1">1 dependent</option>
-                              <option value="2">2 dependents</option>
-                              <option value="3">3 dependents</option>
-                              <option value="4">4 dependents</option>
-                              <option value="5">5 dependents</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title" id="lbl-dependents">Dependents</div>
-                                <div id="dependents-value" class="item-after"></div>
-                              </div>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="list list-strong list-inset">
-              <ul>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
-                      <div id="hero-net" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-summaryGross">Gross Salary</div>
-                      <div id="hero-gross" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
-                      <div id="hero-total" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-netLabel">Net</div>
-                      <div id="bar-net-pct" class="item-after">—</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-title" id="lbl-taxesLabel">Taxes</div>
-                      <div id="bar-taxes-pct" class="item-after">—</div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="list accordion-list list-inset list-strong" id="breakdown-section">
+          <div class="tabs">
+            <div class="page-content tab tab-active" id="tab-calculator">
+              <div class="list list-inset list-strong salary-inputs-list">
                 <ul>
-                  <li class="accordion-item">
+                  <li>
+                    <a href="#" class="item-link popup-open" data-popup=".salary-input-popup" aria-label="Open salary values input dialog">
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="list accordion-list list-inset list-strong" id="adjustments-section">
+                <ul>
+                  <li class="accordion-item lv-option-row">
                     <a href="#" class="item-content item-link">
                       <div class="item-inner">
-                        <div class="item-title" id="lbl-breakdown">Detailed Breakdown</div>
+                        <div class="item-title" id="lbl-optionsSection">Adjustments</div>
                       </div>
                     </a>
                     <div class="accordion-item-content">
                       <div class="list">
                         <ul>
-                          <li class="item-content lv-row">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-empSocial">Employee VSAOI (10.5%)</div>
-                             <div id="r-emp-social" class="item-after">0.00 €</div>
-                           </div>
+                          <li>
+                            <label class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title" id="lbl-taxBook">Tax Book</div>
+                                <div class="item-after">
+                                  <label class="toggle toggle-init color-blue">
+                                    <input id="tax-book-toggle" type="checkbox" checked />
+                                    <span class="toggle-icon"></span>
+                                  </label>
+                                </div>
+                              </div>
+                            </label>
                           </li>
-                          <li class="item-content lv-row">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-iin">PIT (25.5%)</div>
-                             <div id="r-iin" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content lv-row">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-employerSocial">Employer VSAOI (23.59%)</div>
-                             <div id="r-employer-social" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content lv-row">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-riskDuty">Risk Duty (€0.36)</div>
-                             <div id="r-risk-duty" class="item-after">0.36 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content lv-row">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-allowance">Non-taxable Min + Dependents</div>
-                             <div id="r-allowance" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content ee-row display-none">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
-                             <div id="r-emp-unemployment" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content ee-row display-none">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
-                             <div id="r-income-tax" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content ee-row display-none">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
-                             <div id="r-employer-social-ee" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content ee-row display-none">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
-                             <div id="r-employer-unemployment" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content ee-row display-none">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
-                             <div id="r-non-tax-min" class="item-after">0.00 €</div>
-                           </div>
-                          </li>
-                          <li class="item-content">
-                           <div class="item-inner">
-                             <div class="item-title" id="lbl-taxableBase">Taxable Base</div>
-                              <div id="r-taxable-base" class="item-after">0.00 €</div>
-                            </div>
-                          </li>
-                          <li class="item-content">
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-grossLabel">Gross</div>
-                              <div id="r-gross" class="item-after">0.00 €</div>
-                            </div>
-                          </li>
-                          <li class="item-content">
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-netLabel-breakdown">Net</div>
-                              <div id="r-net" class="item-after">0.00 €</div>
-                            </div>
-                          </li>
-                          <li class="item-content">
-                            <div class="item-inner">
-                              <div class="item-title" id="lbl-totalEmployer2">Total Employer Cost</div>
-                              <div id="r-total-employer" class="item-after">0.00 €</div>
-                            </div>
+                          <li>
+                            <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
+                              <select id="dependents-select" aria-label="Dependents">
+                                <option value="0" selected>0 dependents</option>
+                                <option value="1">1 dependent</option>
+                                <option value="2">2 dependents</option>
+                                <option value="3">3 dependents</option>
+                                <option value="4">4 dependents</option>
+                                <option value="5">5 dependents</option>
+                              </select>
+                              <div class="item-content">
+                                <div class="item-inner">
+                                  <div class="item-title" id="lbl-dependents">Dependents</div>
+                                  <div id="dependents-value" class="item-after"></div>
+                                </div>
+                              </div>
+                            </a>
                           </li>
                         </ul>
                       </div>
                     </div>
                   </li>
                 </ul>
+              </div>
+
+              <div class="list list-strong list-inset">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-inHand">In Hand (Net)</div>
+                        <div id="hero-net" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-summaryGross">Gross Salary</div>
+                        <div id="hero-gross" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-totalEmployer">Total Employer Cost</div>
+                        <div id="hero-total" class="item-after" aria-live="polite" aria-atomic="true">0.00 €</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-netLabel">Net</div>
+                        <div id="bar-net-pct" class="item-after">—</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-taxesLabel">Taxes</div>
+                        <div id="bar-taxes-pct" class="item-after">—</div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="list accordion-list list-inset list-strong" id="breakdown-section">
+                  <ul>
+                    <li class="accordion-item">
+                      <a href="#" class="item-content item-link">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-breakdown">Detailed Breakdown</div>
+                        </div>
+                      </a>
+                      <div class="accordion-item-content">
+                        <div class="list">
+                          <ul>
+                            <li class="item-content lv-row">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-empSocial">Employee VSAOI (10.5%)</div>
+                               <div id="r-emp-social" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content lv-row">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-iin">PIT (25.5%)</div>
+                               <div id="r-iin" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content lv-row">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-employerSocial">Employer VSAOI (23.59%)</div>
+                               <div id="r-employer-social" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content lv-row">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-riskDuty">Risk Duty (€0.36)</div>
+                               <div id="r-risk-duty" class="item-after">0.36 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content lv-row">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-allowance">Non-taxable Min + Dependents</div>
+                               <div id="r-allowance" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content ee-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-empUnemployment">Employee Unemployment Ins. (1.6%)</div>
+                               <div id="r-emp-unemployment" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content ee-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-incomeTax">Income Tax (22%)</div>
+                               <div id="r-income-tax" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content ee-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-employerSocialTax">Employer Social Tax (33%)</div>
+                               <div id="r-employer-social-ee" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content ee-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-employerUnemployment">Employer Unemployment Ins. (0.8%)</div>
+                               <div id="r-employer-unemployment" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content ee-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-nonTaxMin">Non-taxable Minimum</div>
+                               <div id="r-non-tax-min" class="item-after">0.00 €</div>
+                             </div>
+                            </li>
+                            <li class="item-content">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-taxableBase">Taxable Base</div>
+                                <div id="r-taxable-base" class="item-after">0.00 €</div>
+                              </div>
+                            </li>
+                            <li class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title" id="lbl-grossLabel">Gross</div>
+                                <div id="r-gross" class="item-after">0.00 €</div>
+                              </div>
+                            </li>
+                            <li class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title" id="lbl-netLabel-breakdown">Net</div>
+                                <div id="r-net" class="item-after">0.00 €</div>
+                              </div>
+                            </li>
+                            <li class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title" id="lbl-totalEmployer2">Total Employer Cost</div>
+                                <div id="r-total-employer" class="item-after">0.00 €</div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+              </div>
+              <div class="block"></div>
             </div>
-            <div class="block"></div>
+            <div class="page-content tab" id="tab-settings">
+              <div class="list list-inset list-strong">
+                <ul>
+                  <li>
+                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select country">
+                      <select id="country-select" aria-labelledby="lbl-country">
+                        <option value="lv">Latvia</option>
+                        <option value="ee">Estonia</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-country">Country</div>
+                          <div id="country-current" class="item-after">Latvia</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select salary input mode">
+                      <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
+                        <option value="gross">Gross</option>
+                        <option value="net">Net</option>
+                        <option value="employer">Employer</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
+                          <div id="source-mode-current" class="item-after">Gross</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true" aria-label="Select language">
+                      <select id="lang-select" aria-labelledby="lbl-lang">
+                        <option value="en">English</option>
+                        <option value="lv">Latviešu</option>
+                        <option value="ru">Русский</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-lang">Language</div>
+                          <div id="lang-current" class="item-after">English</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <label class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title" id="lbl-darkMode">Dark Mode</div>
+                        <div class="item-after">
+                          <label class="toggle toggle-init color-blue">
+                            <input id="dark-mode-toggle" type="checkbox" />
+                            <span class="toggle-icon"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="list list-inset list-strong" id="tax-settings-section">
+                <ul>
+                  <li class="item-content">
+                    <div class="item-inner">
+                      <div class="item-title" id="lbl-taxSettings">Tax Settings</div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline lv-tax-config">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingLvEmployeeVsaoi">Employee VSAOI (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="lv-employee-vsaoi-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline lv-tax-config">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingLvEmployerVsaoi">Employer VSAOI (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="lv-employer-vsaoi-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline lv-tax-config">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingLvIin">PIT (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="lv-iin-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline lv-tax-config">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingLvNonTaxMin">Non-taxable Minimum (€)</div>
+                      <div class="item-input-wrap">
+                        <input id="lv-non-tax-min-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline lv-tax-config">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingLvDepAllowance">Dependent Allowance (€)</div>
+                      <div class="item-input-wrap">
+                        <input id="lv-dep-allowance-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline lv-tax-config">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingLvRiskDuty">Risk Duty (€)</div>
+                      <div class="item-input-wrap">
+                        <input id="lv-risk-duty-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeEmpUnemployment">Employee Unemployment (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-emp-unemployment-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeEmployerUnemployment">Employer Unemployment (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-employer-unemployment-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeIncomeTax">Income Tax (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-income-tax-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeEmployerSocialTax">Employer Social Tax (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-employer-social-tax-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeNonTaxMinMax">Non-taxable Minimum Max (€)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-non-tax-min-max-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeNonTaxMinLow">Non-taxable Min Low Boundary (€)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-non-tax-min-low-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline ee-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingEeNonTaxMinHigh">Non-taxable Min High Boundary (€)</div>
+                      <div class="item-input-wrap">
+                        <input id="ee-non-tax-min-high-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="block"></div>
+            </div>
+          </div>
+          <div class="toolbar tabbar tabbar-icons toolbar-bottom">
+            <div class="toolbar-inner">
+              <a href="#tab-calculator" class="tab-link tab-link-active">
+                <i class="icon f7-icons">function</i>
+                <span class="tabbar-label" id="lbl-tabCalculator">Calculator</span>
+              </a>
+              <a href="#tab-settings" class="tab-link">
+                <i class="icon f7-icons">gear</i>
+                <span class="tabbar-label" id="lbl-tabSettings">Settings</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -370,6 +513,25 @@
           lightMode: 'Light',
           country: 'Country',
           lang: 'Language',
+          tabCalculator: 'Calculator',
+          tabSettings: 'Settings',
+          taxSettings: 'Tax Settings',
+          settingLvEmployeeVsaoi: 'Employee VSAOI (%)',
+          settingLvEmployerVsaoi: 'Employer VSAOI (%)',
+          settingLvIin: 'PIT (%)',
+          settingLvNonTaxMin: 'Non-taxable Minimum (€)',
+          settingLvDepAllowance: 'Dependent Allowance (€)',
+          settingLvRiskDuty: 'Risk Duty (€)',
+          settingEeEmpUnemployment: 'Employee Unemployment (%)',
+          settingEeEmployerUnemployment: 'Employer Unemployment (%)',
+          settingEeIncomeTax: 'Income Tax (%)',
+          settingEeEmployerSocialTax: 'Employer Social Tax (%)',
+          settingEeNonTaxMinMax: 'Non-taxable Minimum Max (€)',
+          settingEeNonTaxMinLow: 'Non-taxable Min Low Boundary (€)',
+          settingEeNonTaxMinHigh: 'Non-taxable Min High Boundary (€)',
+          langOptionEn: 'English',
+          langOptionLv: 'Latviešu',
+          langOptionRu: 'Русский',
         },
         lv: {
           title: 'Algas kalkulators',
@@ -410,6 +572,25 @@
           lightMode: 'Gaišais',
           country: 'Valsts',
           lang: 'Valoda',
+          tabCalculator: 'Kalkulators',
+          tabSettings: 'Iestatījumi',
+          taxSettings: 'Nodokļu iestatījumi',
+          settingLvEmployeeVsaoi: 'Darbinieka VSAOI (%)',
+          settingLvEmployerVsaoi: 'Darba devēja VSAOI (%)',
+          settingLvIin: 'IIN (%)',
+          settingLvNonTaxMin: 'Neapliekamais minimums (€)',
+          settingLvDepAllowance: 'Apgādājamā atvieglojums (€)',
+          settingLvRiskDuty: 'Riska nodeva (€)',
+          settingEeEmpUnemployment: 'Darbinieka bezdarba apdrošināšana (%)',
+          settingEeEmployerUnemployment: 'Darba devēja bezdarba apdrošināšana (%)',
+          settingEeIncomeTax: 'Ienākuma nodoklis (%)',
+          settingEeEmployerSocialTax: 'Darba devēja sociālais nodoklis (%)',
+          settingEeNonTaxMinMax: 'Neapliekamais minimums max (€)',
+          settingEeNonTaxMinLow: 'Neapl. minimuma zemākā robeža (€)',
+          settingEeNonTaxMinHigh: 'Neapl. minimuma augstākā robeža (€)',
+          langOptionEn: 'English',
+          langOptionLv: 'Latviešu',
+          langOptionRu: 'Русский',
         },
         ru: {
           title: 'Калькулятор зарплаты',
@@ -450,6 +631,25 @@
           lightMode: 'Светлый',
           country: 'Страна',
           lang: 'Язык',
+          tabCalculator: 'Калькулятор',
+          tabSettings: 'Настройки',
+          taxSettings: 'Налоговые настройки',
+          settingLvEmployeeVsaoi: 'VSAOI работника (%)',
+          settingLvEmployerVsaoi: 'VSAOI работодателя (%)',
+          settingLvIin: 'ПНН (%)',
+          settingLvNonTaxMin: 'Необлагаемый минимум (€)',
+          settingLvDepAllowance: 'Льгота на иждивенца (€)',
+          settingLvRiskDuty: 'Рисковый взнос (€)',
+          settingEeEmpUnemployment: 'Безработица работника (%)',
+          settingEeEmployerUnemployment: 'Безработица работодателя (%)',
+          settingEeIncomeTax: 'Подоходный налог (%)',
+          settingEeEmployerSocialTax: 'Социальный налог работодателя (%)',
+          settingEeNonTaxMinMax: 'Макс. необлагаемый минимум (€)',
+          settingEeNonTaxMinLow: 'Нижняя граница необл. мин. (€)',
+          settingEeNonTaxMinHigh: 'Верхняя граница необл. мин. (€)',
+          langOptionEn: 'English',
+          langOptionLv: 'Latviešu',
+          langOptionRu: 'Русский',
         },
       };
 
@@ -463,8 +663,13 @@
         riskDuty: 0.36,
       };
 
-      const LV_NET_COEFF = (1 - LV_RATES.employeeVsaoi) * (1 - LV_RATES.iin);
-      const LV_NET_WITHOUT_IIN_COEFF = 1 - LV_RATES.employeeVsaoi;
+      function lvNetCoeff() {
+        return (1 - LV_RATES.employeeVsaoi) * (1 - LV_RATES.iin);
+      }
+
+      function lvNetWithoutIinCoeff() {
+        return 1 - LV_RATES.employeeVsaoi;
+      }
 
       function lvAllowanceTotal() {
         if (!taxBookToggle.checked) return 0;
@@ -486,12 +691,14 @@
       function lvGrossFromNet(targetNet) {
         if (targetNet <= 0) return 0;
         const allowance = lvAllowanceTotal();
+        const withoutIinCoeff = lvNetWithoutIinCoeff();
+        const netCoeff = lvNetCoeff();
         let gross;
         if (targetNet <= allowance) {
-          gross = targetNet / LV_NET_WITHOUT_IIN_COEFF;
+          gross = withoutIinCoeff > 0 ? targetNet / withoutIinCoeff : 0;
         } else {
-          gross = (targetNet - LV_RATES.iin * allowance) / LV_NET_COEFF;
-          const boundaryGross = allowance / LV_NET_WITHOUT_IIN_COEFF;
+          gross = netCoeff > 0 ? (targetNet - LV_RATES.iin * allowance) / netCoeff : 0;
+          const boundaryGross = withoutIinCoeff > 0 ? allowance / withoutIinCoeff : 0;
           if (gross < boundaryGross) gross = boundaryGross;
         }
         if (!Number.isFinite(gross) || gross < 0) return 0;
@@ -516,9 +723,13 @@
       };
 
       function eeNonTaxMin(gross) {
-        if (gross <= EE_RATES.nonTaxMinLow) return EE_RATES.nonTaxMinMax;
-        if (gross >= EE_RATES.nonTaxMinHigh) return 0;
-        return EE_RATES.nonTaxMinMax * (EE_RATES.nonTaxMinHigh - gross) / (EE_RATES.nonTaxMinHigh - EE_RATES.nonTaxMinLow);
+        const low = Math.min(EE_RATES.nonTaxMinLow, EE_RATES.nonTaxMinHigh);
+        const high = Math.max(EE_RATES.nonTaxMinLow, EE_RATES.nonTaxMinHigh);
+        if (gross <= low) return EE_RATES.nonTaxMinMax;
+        if (gross >= high) return 0;
+        const range = high - low;
+        if (range <= 0) return 0;
+        return EE_RATES.nonTaxMinMax * (high - gross) / range;
       }
 
       function eeBreakdownFromGross(gross) {
@@ -565,11 +776,27 @@
       const dependentsValue = $('dependents-value');
       const sourceModeSelect = $('source-mode-select');
       const sourceModeCurrent = $('source-mode-current');
+      const langSelect = $('lang-select');
+      const langCurrent = $('lang-current');
       const inputValuesPopup = document.querySelector('.salary-input-popup');
       const darkModeToggle = $('dark-mode-toggle');
+      const lvEmployeeVsaoiInput = $('lv-employee-vsaoi-input');
+      const lvEmployerVsaoiInput = $('lv-employer-vsaoi-input');
+      const lvIinInput = $('lv-iin-input');
+      const lvNonTaxMinInput = $('lv-non-tax-min-input');
+      const lvDepAllowanceInput = $('lv-dep-allowance-input');
+      const lvRiskDutyInput = $('lv-risk-duty-input');
+      const eeEmpUnemploymentInput = $('ee-emp-unemployment-input');
+      const eeEmployerUnemploymentInput = $('ee-employer-unemployment-input');
+      const eeIncomeTaxInput = $('ee-income-tax-input');
+      const eeEmployerSocialTaxInput = $('ee-employer-social-tax-input');
+      const eeNonTaxMinMaxInput = $('ee-non-tax-min-max-input');
+      const eeNonTaxMinLowInput = $('ee-non-tax-min-low-input');
+      const eeNonTaxMinHighInput = $('ee-non-tax-min-high-input');
 
       const LABEL_MAP = {
         'lbl-country': 'country',
+        'lbl-lang': 'lang',
         'lbl-inputModeSection': 'inputModeSection',
         'lbl-openInputValues': 'openInputValues',
         'lbl-inputValuesPage': 'inputValuesPage',
@@ -600,6 +827,22 @@
         'lbl-totalEmployer2': 'totalEmployer',
         'lbl-taxesLabel': 'taxes',
         'lbl-darkMode': 'darkMode',
+        'lbl-tabCalculator': 'tabCalculator',
+        'lbl-tabSettings': 'tabSettings',
+        'lbl-taxSettings': 'taxSettings',
+        'lbl-settingLvEmployeeVsaoi': 'settingLvEmployeeVsaoi',
+        'lbl-settingLvEmployerVsaoi': 'settingLvEmployerVsaoi',
+        'lbl-settingLvIin': 'settingLvIin',
+        'lbl-settingLvNonTaxMin': 'settingLvNonTaxMin',
+        'lbl-settingLvDepAllowance': 'settingLvDepAllowance',
+        'lbl-settingLvRiskDuty': 'settingLvRiskDuty',
+        'lbl-settingEeEmpUnemployment': 'settingEeEmpUnemployment',
+        'lbl-settingEeEmployerUnemployment': 'settingEeEmployerUnemployment',
+        'lbl-settingEeIncomeTax': 'settingEeIncomeTax',
+        'lbl-settingEeEmployerSocialTax': 'settingEeEmployerSocialTax',
+        'lbl-settingEeNonTaxMinMax': 'settingEeNonTaxMinMax',
+        'lbl-settingEeNonTaxMinLow': 'settingEeNonTaxMinLow',
+        'lbl-settingEeNonTaxMinHigh': 'settingEeNonTaxMinHigh',
       };
       const CALCULATOR_MAP = {
         lv: {
@@ -616,9 +859,11 @@
 
       // ── State ─────────────────────────────────────────────────────────────────
       const VALID_COUNTRIES = ['lv', 'ee'];
+      const VALID_LANGS = ['en', 'lv', 'ru'];
       const savedCountry = localStorage.getItem('country');
       let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
-      const APP_LANG = 'en';
+      const savedLang = localStorage.getItem('lang');
+      let currentLang = VALID_LANGS.includes(savedLang) ? savedLang : 'en';
       const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
       let lastEdited = 'gross';
       let isInternalUpdate = false;
@@ -645,6 +890,13 @@
         syncInputState(input);
       }
 
+      function setTaxInputValue(input, value, asPercent = false) {
+        if (!input) return;
+        const normalized = asPercent ? value * 100 : value;
+        input.value = round2(normalized).toFixed(2);
+        syncInputState(input);
+      }
+
       function getDependents() {
         return Math.min(5, Math.max(0, parseInt(dependentsSelect.value || '0', 10) || 0));
       }
@@ -656,20 +908,28 @@
       }
 
       function getCountryLabel(country) {
-        const t = I18N[APP_LANG];
+        const t = I18N[currentLang];
         return country === 'ee' ? t.countryEe : t.countryLv;
       }
 
       function getModeLabel(mode) {
-        const t = I18N[APP_LANG];
+        const t = I18N[currentLang];
         if (mode === 'net') return t.netTab;
         if (mode === 'employer') return t.employerTab;
         return t.grossTab;
       }
 
+      function getLanguageLabel(lang) {
+        const t = I18N[currentLang];
+        if (lang === 'lv') return t.langOptionLv;
+        if (lang === 'ru') return t.langOptionRu;
+        return t.langOptionEn;
+      }
+
       function syncSelectionLabels() {
         countryCurrent.textContent = getCountryLabel(currentCountry);
         sourceModeCurrent.textContent = getModeLabel(lastEdited);
+        langCurrent.textContent = getLanguageLabel(currentLang);
       }
 
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
@@ -712,7 +972,13 @@
         document.querySelectorAll('.lv-option-row, .lv-row').forEach(el => {
           el.classList.toggle('display-none', !isLatvia);
         });
+        document.querySelectorAll('.lv-tax-config').forEach(el => {
+          el.classList.toggle('display-none', !isLatvia);
+        });
         document.querySelectorAll('.ee-row').forEach(el => {
+          el.classList.toggle('display-none', isLatvia);
+        });
+        document.querySelectorAll('.ee-tax-config').forEach(el => {
           el.classList.toggle('display-none', isLatvia);
         });
         localStorage.setItem('country', country);
@@ -722,9 +988,8 @@
 
       // ── Language ──────────────────────────────────────────────────────────────
       function initializeLabels() {
-        const t = I18N[APP_LANG];
+        const t = I18N[currentLang];
         document.title = t.title;
-        $('nav-title').textContent = t.title;
         Object.entries(LABEL_MAP).forEach(([id, key]) => {
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
@@ -734,7 +999,44 @@
         sourceModeSelect.querySelector('option[value="gross"]').textContent = t.grossTab;
         sourceModeSelect.querySelector('option[value="net"]').textContent = t.netTab;
         sourceModeSelect.querySelector('option[value="employer"]').textContent = t.employerTab;
+        langSelect.querySelector('option[value="en"]').textContent = t.langOptionEn;
+        langSelect.querySelector('option[value="lv"]').textContent = t.langOptionLv;
+        langSelect.querySelector('option[value="ru"]').textContent = t.langOptionRu;
+        langSelect.value = currentLang;
         syncSelectionLabels();
+      }
+
+      function applyLanguage(lang) {
+        if (!VALID_LANGS.includes(lang)) return;
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+        document.documentElement.lang = lang;
+        initializeLabels();
+      }
+
+      function syncTaxInputsFromState() {
+        setTaxInputValue(lvEmployeeVsaoiInput, LV_RATES.employeeVsaoi, true);
+        setTaxInputValue(lvEmployerVsaoiInput, LV_RATES.employerVsaoi, true);
+        setTaxInputValue(lvIinInput, LV_RATES.iin, true);
+        setTaxInputValue(lvNonTaxMinInput, LV_RATES.nonTaxMin);
+        setTaxInputValue(lvDepAllowanceInput, LV_RATES.depAllowance);
+        setTaxInputValue(lvRiskDutyInput, LV_RATES.riskDuty);
+        setTaxInputValue(eeEmpUnemploymentInput, EE_RATES.empUnemployment, true);
+        setTaxInputValue(eeEmployerUnemploymentInput, EE_RATES.employerUnemployment, true);
+        setTaxInputValue(eeIncomeTaxInput, EE_RATES.incomeTax, true);
+        setTaxInputValue(eeEmployerSocialTaxInput, EE_RATES.employerSocialTax, true);
+        setTaxInputValue(eeNonTaxMinMaxInput, EE_RATES.nonTaxMinMax);
+        setTaxInputValue(eeNonTaxMinLowInput, EE_RATES.nonTaxMinLow);
+        setTaxInputValue(eeNonTaxMinHighInput, EE_RATES.nonTaxMinHigh);
+      }
+
+      function bindTaxInput(input, onChange) {
+        if (!input) return;
+        input.addEventListener('input', () => {
+          syncInputState(input);
+          onChange(parseAmount(input.value));
+          recalc();
+        });
       }
 
       // ── Section visibility ────────────────────────────────────────────────────
@@ -844,10 +1146,26 @@
       });
 
       countrySelect.addEventListener('change', () => applyCountry(countrySelect.value));
+      langSelect.addEventListener('change', () => applyLanguage(langSelect.value));
       sourceModeSelect.addEventListener('change', () => {
         const popupVisible = isInputValuesPopupOpen || Boolean(inputValuesPopup && inputValuesPopup.classList.contains('modal-in'));
         activateSalaryInput(sourceModeSelect.value, { focus: popupVisible, sync: true });
       });
+
+      bindTaxInput(lvEmployeeVsaoiInput, value => { LV_RATES.employeeVsaoi = Math.max(0, value / 100); });
+      bindTaxInput(lvEmployerVsaoiInput, value => { LV_RATES.employerVsaoi = Math.max(0, value / 100); });
+      bindTaxInput(lvIinInput, value => { LV_RATES.iin = Math.max(0, value / 100); });
+      bindTaxInput(lvNonTaxMinInput, value => { LV_RATES.nonTaxMin = Math.max(0, value); });
+      bindTaxInput(lvDepAllowanceInput, value => { LV_RATES.depAllowance = Math.max(0, value); });
+      bindTaxInput(lvRiskDutyInput, value => { LV_RATES.riskDuty = Math.max(0, value); });
+      bindTaxInput(eeEmpUnemploymentInput, value => { EE_RATES.empUnemployment = Math.max(0, value / 100); });
+      bindTaxInput(eeEmployerUnemploymentInput, value => { EE_RATES.employerUnemployment = Math.max(0, value / 100); });
+      bindTaxInput(eeIncomeTaxInput, value => { EE_RATES.incomeTax = Math.max(0, value / 100); });
+      bindTaxInput(eeEmployerSocialTaxInput, value => { EE_RATES.employerSocialTax = Math.max(0, value / 100); });
+      bindTaxInput(eeNonTaxMinMaxInput, value => { EE_RATES.nonTaxMinMax = Math.max(0, value); });
+      bindTaxInput(eeNonTaxMinLowInput, value => { EE_RATES.nonTaxMinLow = Math.max(0, value); });
+      bindTaxInput(eeNonTaxMinHighInput, value => { EE_RATES.nonTaxMinHigh = Math.max(0, value); });
+
       if (inputValuesPopup) {
         inputValuesPopup.addEventListener('popup:opened', () => {
           isInputValuesPopupOpen = true;
@@ -859,7 +1177,7 @@
       }
 
       // ── Init ──────────────────────────────────────────────────────────────────
-      document.documentElement.lang = APP_LANG;
+      document.documentElement.lang = currentLang;
       const savedDarkPref = localStorage.getItem('darkMode');
       if (savedDarkPref) {
         applyDarkMode(savedDarkPref === 'dark');
@@ -872,8 +1190,9 @@
         // Legacy Safari fallback for MediaQueryList change events.
         colorSchemeMedia.addListener(applySystemTheme);
       }
+      syncTaxInputsFromState();
       applyCountry(currentCountry);
-      initializeLabels();
+      applyLanguage(currentLang);
       activateSalaryInput(lastEdited);
       dependentsValue.textContent = dependentsSelect.value || '0';
       recalc();
