@@ -65,37 +65,37 @@
               </ul>
             </div>
 
-            <div class="list list-strong list-inset">
-              <ul>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-input-wrap">
-                        <div class="segmented segmented-round segmented-raised" id="country-selector">
-                          <button class="button button-active" data-country="lv" type="button" aria-label="Latvia">LV</button>
-                          <button class="button" data-country="ee" type="button" aria-label="Estonia">EE</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item-content">
-                    <div class="item-inner">
-                      <div class="item-input-wrap">
-                        <div class="segmented segmented-round segmented-raised" id="source-mode-selector">
-                          <button class="button button-active" data-mode="gross" type="button" id="mode-btn-gross">Gross</button>
-                          <button class="button" data-mode="net" type="button" id="mode-btn-net">Net</button>
-                          <button class="button" data-mode="employer" type="button" id="mode-btn-employer">Employer</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
             <div class="list list-inset list-strong-inset salary-inputs-list">
                 <ul>
+                  <li>
+                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
+                      <select id="country-select" aria-labelledby="lbl-country">
+                        <option value="lv">Latvia</option>
+                        <option value="ee">Estonia</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-country">Country</div>
+                          <div id="country-current" class="item-after">Latvia</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="item-link smart-select smart-select-init" data-open-in="page" data-close-on-select="true">
+                      <select id="source-mode-select" aria-labelledby="lbl-inputModeSection">
+                        <option value="gross">Gross</option>
+                        <option value="net">Net</option>
+                        <option value="employer">Employer</option>
+                      </select>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title" id="lbl-inputModeSection">Salary Input</div>
+                          <div id="source-mode-current" class="item-after">Gross</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
                   <li id="field-gross" class="item-content item-input item-input-outline salary-field is-source">
                     <div class="item-inner">
                       <div class="item-title item-label" id="lbl-gross">Salary (Gross) EUR</div>
@@ -123,21 +123,12 @@
                     </div>
                     <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
-                </ul>
-            </div>
-
-            <div class="list list-inset list-strong-inset">
-                <ul>
                   <li id="lbl-optionsSection-row" class="item-content">
                     <div class="item-inner">
                       <div class="item-title" id="lbl-optionsSection">Adjustments</div>
                     </div>
                   </li>
-                </ul>
-            </div>
-            <div id="lv-options" class="list list-inset list-strong-inset">
-                <ul>
-                  <li>
+                  <li class="lv-option-row">
                     <label class="item-content">
                       <div class="item-inner">
                         <div class="item-title" id="lbl-taxBook">Tax Book</div>
@@ -150,7 +141,7 @@
                       </div>
                     </label>
                   </li>
-                  <li class="item-content item-input item-input-with-value">
+                  <li class="item-content item-input item-input-with-value lv-option-row">
                     <div class="item-inner">
                       <div class="item-title" id="lbl-dependents">Dependents</div>
                       <div class="item-after">
@@ -300,6 +291,8 @@
           gross: 'Salary (Gross) EUR',
           net: 'Salary (Net) EUR',
           employerCost: 'Employer Cost EUR',
+          countryLv: 'Latvia',
+          countryEe: 'Estonia',
           taxBook: 'Tax Book',
           dependents: 'Dependents',
           summaryGross: 'Gross Salary',
@@ -336,6 +329,8 @@
           gross: 'Alga (Brutto) EUR',
           net: 'Alga (Netto) EUR',
           employerCost: 'Darba devēja izmaksas EUR',
+          countryLv: 'Latvija',
+          countryEe: 'Igaunija',
           taxBook: 'Algas nodokļa grāmatiņa',
           dependents: 'Apgādājamie',
           summaryGross: 'Bruto alga',
@@ -372,6 +367,8 @@
           gross: 'Зарплата (Брутто) EUR',
           net: 'Зарплата (Нетто) EUR',
           employerCost: 'Расходы работодателя EUR',
+          countryLv: 'Латвия',
+          countryEe: 'Эстония',
           taxBook: 'Налоговая книжка',
           dependents: 'Иждивенцы',
           summaryGross: 'Зарплата брутто',
@@ -504,15 +501,19 @@
       const grossInput = $('gross-input');
       const netInput = $('net-input');
       const employerInput = $('employer-input');
+      const countrySelect = $('country-select');
+      const countryCurrent = $('country-current');
       const taxBookToggle = $('tax-book-toggle');
       const dependentsInput = $('dependents-input');
-      const lvOptions = $('lv-options');
       const optionsSectionTitle = $('lbl-optionsSection');
       const optionsSectionRow = $('lbl-optionsSection-row');
       const dependentsValue = $('dependents-value');
-      const sourceModeSelector = $('source-mode-selector');
+      const sourceModeSelect = $('source-mode-select');
+      const sourceModeCurrent = $('source-mode-current');
 
       const LABEL_MAP = {
+        'lbl-country': 'country',
+        'lbl-inputModeSection': 'inputModeSection',
         'lbl-optionsSection': 'optionsSection',
         'lbl-gross': 'gross',
         'lbl-net': 'net',
@@ -593,21 +594,33 @@
         return grossInput;
       }
 
-      function updateSourceModeSelector() {
-        sourceModeSelector.querySelectorAll('.button').forEach(btn => {
-          btn.classList.toggle('button-active', btn.dataset.mode === lastEdited);
-        });
+      function getCountryLabel(country) {
+        const t = I18N[APP_LANG];
+        return country === 'ee' ? t.countryEe : t.countryLv;
+      }
+
+      function getModeLabel(mode) {
+        const t = I18N[APP_LANG];
+        if (mode === 'net') return t.netTab;
+        if (mode === 'employer') return t.employerTab;
+        return t.grossTab;
+      }
+
+      function syncSelectionLabels() {
+        countryCurrent.textContent = getCountryLabel(currentCountry);
+        sourceModeCurrent.textContent = getModeLabel(lastEdited);
       }
 
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
         lastEdited = mode;
+        sourceModeSelect.value = mode;
         document.querySelectorAll('.salary-field').forEach(field => {
           const isSource = field.id === `field-${mode}`;
           field.classList.toggle('is-source', isSource);
           const autoChip = field.querySelector('[data-auto-chip]');
           if (autoChip) autoChip.hidden = isSource;
         });
-        updateSourceModeSelector();
+        syncSelectionLabels();
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
         if (sync) recalc();
       }
@@ -621,19 +634,17 @@
       function applyCountry(country) {
         currentCountry = country;
         const isLatvia = country === 'lv';
-        document.querySelectorAll('#country-selector .button').forEach(btn => {
-          btn.classList.toggle('button-active', btn.dataset.country === country);
-        });
+        countrySelect.value = country;
         optionsSectionTitle.hidden = !isLatvia;
         optionsSectionRow.classList.toggle('display-none', !isLatvia);
-        lvOptions.classList.toggle('display-none', !isLatvia);
-        document.querySelectorAll('.lv-row').forEach(el => {
+        document.querySelectorAll('.lv-option-row, .lv-row').forEach(el => {
           el.classList.toggle('display-none', !isLatvia);
         });
         document.querySelectorAll('.ee-row').forEach(el => {
           el.classList.toggle('display-none', isLatvia);
         });
         localStorage.setItem('country', country);
+        syncSelectionLabels();
         recalc();
       }
 
@@ -646,9 +657,12 @@
           const el = $(id);
           if (el && t[key]) el.textContent = t[key];
         });
-        $('mode-btn-gross').textContent = t.grossTab;
-        $('mode-btn-net').textContent = t.netTab;
-        $('mode-btn-employer').textContent = t.employerTab;
+        countrySelect.querySelector('option[value="lv"]').textContent = t.countryLv;
+        countrySelect.querySelector('option[value="ee"]').textContent = t.countryEe;
+        sourceModeSelect.querySelector('option[value="gross"]').textContent = t.grossTab;
+        sourceModeSelect.querySelector('option[value="net"]').textContent = t.netTab;
+        sourceModeSelect.querySelector('option[value="employer"]').textContent = t.employerTab;
+        syncSelectionLabels();
       }
 
       // ── Render ────────────────────────────────────────────────────────────────
@@ -744,14 +758,8 @@
         recalc();
       });
 
-      document.getElementById('country-selector').addEventListener('click', e => {
-        const btn = e.target.closest('[data-country]');
-        if (btn) applyCountry(btn.dataset.country);
-      });
-      sourceModeSelector.addEventListener('click', e => {
-        const btn = e.target.closest('[data-mode]');
-        if (btn) activateSalaryInput(btn.dataset.mode, { focus: true, sync: true });
-      });
+      countrySelect.addEventListener('change', () => applyCountry(countrySelect.value));
+      sourceModeSelect.addEventListener('change', () => activateSalaryInput(sourceModeSelect.value, { focus: true, sync: true }));
 
       // ── Init ──────────────────────────────────────────────────────────────────
       document.documentElement.lang = APP_LANG;
