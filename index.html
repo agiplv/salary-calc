@@ -20,7 +20,7 @@
                       <div class="item-content">
                         <div class="item-inner">
                           <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
-                          <div class="item-footer" id="salary-values-footer"></div>
+                          <div class="item-footer" id="salary-values-footer" aria-live="polite" aria-label="Entered salary value"></div>
                         </div>
                       </div>
                     </a>
@@ -935,7 +935,7 @@
       function updateSalaryValuesFooter() {
         if (!salaryValuesFooter) return;
         const sourceInput = getInputByMode(lastEdited);
-        const amount = parseAmount(sourceInput && sourceInput.value);
+        const amount = parseAmount(sourceInput?.value);
         salaryValuesFooter.textContent = amount > 0 ? `${getModeLabel(lastEdited)}: ${money(amount)}` : '';
       }
 
