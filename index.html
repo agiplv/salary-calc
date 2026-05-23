@@ -50,11 +50,11 @@
                 </div>
                 <div class="block block-strong inset">
                   <div class="block-header">Net</div>
-                  <div id="bar-net" class="progressbar color-green" data-progress="0"></div>
+                  <div id="bar-net" class="progressbar color-green" data-progress="0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
                 </div>
                 <div class="block block-strong inset">
                   <div class="block-header">Taxes</div>
-                  <div id="bar-taxes" class="progressbar color-red" data-progress="0"></div>
+                  <div id="bar-taxes" class="progressbar color-red" data-progress="0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@
                         <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden>AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
                   <li id="field-net" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -106,7 +106,7 @@
                         <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden>AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
                   <li id="field-employer" class="item-content item-input item-input-outline salary-field">
                     <div class="item-inner">
@@ -115,7 +115,7 @@
                         <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
                       </div>
                     </div>
-                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden>AUTO</span></div>
+                    <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                   </li>
                 </ul>
             </div>
@@ -278,7 +278,7 @@
     <script src="vendor/framework7/framework7-bundle.min.js"></script>
     <script>
       if (typeof window.Framework7 !== 'function') {
-        throw new Error('Framework7 library is required but was not loaded. Ensure framework7-bundle.min.js is included before this script.');
+        throw new Error('Framework7 library is required but was not loaded. Verify vendor/framework7/framework7-bundle.min.js exists and is included before this script.');
       }
 
       // ── i18n ──────────────────────────────────────────────────────────────────
@@ -672,11 +672,15 @@
           const taxPct = 100 - netPct;
           app.progressbar.set($('bar-net'), netPct);
           app.progressbar.set($('bar-taxes'), taxPct);
+          $('bar-net').setAttribute('aria-valuenow', String(netPct));
+          $('bar-taxes').setAttribute('aria-valuenow', String(taxPct));
           $('bar-net-pct').textContent = netPct + '%';
           $('bar-taxes-pct').textContent = taxPct + '%';
         } else {
           app.progressbar.set($('bar-net'), 0);
           app.progressbar.set($('bar-taxes'), 0);
+          $('bar-net').setAttribute('aria-valuenow', '0');
+          $('bar-taxes').setAttribute('aria-valuenow', '0');
           $('bar-net-pct').textContent = '—';
           $('bar-taxes-pct').textContent = '—';
         }
