@@ -20,6 +20,7 @@
                       <div class="item-content">
                         <div class="item-inner">
                           <div class="item-title" id="lbl-openInputValues">Enter Salary Values</div>
+                          <div class="item-footer" id="salary-values-footer" role="status"></div>
                         </div>
                       </div>
                     </a>
@@ -441,25 +442,22 @@
                       <input id="gross-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-gross" />
                     </div>
                   </div>
-                  <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                 </li>
-                <li id="field-net" class="item-content item-input item-input-outline salary-field">
+                <li id="field-net" class="item-content item-input item-input-outline salary-field display-none">
                   <div class="item-inner">
                     <div class="item-title item-label" id="lbl-net">Salary (Net) EUR</div>
                     <div class="item-input-wrap">
                       <input id="net-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-net" />
                     </div>
                   </div>
-                  <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                 </li>
-                <li id="field-employer" class="item-content item-input item-input-outline salary-field">
+                <li id="field-employer" class="item-content item-input item-input-outline salary-field display-none">
                   <div class="item-inner">
                     <div class="item-title item-label" id="lbl-employerCost">Employer Cost EUR</div>
                     <div class="item-input-wrap">
                       <input id="employer-input" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" aria-labelledby="lbl-employerCost" />
                     </div>
                   </div>
-                  <div class="item-after"><span class="badge color-gray" data-auto-chip hidden aria-label="Automatically calculated">AUTO</span></div>
                 </li>
               </ul>
             </div>
@@ -777,6 +775,7 @@
       const dependentsValue = $('dependents-value');
       const sourceModeSelect = $('source-mode-select');
       const sourceModeCurrent = $('source-mode-current');
+      const salaryValuesFooter = $('salary-values-footer');
       const langSelect = $('lang-select');
       const langCurrent = $('lang-current');
       const inputValuesPopup = document.querySelector('.salary-input-popup');
@@ -933,16 +932,27 @@
         langCurrent.textContent = getLanguageLabel(currentLang);
       }
 
+      function updateSalaryValuesFooter() {
+        if (!salaryValuesFooter) return;
+        const sourceInput = getInputByMode(lastEdited);
+        if (!sourceInput) {
+          salaryValuesFooter.textContent = '';
+          return;
+        }
+        const amount = parseAmount(sourceInput.value);
+        salaryValuesFooter.textContent = amount > 0 ? `${getModeLabel(lastEdited)}: ${money(amount)}` : '';
+      }
+
       function activateSalaryInput(mode, { focus = false, sync = false } = {}) {
         lastEdited = mode;
         sourceModeSelect.value = mode;
         document.querySelectorAll('.salary-field').forEach(field => {
           const isSource = field.id === `field-${mode}`;
           field.classList.toggle('is-source', isSource);
-          const autoChip = field.querySelector('[data-auto-chip]');
-          if (autoChip) autoChip.hidden = isSource;
+          field.classList.toggle('display-none', !isSource);
         });
         syncSelectionLabels();
+        updateSalaryValuesFooter();
         if (focus) requestAnimationFrame(() => getInputByMode(mode).focus());
         if (sync) recalc();
       }
@@ -1005,6 +1015,7 @@
         langSelect.querySelector('option[value="ru"]').textContent = t.langOptionRu;
         langSelect.value = currentLang;
         syncSelectionLabels();
+        updateSalaryValuesFooter();
       }
 
       function applyLanguage(lang) {
@@ -1122,6 +1133,7 @@
         isInternalUpdate = false;
 
         render(result);
+        updateSalaryValuesFooter();
         updateSectionVisibility();
       }
 
