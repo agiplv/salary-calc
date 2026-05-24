@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="ios ios-translucent-bars ios-translucent-modals">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
@@ -743,7 +743,12 @@
       }
 
       // ── Framework7 app ────────────────────────────────────────────────────────
-      const app = new Framework7({ el: '#app', theme: 'ios' });
+      const app = new Framework7({
+        el: '#app',
+        theme: 'ios',
+        iosTranslucentBars: true,
+        iosTranslucentModals: true,
+      });
 
       // ── DOM refs ──────────────────────────────────────────────────────────────
       const $ = id => document.getElementById(id);
