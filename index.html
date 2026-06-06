@@ -53,6 +53,7 @@
                       <select id="country-select" aria-labelledby="lbl-country">
                         <option value="lv">Latvia</option>
                         <option value="ee">Estonia</option>
+                        <option value="se">Sweden</option>
                       </select>
                       <div class="item-content">
                         <div class="item-inner">
@@ -269,6 +270,36 @@
                                <div id="r-non-tax-min" class="item-after">0.00 €</div>
                              </div>
                             </li>
+                            <li class="item-content se-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-sePensionFee">Pension Fee (7%)</div>
+                               <div id="r-se-pension-fee" class="item-after">0.00 kr</div>
+                             </div>
+                            </li>
+                            <li class="item-content se-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-seKommunalskatt">Municipal Tax (32%)</div>
+                               <div id="r-se-kommunalskatt" class="item-after">0.00 kr</div>
+                             </div>
+                            </li>
+                            <li class="item-content se-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-seStateTax">State Income Tax (20%)</div>
+                               <div id="r-se-state-tax" class="item-after">0.00 kr</div>
+                             </div>
+                            </li>
+                            <li class="item-content se-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-seEmployerContributions">Employer Contributions (31.42%)</div>
+                               <div id="r-se-employer-contributions" class="item-after">0.00 kr</div>
+                             </div>
+                            </li>
+                            <li class="item-content se-row display-none">
+                             <div class="item-inner">
+                               <div class="item-title" id="lbl-seGrundavdrag">Basic Deduction</div>
+                               <div id="r-se-grundavdrag" class="item-after">0.00 kr</div>
+                             </div>
+                            </li>
                             <li class="item-content">
                              <div class="item-inner">
                                <div class="item-title" id="lbl-taxableBase">Taxable Base</div>
@@ -446,6 +477,62 @@
                       </div>
                     </div>
                   </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSeKommunalskatt">Municipal Tax (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-kommunalskatt-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSeStateTaxRate">State Income Tax (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-state-tax-rate-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSeStateTaxThreshold">State Tax Threshold (SEK/month)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-state-tax-threshold-input" type="number" min="0" step="1" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSeGrundavdrag">Basic Deduction (SEK/month)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-grundavdrag-input" type="number" min="0" step="1" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSePensionFeeRate">Pension Fee (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-pension-fee-rate-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSePensionFeeGrossCap">Pension Fee Gross Cap (SEK/month)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-pension-fee-gross-cap-input" type="number" min="0" step="1" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
+                  <li class="item-content item-input item-input-outline se-tax-config display-none">
+                    <div class="item-inner">
+                      <div class="item-title item-label" id="lbl-settingSeEmployerContributions">Employer Contributions (%)</div>
+                      <div class="item-input-wrap">
+                        <input id="se-employer-contributions-input" type="number" min="0" step="0.01" inputmode="decimal" />
+                      </div>
+                    </div>
+                  </li>
                 </ul>
                </div>
                <div class="block"></div>
@@ -484,6 +571,7 @@
           employerCost: 'Employer Cost EUR',
           countryLv: 'Latvia',
           countryEe: 'Estonia',
+          countrySe: 'Sweden',
           taxBook: 'Tax Book',
           dependents: 'Dependents',
           summaryGross: 'Gross Salary',
@@ -524,6 +612,18 @@
           settingEeNonTaxMinMax: 'Non-taxable Minimum Max (€)',
           settingEeNonTaxMinLow: 'Non-taxable Min Low Boundary (€)',
           settingEeNonTaxMinHigh: 'Non-taxable Min High Boundary (€)',
+          seKommunalskatt: 'Municipal Tax (32%)',
+          sePensionFee: 'Pension Fee (7%)',
+          seStateTax: 'State Income Tax (20%)',
+          seEmployerContributions: 'Employer Contributions (31.42%)',
+          seGrundavdrag: 'Basic Deduction',
+          settingSeKommunalskatt: 'Municipal Tax (%)',
+          settingSeStateTaxRate: 'State Income Tax (%)',
+          settingSeStateTaxThreshold: 'State Tax Threshold (SEK/month)',
+          settingSeGrundavdrag: 'Basic Deduction (SEK/month)',
+          settingSePensionFeeRate: 'Pension Fee (%)',
+          settingSePensionFeeGrossCap: 'Pension Fee Gross Cap (SEK/month)',
+          settingSeEmployerContributions: 'Employer Contributions (%)',
           langOptionEn: 'English',
           langOptionLv: 'Latviešu',
           langOptionRu: 'Русский',
@@ -541,6 +641,7 @@
           employerCost: 'Darba devēja izmaksas EUR',
           countryLv: 'Latvija',
           countryEe: 'Igaunija',
+          countrySe: 'Zviedrija',
           taxBook: 'Algas nodokļa grāmatiņa',
           dependents: 'Apgādājamie',
           summaryGross: 'Bruto alga',
@@ -581,6 +682,18 @@
           settingEeNonTaxMinMax: 'Neapliekamais minimums max (€)',
           settingEeNonTaxMinLow: 'Neapl. minimuma zemākā robeža (€)',
           settingEeNonTaxMinHigh: 'Neapl. minimuma augstākā robeža (€)',
+          seKommunalskatt: 'Pašvaldības nodoklis (32%)',
+          sePensionFee: 'Pensijas iemaksa (7%)',
+          seStateTax: 'Valsts ienākuma nodoklis (20%)',
+          seEmployerContributions: 'Darba devēja iemaksas (31.42%)',
+          seGrundavdrag: 'Pamatatlaide',
+          settingSeKommunalskatt: 'Pašvaldības nodoklis (%)',
+          settingSeStateTaxRate: 'Valsts ienākuma nodoklis (%)',
+          settingSeStateTaxThreshold: 'Valsts nodokļa robeža (SEK/mēn.)',
+          settingSeGrundavdrag: 'Pamatatlaide (SEK/mēn.)',
+          settingSePensionFeeRate: 'Pensijas iemaksa (%)',
+          settingSePensionFeeGrossCap: 'Pensijas iemaksas ienākumu robeža (SEK/mēn.)',
+          settingSeEmployerContributions: 'Darba devēja iemaksas (%)',
           langOptionEn: 'English',
           langOptionLv: 'Latviešu',
           langOptionRu: 'Русский',
@@ -598,6 +711,7 @@
           employerCost: 'Расходы работодателя EUR',
           countryLv: 'Латвия',
           countryEe: 'Эстония',
+          countrySe: 'Швеция',
           taxBook: 'Налоговая книжка',
           dependents: 'Иждивенцы',
           summaryGross: 'Зарплата брутто',
@@ -638,6 +752,18 @@
           settingEeNonTaxMinMax: 'Макс. необлагаемый минимум (€)',
           settingEeNonTaxMinLow: 'Нижняя граница необл. мин. (€)',
           settingEeNonTaxMinHigh: 'Верхняя граница необл. мин. (€)',
+          seKommunalskatt: 'Муниципальный налог (32%)',
+          sePensionFee: 'Пенсионный взнос (7%)',
+          seStateTax: 'Государственный подоходный налог (20%)',
+          seEmployerContributions: 'Взносы работодателя (31.42%)',
+          seGrundavdrag: 'Базовый вычет',
+          settingSeKommunalskatt: 'Муниципальный налог (%)',
+          settingSeStateTaxRate: 'Государственный подоходный налог (%)',
+          settingSeStateTaxThreshold: 'Порог государственного налога (SEK/мес.)',
+          settingSeGrundavdrag: 'Базовый вычет (SEK/мес.)',
+          settingSePensionFeeRate: 'Пенсионный взнос (%)',
+          settingSePensionFeeGrossCap: 'Лимит дохода для пенс. взноса (SEK/мес.)',
+          settingSeEmployerContributions: 'Взносы работодателя (%)',
           langOptionEn: 'English',
           langOptionLv: 'Latviešu',
           langOptionRu: 'Русский',
@@ -700,6 +826,50 @@
         if (employerCost < LV_RATES.riskDuty) return 0;
         const gross = (employerCost - LV_RATES.riskDuty) / (1 + LV_RATES.employerVsaoi);
         return gross > 0 ? gross : 0;
+      }
+
+      // ── Sweden calculator ─────────────────────────────────────────────────────
+      const SE_RATES = {
+        kommunalskatt: 0.32,       // average municipal tax rate
+        stateTaxRate: 0.20,        // state income tax rate (statlig inkomstskatt)
+        stateTaxThreshold: 49875,  // monthly gross threshold for state tax (SEK) = 598,500 / 12
+        pensionFeeRate: 0.07,      // general pension fee (allmän pensionsavgift), fully credited against income tax
+        pensionFeeGrossCap: 47625, // monthly gross cap for pension fee (SEK) = 7.5 × IBB / 12 (2025)
+        grundavdrag: 2917,         // monthly basic deduction (SEK), simplified annual ~35,000 / 12
+        employerContributions: 0.3142, // arbetsgivaravgift
+      };
+
+      function seBreakdownFromGross(gross) {
+        const pensionFee = Math.min(gross, SE_RATES.pensionFeeGrossCap) * SE_RATES.pensionFeeRate;
+        const grundavdrag = Math.min(SE_RATES.grundavdrag, gross);
+        const taxableBase = Math.max(0, gross - grundavdrag);
+        const kommunalskatt = taxableBase * SE_RATES.kommunalskatt;
+        const stateTaxBase = Math.max(0, gross - SE_RATES.stateTaxThreshold);
+        const stateTax = stateTaxBase * SE_RATES.stateTaxRate;
+        // Pension fee is fully credited against income tax
+        const incomeTax = Math.max(0, kommunalskatt + stateTax - pensionFee);
+        const net = gross - pensionFee - incomeTax;
+        const employerContributions = gross * SE_RATES.employerContributions;
+        const totalEmployerCost = gross + employerContributions;
+        return { gross, net, pensionFee, kommunalskatt, stateTax, grundavdrag, taxableBase, employerContributions, totalEmployerCost };
+      }
+
+      function seGrossFromNet(targetNet) {
+        if (targetNet <= 0) return 0;
+        // Upper bound: net can never exceed gross * (1 - min_tax_rate), so 3× + buffer is safe.
+        // 64 iterations gives ~1e-19 relative precision, well beyond 2-decimal-place display needs.
+        let lo = 0, hi = targetNet * 3 + 10000;
+        for (let i = 0; i < 64; i++) {
+          const mid = (lo + hi) / 2;
+          if (seBreakdownFromGross(mid).net < targetNet) lo = mid;
+          else hi = mid;
+        }
+        return (lo + hi) / 2;
+      }
+
+      function seGrossFromEmployerCost(employerCost) {
+        if (employerCost <= 0) return 0;
+        return employerCost / (1 + SE_RATES.employerContributions);
       }
 
       // ── Estonia calculator ────────────────────────────────────────────────────
@@ -788,6 +958,13 @@
       const eeNonTaxMinMaxInput = $('ee-non-tax-min-max-input');
       const eeNonTaxMinLowInput = $('ee-non-tax-min-low-input');
       const eeNonTaxMinHighInput = $('ee-non-tax-min-high-input');
+      const seKommunalskattInput = $('se-kommunalskatt-input');
+      const seStateTaxRateInput = $('se-state-tax-rate-input');
+      const seStateTaxThresholdInput = $('se-state-tax-threshold-input');
+      const seGrundavdragInput = $('se-grundavdrag-input');
+      const sePensionFeeRateInput = $('se-pension-fee-rate-input');
+      const sePensionFeeGrossCapInput = $('se-pension-fee-gross-cap-input');
+      const seEmployerContributionsInput = $('se-employer-contributions-input');
 
       const LABEL_MAP = {
         'lbl-country': 'country',
@@ -836,6 +1013,18 @@
         'lbl-settingEeNonTaxMinMax': 'settingEeNonTaxMinMax',
         'lbl-settingEeNonTaxMinLow': 'settingEeNonTaxMinLow',
         'lbl-settingEeNonTaxMinHigh': 'settingEeNonTaxMinHigh',
+        'lbl-sePensionFee': 'sePensionFee',
+        'lbl-seKommunalskatt': 'seKommunalskatt',
+        'lbl-seStateTax': 'seStateTax',
+        'lbl-seEmployerContributions': 'seEmployerContributions',
+        'lbl-seGrundavdrag': 'seGrundavdrag',
+        'lbl-settingSeKommunalskatt': 'settingSeKommunalskatt',
+        'lbl-settingSeStateTaxRate': 'settingSeStateTaxRate',
+        'lbl-settingSeStateTaxThreshold': 'settingSeStateTaxThreshold',
+        'lbl-settingSeGrundavdrag': 'settingSeGrundavdrag',
+        'lbl-settingSePensionFeeRate': 'settingSePensionFeeRate',
+        'lbl-settingSePensionFeeGrossCap': 'settingSePensionFeeGrossCap',
+        'lbl-settingSeEmployerContributions': 'settingSeEmployerContributions',
       };
       const CALCULATOR_MAP = {
         lv: {
@@ -848,10 +1037,15 @@
           grossFromNet: eeGrossFromNet,
           grossFromEmployerCost: eeGrossFromEmployerCost,
         },
+        se: {
+          breakdownFromGross: seBreakdownFromGross,
+          grossFromNet: seGrossFromNet,
+          grossFromEmployerCost: seGrossFromEmployerCost,
+        },
       };
 
       // ── State ─────────────────────────────────────────────────────────────────
-      const VALID_COUNTRIES = ['lv', 'ee'];
+      const VALID_COUNTRIES = ['lv', 'ee', 'se'];
       const VALID_LANGS = ['en', 'lv', 'ru'];
       const savedCountry = localStorage.getItem('country');
       let currentCountry = VALID_COUNTRIES.includes(savedCountry) ? savedCountry : 'lv';
@@ -870,7 +1064,9 @@
 
       function round2(value) { return Math.round(value * 100) / 100; }
 
-      function money(value) { return `${round2(value).toFixed(2)} €`; }
+      function getCurrencySymbol() { return currentCountry === 'se' ? 'kr' : '€'; }
+
+      function money(value) { return `${round2(value).toFixed(2)} ${getCurrencySymbol()}`; }
 
       function syncInputState(input) {
         const itemContent = input.closest('.item-content');
@@ -901,7 +1097,9 @@
 
       function getCountryLabel(country) {
         const t = I18N[currentLang];
-        return country === 'ee' ? t.countryEe : t.countryLv;
+        if (country === 'ee') return t.countryEe;
+        if (country === 'se') return t.countrySe;
+        return t.countryLv;
       }
 
       function getModeLabel(mode) {
@@ -959,6 +1157,8 @@
       function applyCountry(country) {
         currentCountry = country;
         const isLatvia = country === 'lv';
+        const isEstonia = country === 'ee';
+        const isSweden = country === 'se';
         countrySelect.value = country;
         document.querySelectorAll('.lv-option-row, .lv-row').forEach(el => {
           el.classList.toggle('display-none', !isLatvia);
@@ -967,12 +1167,19 @@
           el.classList.toggle('display-none', !isLatvia);
         });
         document.querySelectorAll('.ee-row').forEach(el => {
-          el.classList.toggle('display-none', isLatvia);
+          el.classList.toggle('display-none', !isEstonia);
         });
         document.querySelectorAll('.ee-tax-config').forEach(el => {
-          el.classList.toggle('display-none', isLatvia);
+          el.classList.toggle('display-none', !isEstonia);
+        });
+        document.querySelectorAll('.se-row').forEach(el => {
+          el.classList.toggle('display-none', !isSweden);
+        });
+        document.querySelectorAll('.se-tax-config').forEach(el => {
+          el.classList.toggle('display-none', !isSweden);
         });
         localStorage.setItem('country', country);
+        updateCurrencyDependentLabels();
         syncSelectionLabels();
         recalc();
       }
@@ -987,6 +1194,7 @@
         });
         countrySelect.querySelector('option[value="lv"]').textContent = t.countryLv;
         countrySelect.querySelector('option[value="ee"]').textContent = t.countryEe;
+        countrySelect.querySelector('option[value="se"]').textContent = t.countrySe;
         sourceModeSelect.querySelector('option[value="gross"]').textContent = t.grossTab;
         sourceModeSelect.querySelector('option[value="net"]').textContent = t.netTab;
         sourceModeSelect.querySelector('option[value="employer"]').textContent = t.employerTab;
@@ -994,7 +1202,16 @@
         langSelect.querySelector('option[value="lv"]').textContent = t.langOptionLv;
         langSelect.querySelector('option[value="ru"]').textContent = t.langOptionRu;
         langSelect.value = currentLang;
+        updateCurrencyDependentLabels();
         syncSelectionLabels();
+      }
+
+      function updateCurrencyDependentLabels() {
+        const currency = currentCountry === 'se' ? 'SEK' : 'EUR';
+        const t = I18N[currentLang];
+        $('lbl-gross').textContent = t.gross.replace('EUR', currency);
+        $('lbl-net').textContent = t.net.replace('EUR', currency);
+        $('lbl-employerCost').textContent = t.employerCost.replace('EUR', currency);
       }
 
       function applyLanguage(lang) {
@@ -1019,6 +1236,13 @@
         setTaxInputValue(eeNonTaxMinMaxInput, EE_RATES.nonTaxMinMax);
         setTaxInputValue(eeNonTaxMinLowInput, EE_RATES.nonTaxMinLow);
         setTaxInputValue(eeNonTaxMinHighInput, EE_RATES.nonTaxMinHigh);
+        setTaxInputValue(seKommunalskattInput, SE_RATES.kommunalskatt, true);
+        setTaxInputValue(seStateTaxRateInput, SE_RATES.stateTaxRate, true);
+        setTaxInputValue(seStateTaxThresholdInput, SE_RATES.stateTaxThreshold);
+        setTaxInputValue(seGrundavdragInput, SE_RATES.grundavdrag);
+        setTaxInputValue(sePensionFeeRateInput, SE_RATES.pensionFeeRate, true);
+        setTaxInputValue(sePensionFeeGrossCapInput, SE_RATES.pensionFeeGrossCap);
+        setTaxInputValue(seEmployerContributionsInput, SE_RATES.employerContributions, true);
       }
 
       function bindTaxInput(input, onChange) {
@@ -1059,6 +1283,12 @@
           $('r-employer-social').textContent = money(result.employerSocial);
           $('r-risk-duty').textContent = money(result.riskDuty);
           $('r-allowance').textContent = money(result.allowance);
+        } else if (currentCountry === 'se') {
+          $('r-se-pension-fee').textContent = money(result.pensionFee);
+          $('r-se-kommunalskatt').textContent = money(result.kommunalskatt);
+          $('r-se-state-tax').textContent = money(result.stateTax);
+          $('r-se-employer-contributions').textContent = money(result.employerContributions);
+          $('r-se-grundavdrag').textContent = money(result.grundavdrag);
         } else {
           $('r-emp-unemployment').textContent = money(result.empUnemployment);
           $('r-income-tax').textContent = money(result.incomeTax);
@@ -1155,6 +1385,13 @@
       bindTaxInput(eeNonTaxMinMaxInput, value => { EE_RATES.nonTaxMinMax = Math.max(0, value); });
       bindTaxInput(eeNonTaxMinLowInput, value => { EE_RATES.nonTaxMinLow = Math.max(0, value); });
       bindTaxInput(eeNonTaxMinHighInput, value => { EE_RATES.nonTaxMinHigh = Math.max(0, value); });
+      bindTaxInput(seKommunalskattInput, value => { SE_RATES.kommunalskatt = Math.max(0, value / 100); });
+      bindTaxInput(seStateTaxRateInput, value => { SE_RATES.stateTaxRate = Math.max(0, value / 100); });
+      bindTaxInput(seStateTaxThresholdInput, value => { SE_RATES.stateTaxThreshold = Math.max(0, value); });
+      bindTaxInput(seGrundavdragInput, value => { SE_RATES.grundavdrag = Math.max(0, value); });
+      bindTaxInput(sePensionFeeRateInput, value => { SE_RATES.pensionFeeRate = Math.max(0, value / 100); });
+      bindTaxInput(sePensionFeeGrossCapInput, value => { SE_RATES.pensionFeeGrossCap = Math.max(0, value); });
+      bindTaxInput(seEmployerContributionsInput, value => { SE_RATES.employerContributions = Math.max(0, value / 100); });
 
       // ── Init ──────────────────────────────────────────────────────────────────
       document.documentElement.lang = currentLang;
