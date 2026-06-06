@@ -856,6 +856,8 @@
 
       function seGrossFromNet(targetNet) {
         if (targetNet <= 0) return 0;
+        // Upper bound: net can never exceed gross * (1 - min_tax_rate), so 3× + buffer is safe.
+        // 64 iterations gives ~1e-19 relative precision, well beyond 2-decimal-place display needs.
         let lo = 0, hi = targetNet * 3 + 10000;
         for (let i = 0; i < 64; i++) {
           const mid = (lo + hi) / 2;
